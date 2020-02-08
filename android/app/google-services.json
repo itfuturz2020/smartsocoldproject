@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "653223090945",
+    "firebase_url": "https://smart-society-user-app-78683.firebaseio.com",
+    "project_id": "smart-society-user-app-78683",
+    "storage_bucket": "smart-society-user-app-78683.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653223090945:android:c9d594d3a9c6932ee19900",
+        "android_client_info": {
+          "package_name": "com.itfuturz.mygenie_member"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653223090945-valkoh4gc68n93v4iidd3v1bltfks7r4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOddcTZeTp06sLo-uqmQkmtBVZSz7sJg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "653223090945-valkoh4gc68n93v4iidd3v1bltfks7r4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
