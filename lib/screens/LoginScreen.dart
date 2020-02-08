@@ -8,7 +8,6 @@ import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -79,7 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
               await prefs.setString(
                   constant.Session.Profile, data[0]["Image"].toString());
 
-
               if (data[0]["IsVerified"] == true) {
                 Navigator.pushReplacementNamed(context, '/HomeScreen');
               } else
@@ -147,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
       height: MediaQuery.of(context).size.height,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top:110.0),
+          padding: const EdgeInsets.only(top: 110.0),
           child: Container(
             child: Center(
               child: Stack(
@@ -211,7 +209,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
                                           child: TextFormField(
-                                            textInputAction: TextInputAction.done,
+                                            textInputAction:
+                                                TextInputAction.done,
                                             controller: _MobileNumber,
                                             maxLength: 10,
                                             keyboardType: TextInputType.number,
@@ -245,7 +244,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     height: 45,
                                     child: RaisedButton(
                                       shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5)),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       color:
                                           constant.appPrimaryMaterialColor[500],
                                       textColor: Colors.white,
