@@ -36,7 +36,8 @@ class _AmenitiesState extends State<Amenities> {
             setState(() {
               _aminitiesData = data;
             });
-          } else {
+          }
+          else {
             setState(() {
               isLoading = false;
             });

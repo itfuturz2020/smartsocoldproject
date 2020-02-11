@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
     await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new OverlayScreen(payload) )
+            builder: (context) => new OverlayScreen() )
     );
   }
 
@@ -247,7 +247,6 @@ class _MyAppState extends State<MyApp> {
 */
 
 class OverlayScreen extends StatefulWidget {
-  OverlayScreen(String payload);
 
   @override
   _OverlayScreenState createState() => _OverlayScreenState();
