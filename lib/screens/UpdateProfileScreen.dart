@@ -367,11 +367,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
       if (tempDate[1].toString().length == 1) {
         tempDate[1] = "0" + tempDate[1].toString();
       }
+      final_date = date == "" || date == null
+          ? ""
+          : "${tempDate[2].toString().substring(0, 2)}-${tempDate[1].toString()}-${tempDate[0].toString()}"
+          .toString();
     }
-    final_date = date == "" || date == null
-        ? ""
-        : "${tempDate[2].toString().substring(0, 2)}-${tempDate[1].toString()}-${tempDate[0].toString()}"
-            .toString();
 
     return final_date;
   }

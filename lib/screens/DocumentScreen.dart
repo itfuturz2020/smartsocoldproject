@@ -36,6 +36,26 @@ class _DocumentScreenState extends State<DocumentScreen> {
     _getLocaldata();
   }
 
+  String setDate(String date) {
+    String final_date = "";
+    var tempDate;
+    if (date != "" || date != null) {
+      tempDate = date.toString().split("-");
+      if (tempDate[2].toString().length == 1) {
+        tempDate[2] = "0" + tempDate[2].toString();
+      }
+      if (tempDate[1].toString().length == 1) {
+        tempDate[1] = "0" + tempDate[1].toString();
+      }
+      final_date = date == "" || date == null
+          ? ""
+          : "${tempDate[2].toString().substring(0, 2)}-${tempDate[1].toString()}-${tempDate[0].toString()}"
+              .toString();
+    }
+
+    return final_date;
+  }
+
   GetSocietyRules() async {
     try {
       //check Internet Connection
@@ -164,14 +184,20 @@ class _DocumentScreenState extends State<DocumentScreen> {
                       Flexible(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            "${DocumentData[index]["Title"]}",
-                            softWrap: true,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "${DocumentData[index]["Title"]}",
+                                softWrap: true,
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
+                              ),
+                              Text("${setDate(DocumentData[index]["Date"])}")
+                            ],
                           ),
                         ),
                       ),

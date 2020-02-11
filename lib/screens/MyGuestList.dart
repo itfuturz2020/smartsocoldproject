@@ -13,9 +13,14 @@ class MyGuestlist extends StatefulWidget {
 
 class _MyGuestlistState extends State<MyGuestlist> {
   bool isLoading = false;
-  List _GuestData = [];
   List _GuestList = [];
   List _VisitorList = [];
+
+  @override
+  void initState() {
+    _GetVisitorData();
+    _getLocaldata();
+  }
 
   _GetVisitorData() async {
     try {
@@ -32,9 +37,9 @@ class _MyGuestlistState extends State<MyGuestlist> {
           });
           if (data != null && data.length > 0) {
             setState(() {
-              _GuestData = data;
+              _VisitorList = data[0]["GetVisitorByMember"];
+              _GuestList = data[0]["GetVisitorBySecurity"];
             });
-            _SetData(data);
           } else {
             setState(() {
               isLoading = false;
@@ -57,17 +62,6 @@ class _MyGuestlistState extends State<MyGuestlist> {
     }
   }
 
-  _SetData(var data) {
-    for (int i = 0; i < data.length; i++) {
-      if (data[i]["IsVerified"] == true) {
-        _VisitorList.add(data[i]);
-      } else
-        _GuestList.add(data[i]);
-    }
-    print("Visitor list  ----" + _VisitorList.toString());
-    print("Guest list  ----" + _GuestList.toString());
-  }
-
   String Address;
 
   _getLocaldata() async {
@@ -76,12 +70,6 @@ class _MyGuestlistState extends State<MyGuestlist> {
     setState(() {
       Address = prefs.getString(constant.Session.Address);
     });
-  }
-
-  @override
-  void initState() {
-    _GetVisitorData();
-    _getLocaldata();
   }
 
   showHHMsg(String title, String msg) {
@@ -117,12 +105,11 @@ class _MyGuestlistState extends State<MyGuestlist> {
       if (tempDate[1].toString().length == 1) {
         tempDate[1] = "0" + tempDate[1].toString();
       }
+      final_date = date == "" || date == null
+          ? ""
+          : "${tempDate[2].toString().substring(0, 2)}\n${setMonth(DateTime.parse(date))}"
+          .toString();
     }
-    final_date = date == "" || date == null
-        ? ""
-        : "${tempDate[2].toString().substring(0, 2)}\n${setMonth(DateTime.parse(date))}"
-            .toString();
-
     return final_date;
   }
 

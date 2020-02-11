@@ -38,12 +38,11 @@ class _MaintainanceState extends State<Maintainance> {
       if (tempDate[1].toString().length == 1) {
         tempDate[1] = "0" + tempDate[1].toString();
       }
+      final_date = date == "" || date == null
+          ? ""
+          : "${tempDate[2].toString().substring(0, 2)}\n${setMonth(DateTime.parse(date))}"
+          .toString();
     }
-    final_date = date == "" || date == null
-        ? ""
-        : "${tempDate[2].toString().substring(0, 2)}\n${setMonth(DateTime.parse(date))}"
-        .toString();
-
     return final_date;
   }
 
