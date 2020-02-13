@@ -7,7 +7,7 @@ class Menu {
   static List<Menu> allMenuItems() {
     var listofmenus = new List<Menu>();
 
-    listofmenus.add(new Menu(Icon: "kamvali.png", IconName: "Kamvali"));
+    listofmenus.add(new Menu(Icon: "DailyHelp.png", IconName: "DailyHelp"));
     listofmenus.add(new Menu(Icon: "information.png", IconName: "Notice"));
     listofmenus.add(new Menu(Icon: "complaint.png", IconName: "Complaints"));
     listofmenus.add(new Menu(Icon: "directory.png", IconName: "Directory"));
@@ -19,8 +19,7 @@ class Menu {
 
     listofmenus.add(new Menu(Icon: "Helpdesk.png", IconName: "Committee"));
     listofmenus.add(new Menu(Icon: "gallery.png", IconName: "Gallery"));
-    listofmenus
-        .add(new Menu(Icon: "Maintainence.png", IconName: "Maintainence"));
+    listofmenus.add(new Menu(Icon: "Maintainence.png", IconName: "Maintainence"));
     listofmenus.add(new Menu(Icon: "Utilities.png", IconName: "Amenities"));
 
     return listofmenus;

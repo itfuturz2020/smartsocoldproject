@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
     await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (context) => new OverlayScreen() )
+            builder: (BuildContext context) => new OverlayScreen() )
     );
   }
 
@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
         '/ContactList': (context) => ContactList( ),
         '/Committee': (context) => Committees( ),
         '/Amenities': (context) => Amenities( ),
-        '/Kamvali': (context) => KaamWaliList( ),
+        '/DailyHelp': (context) => KaamWaliList( ),
       },
       theme: ThemeData(
         fontFamily: 'OpenSans',

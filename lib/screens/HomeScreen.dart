@@ -194,10 +194,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 60,
                 height: 60,
               ),
-              Padding(padding: EdgeInsets.only(top: 8)),
-              Text(
-                "Hello, $Name",
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              Padding(
+                padding: const EdgeInsets.only(left:15.0),
+                child: Text(
+                  "Hello, $Name",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
               )
             ],
           ),

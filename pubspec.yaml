@@ -142,7 +142,7 @@ flutter:
     - images/callvisitor.png
     - images/mail.png
     - images/navigation.png
-    - images/kamvali.png
+    - images/DailyHelp.png
     - assets/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

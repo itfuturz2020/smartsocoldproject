@@ -9,9 +9,15 @@ class _KaamwaliComponentState extends State<KaamwaliComponent> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
-        height: 70,
-      ),
+      child: Column(
+        children: <Widget>[
+           Row(
+             children: <Widget>[
+
+             ],
+           )
+        ],
+      )
     );
   }
 }
