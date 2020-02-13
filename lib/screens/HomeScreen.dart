@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               isLoading = false;
             });
-            prefs.setString(constant.Session.ProfileUpdateFlag, "false");
+            await prefs.setString(constant.Session.ProfileUpdateFlag, "false");
             _showProfileUpdateDailog(data.Data);
           } else {
             setState(() {
@@ -195,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 60,
               ),
               Padding(
-                padding: const EdgeInsets.only(left:15.0),
+                padding: const EdgeInsets.only(left: 15.0),
                 child: Text(
                   "Hello, $Name",
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
@@ -351,7 +351,8 @@ class _HomeScreenState extends State<HomeScreen> {
       FlatNo = prefs.getString(constant.Session.FlatNo);
       Profile = prefs.getString(constant.Session.Profile);
     });
-    getProfilePR();
+    if (prefs.getString(constant.Session.ProfileUpdateFlag) == "true")
+      getProfilePR();
   }
 
   DateTime currentBackPressTime;

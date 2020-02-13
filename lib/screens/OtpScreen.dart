@@ -10,6 +10,11 @@ import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/component/LoadingComponent.dart';
 
 class OtpScreen extends StatefulWidget {
+  String MobileNo,Id;
+  Function onsuccess;
+  OtpScreen(this.MobileNo,this.Id,this.onsuccess);
+
+
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
@@ -18,7 +23,6 @@ class _OtpScreenState extends State<OtpScreen> {
   TextEditingController controller = new TextEditingController();
   var rndnumber = "";
   bool isLoading = false;
-  String Member_id = "", MobileNo;
 
   @override
   void initState() {
@@ -26,10 +30,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   _getLocaldata() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String Mobileno = await prefs.getString(constant.Session.session_login);
-    Member_id = await prefs.getString(constant.Session.Member_Id);
-    _sendVerificationCode(Mobileno);
+    _sendVerificationCode(widget.MobileNo);
   }
 
   _sendVerificationCode(String Mobile) async {
@@ -81,14 +82,13 @@ class _OtpScreenState extends State<OtpScreen> {
         setState(() {
           isLoading = true;
         });
-        Services.Checkverification(Member_id).then((data) async {
+        Services.Checkverification(widget.Id).then((data) async {
           if (data.Data == "1" && data.IsSuccess == true) {
             setState(() {
               isLoading = false;
             });
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString(constant.Session.IsVerified, "true");
-
             Navigator.pushReplacementNamed(context, '/HomeScreen');
           } else {
             setState(() {
@@ -198,6 +198,9 @@ class _OtpScreenState extends State<OtpScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                           GestureDetector(
+                            onTap: (){
+                              _sendVerificationCode(widget.MobileNo);
+                            },
                             child: Text(" Resend",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w900,
@@ -232,9 +235,11 @@ class _OtpScreenState extends State<OtpScreen> {
                       padding: const EdgeInsets.only(top: 30.0),
                       child: GestureDetector(
                         onTap: () {
-                          if (controller.text == rndnumber)
-                            _MemberVerification();
-                          else
+                          if (controller.text == rndnumber) {
+                            widget.onsuccess( );
+                            _MemberVerification( );
+                          }
+                            else
                             Fluttertoast.showToast(
                                 msg: "Wrong OTP..",
                                 toastLength: Toast.LENGTH_LONG,

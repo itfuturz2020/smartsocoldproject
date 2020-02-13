@@ -114,7 +114,6 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => Splashscreen( ),
         '/LoginScreen': (context) => LoginScreen( ),
-        '/OtpScreen': (context) => OtpScreen( ),
         '/HomeScreen': (context) => HomeScreen( ),
         '/Notice': (context) => NoticeScreen( ),
         '/WaitingScreen': (context) => Approval_admin( ),

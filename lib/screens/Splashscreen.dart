@@ -14,11 +14,10 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState() {
     Timer(Duration(seconds: 4), () async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString(constant.Session.ProfileUpdateFlag, "true");
       String MemberId = prefs.getString(constant.Session.Member_Id);
       String Verified = prefs.getString(constant.Session.IsVerified);
-      if (MemberId != null &&
-          MemberId != "" &&
-          Verified.toLowerCase() == "true")
+      if (MemberId != null && MemberId != "")
         Navigator.pushReplacementNamed(context, '/HomeScreen');
       else {
         Navigator.pushReplacementNamed(context, '/LoginScreen');
