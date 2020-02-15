@@ -111,8 +111,9 @@ class _AddGuestState extends State<AddGuest> {
                 textColor: Colors.white);
 
             await Share.share(
-                'http://smartsociety.itfuturz.com/QRCode.aspx?id=${data.Data}');
-            Navigator.pushReplacementNamed(context, '/MyGuestlist');
+                'Please show the QR code in the follwing link at the gate for Entry Purpose\n\nhttp://smartsociety.itfuturz.com/QRCode.aspx?id=${data.Data}');
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/HomeScreen', (Route<dynamic> route) => false);
           } else {
             setState(() {
               isLoading = false;
@@ -171,7 +172,8 @@ class _AddGuestState extends State<AddGuest> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, '/MyGuestList');
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/HomeScreen', (Route<dynamic> route) => false);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -179,7 +181,8 @@ class _AddGuestState extends State<AddGuest> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/MyGuestList');
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/HomeScreen', (Route<dynamic> route) => false);
               }),
         ),
         body: SingleChildScrollView(

@@ -565,7 +565,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, "/AdvertisementManage");
+                  Navigator.pushReplacementNamed(context, "/AdvertisementManage");
                 },
               ),
               ListTile(

@@ -14,24 +14,36 @@ class _DailyHelpState extends State<DailyHelp> {
       onWillPop: () {
         Navigator.pushReplacementNamed(context, '/HomeScreen');
       },
-      child:DefaultTabController(
+      child: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             bottom: TabBar(
               indicatorColor: Colors.white,
               tabs: [
-                Tab(child: Text("Maid",style: TextStyle(fontWeight: FontWeight.w600),)),
-                Tab(child: Text("Others",style: TextStyle(fontWeight: FontWeight.w600))),
+                Tab(
+                    child: Text(
+                  "Maid",
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                )),
+                Tab(
+                    child: Text("Others",
+                        style: TextStyle(fontWeight: FontWeight.w600))),
               ],
             ),
-            title: Text('Daily Help'),
+            title: Text(
+              'Documents',
+              style: TextStyle(fontSize: 18),
+            ),
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/HomeScreen');
+                }),
           ),
           body: TabBarView(
-            children: [
-              MaidListing(),
-              Container()
-            ],
+            children: [MaidListing(), Container()],
           ),
         ),
       ),

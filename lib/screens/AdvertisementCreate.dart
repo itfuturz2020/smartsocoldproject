@@ -22,6 +22,7 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
   TextEditingController edtDescription = new TextEditingController();
   TextEditingController edtWebsiteURL = new TextEditingController();
   TextEditingController edtEmail = new TextEditingController();
+  TextEditingController edtVideoLink = new TextEditingController();
 
   String selectedType;
   String selectedLocationType;
@@ -37,7 +38,7 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
 
   bool isLoading = false;
   ProgressDialog pr;
-  String _result = 'Unknown';
+  String _lat = "", _long = "";
 
   @override
   void initState() {
@@ -52,7 +53,8 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
-      _result = position.toString();
+      _lat = position.latitude.toString();
+      _long = position.longitude.toString();
     });
 
     print(position);
@@ -231,7 +233,10 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
   }
 
   _makePayment() async {
-    if (edtTitle.text != "" && edtDescription.text != "" && edtWebsiteURL.text != "" && edtEmail.text != "") {
+    if (edtTitle.text != "" &&
+        edtDescription.text != "" &&
+        edtWebsiteURL.text != "" &&
+        edtEmail.text != "") {
       DateTime expiredDate = DateTime.now();
 
       expiredDate = expiredDate
@@ -252,6 +257,10 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
         "type": "${selectedLocationType}",
         "targetedId": "${selectedLocations}",
         "renew": "false",
+        "WebsiteURL": edtWebsiteURL.text,
+        "VideoLink": edtVideoLink.text,
+        "Email": edtEmail.text,
+        "GoogleMap": _lat + "," + _long,
       };
 
       print(data);
@@ -465,17 +474,51 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                                         BorderRadius.all(Radius.circular(6.0))),
                               ),
                             ),
-                            Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 15.0, right: 5.0, left: 5.0),
-                                  child: Text("Location:" + _result,
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 15.0, right: 5.0, left: 5.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Text("Youtube Video Link",
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.grey[600],
-                                          fontWeight: FontWeight.w500)),
-                                )),
+                                          fontWeight: FontWeight.w500))
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 5.0, right: 5.0, top: 6.0),
+                              child: Container(
+                                height: 55,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: TextFormField(
+                                        controller: edtVideoLink,
+                                        decoration: InputDecoration(
+                                          hintText: "Enter Youtube Video Link",
+                                          hintStyle: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[400]),
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1,
+                                        color:
+                                            constant.appPrimaryMaterialColor),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(6.0))),
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 15.0, right: 8.0, left: 8.0),

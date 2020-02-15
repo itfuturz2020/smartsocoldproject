@@ -130,8 +130,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
                         minWidth: MediaQuery.of(context).size.width / 2,
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.popUntil(
-                              context, ModalRoute.withName('/HomeScreen'));
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/HomeScreen', (Route<dynamic> route) => false);
                         },
                         child: Text(
                           "Continue",
@@ -209,8 +209,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
                         minWidth: MediaQuery.of(context).size.width / 2,
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.popUntil(
-                              context, ModalRoute.withName('/HomeScreen'));
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/HomeScreen', (Route<dynamic> route) => false);
                         },
                         child: Text(
                           "Try again",
@@ -435,6 +435,10 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           "PaymentMode": "Online",
           "ReferenceNo": "${tId}",
           "date": "${DateTime.now().toString()}",
+          "WebsiteURL": "${widget.data["WebsiteURL"]}",
+          "GoogleMap": "${widget.data["GoogleMap"]}",
+          "Email": "${widget.data["Email"]}",
+          "VideoLink": "${widget.data["VideoLink"]}",
         });
 
         print("SaveAdvertisement Data = ${formData}");
@@ -466,7 +470,8 @@ class _PaymentWebViewState extends State<PaymentWebView> {
               child: new Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.popUntil(context, ModalRoute.withName('/HomeScreen'));
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/HomeScreen', (Route<dynamic> route) => false);
               },
             ),
           ],
