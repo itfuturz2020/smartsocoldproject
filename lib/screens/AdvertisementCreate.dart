@@ -434,7 +434,7 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                                   top: 15.0, right: 5.0, left: 5.0),
                               child: Row(
                                 children: <Widget>[
-                                  Text("E-Mail",
+                                  Text("EMail",
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.grey[600],

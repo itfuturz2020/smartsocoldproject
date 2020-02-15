@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
     initPlayer();
     _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
       final title = message['notification']['title'];
-      final body = message['data']['CompanyName'];
+      final body = message['notification']['body'];
       showNotification('$title', '$body');
       print("onMessage");
       print(message);

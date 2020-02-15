@@ -359,12 +359,12 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         }
 
         FormData formData = new FormData.fromMap({
-          "Id": "0",
+          "Id": "${widget.data["id"]}",
           "Title": widget.data["title"],
           "Description": widget.data["desc"],
           "Image": (filePath != null && filePath != '')
               ? await MultipartFile.fromFile(filePath,
-                  filename: filename.toString())
+              filename: filename.toString())
               : null,
           "MemberId": MemberId,
           "PackageId": "${widget.data["packageId"]}",
@@ -373,7 +373,11 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           "TargetedId": "${widget.data["targetedId"]}",
           "PaymentMode": "Online",
           "ReferenceNo": "${tId}",
-          "date": "${DateTime.now().toString()}",
+          "Date": "${DateTime.now().toString()}",
+          "WebsiteURL": "${widget.data["WebsiteURL"]}",
+          "GoogleMap": "${widget.data["GoogleMap"]}",
+          "Email": "${widget.data["Email"]}",
+          "VideoLink": "${widget.data["VideoLink"]}",
         });
 
         print("SaveAdvertisement Data = ${formData}");
