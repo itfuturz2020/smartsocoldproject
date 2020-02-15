@@ -23,6 +23,8 @@ import 'package:draggable_fab/draggable_fab.dart';
 import 'AdvertismentDetailPage.dart';
 
 class HomeScreen extends StatefulWidget {
+  String payload;
+ // HomeScreen({this.payload});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -127,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-
+/*
   getProfilePR() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -161,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
       showMsg("Something Went Wrong");
     }
   }
+*/
 
   showMsg(String msg, {String title = 'My JINI'}) {
     showDialog(
@@ -182,6 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+/*
   _showProfileUpdateDailog(String pr) {
     showDialog(
       context: context,
@@ -243,6 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+*/
 
   Widget _getMenuItem(BuildContext context, int index) {
     return AnimationConfiguration.staggeredGrid(
@@ -351,8 +356,8 @@ class _HomeScreenState extends State<HomeScreen> {
       FlatNo = prefs.getString(constant.Session.FlatNo);
       Profile = prefs.getString(constant.Session.Profile);
     });
-    if (prefs.getString(constant.Session.ProfileUpdateFlag) == "true")
-      getProfilePR();
+   /* if (prefs.getString(constant.Session.ProfileUpdateFlag) == "true")
+      getProfilePR();*/
   }
 
   DateTime currentBackPressTime;
