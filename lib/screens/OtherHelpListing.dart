@@ -2,42 +2,41 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:smart_society_new/common/Services.dart';
-import 'package:smart_society_new/component/MaidComponent.dart';
-
-class MaidListing extends StatefulWidget {
+import 'package:smart_society_new/component/OtherHelpComponent.dart';
+class OtherHelpListing extends StatefulWidget {
   @override
-  _MaidListingState createState() => _MaidListingState();
+  _OtherHelpListingState createState() => _OtherHelpListingState();
 }
 
-class _MaidListingState extends State<MaidListing> {
+class _OtherHelpListingState extends State<OtherHelpListing> {
   bool isLoading = true;
-  List maidList = [];
+  List otherList = [];
 
   @override
   void initState() {
     super.initState();
-    _getMaidListing();
+    _getotherListing();
   }
 
-  _getMaidListing() async {
+  _getotherListing() async {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        Future res = Services.GetMaidListing();
+        Future res = Services.GetOtherListing();
         setState(() {
           isLoading = true;
         });
         res.then((data) async {
           if (data != null && data.length > 0) {
             setState(() {
-              maidList = data;
+              otherList = data;
 
               isLoading = false;
             });
           } else {
             setState(() {
               isLoading = false;
-              maidList = data;
+              otherList = data;
             });
           }
         }, onError: (e) {
@@ -84,14 +83,14 @@ class _MaidListingState extends State<MaidListing> {
   Widget build(BuildContext context) {
     return isLoading
         ? Center(child: CircularProgressIndicator())
-        : maidList.length > 0
-            ? ListView.builder(
-                itemCount: maidList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return MaidComponent(maidList[index]);
-                })
-            : Container(
-                child: Center(child: Text("No Data Found")),
-              );
+        : otherList.length > 0
+        ? ListView.builder(
+        itemCount: otherList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return OtherHelpComponent(otherList[index]);
+        })
+        : Container(
+      child: Center(child: Text("No Data Found")),
+    );
   }
 }

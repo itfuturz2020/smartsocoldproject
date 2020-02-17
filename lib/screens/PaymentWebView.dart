@@ -359,7 +359,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         }
 
         FormData formData = new FormData.fromMap({
-          "Id": "${widget.data["id"]}",
+          "Id": 0,
           "Title": widget.data["title"],
           "Description": widget.data["desc"],
           "Image": (filePath != null && filePath != '')

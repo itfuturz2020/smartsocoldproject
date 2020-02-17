@@ -626,7 +626,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(padding: EdgeInsets.only(left: 4)),
                       Expanded(
                         child: Text(
-                          "My JINI",
+                          "MY JINI",
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 15,

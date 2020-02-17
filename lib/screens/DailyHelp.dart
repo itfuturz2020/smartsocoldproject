@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_society_new/component/MaidComponent.dart';
 import 'package:smart_society_new/screens/MaidListing.dart';
+import 'package:smart_society_new/screens/OtherHelpListing.dart';
 
 class DailyHelp extends StatefulWidget {
   @override
@@ -33,7 +34,7 @@ class _DailyHelpState extends State<DailyHelp> {
               ],
             ),
             title: Text(
-              'Documents',
+              'Daily Help',
               style: TextStyle(fontSize: 18),
             ),
             leading: IconButton(
@@ -43,7 +44,7 @@ class _DailyHelpState extends State<DailyHelp> {
                 }),
           ),
           body: TabBarView(
-            children: [MaidListing(), Container()],
+            children: [MaidListing(), OtherHelpListing()],
           ),
         ),
       ),

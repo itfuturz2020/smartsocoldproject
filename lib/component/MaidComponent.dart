@@ -1,36 +1,163 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_society_new/common/constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MaidComponent extends StatefulWidget {
+  var maidData;
+
+  MaidComponent(this.maidData);
+
   @override
   _MaidComponentState createState() => _MaidComponentState();
 }
 
 class _MaidComponentState extends State<MaidComponent> {
+  setTime(String datetime) {
+    var time = datetime.split(" ");
+    var t = time[1].split(":");
+
+    return "${t[0]}:${t[1]}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
+      elevation: 1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-           Row(
-             children: <Widget>[
-               Padding(
-                   padding: const EdgeInsets.only(top:8.0,left: 8.0,bottom: 8.0),
-                   child: ClipOval(
-                       child: /*widget._staffInSideList["Image"] == null && widget._staffInSideList["Image"] == '' ?*/
-                       /*FadeInImage.assetNetwork(
-                           placeholder: 'images/Logo.png',
-                           image:
-                           "${IMG_URL+widget._staffInSideList["Image"]}",
-                           width: 50,
-                           height: 50,
-                           fit: BoxFit.fill)*/
-                           Image.asset('images/user.png',width: 50,height: 50,)
-                   )
-               ),
-             ],
-           )
+          Row(
+            children: <Widget>[
+              widget.maidData["Image"] != null || widget.maidData["Image"] != ""
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipOval(
+                          child: /*widget._staffInSideList["Image"] == null && widget._staffInSideList["Image"] == '' ?*/
+                              FadeInImage.assetNetwork(
+                                  placeholder: 'images/user.png',
+                                  image:
+                                      "${Image_Url}${widget.maidData["Image"]}",
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.fill)))
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipOval(
+                          child: Image.asset(
+                        'images/user.png',
+                        width: 50,
+                        height: 50,
+                      ))),
+              Container(
+                width: MediaQuery.of(context).size.width / 1.63,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text("${widget.maidData["Name"]}",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600)),
+                    Text("${widget.maidData["Address"]}",
+                        style: TextStyle(color: Colors.black)),
+                    Row(
+                      children: <Widget>[
+                        Text("${widget.maidData["Work"]}",
+                            style: TextStyle(color: Colors.black)),
+                        widget.maidData["lastentry"].length > 0 &&
+                                widget.maidData["lastentry"][0]["OutTime"] !=
+                                    null &&
+                                widget.maidData["lastentry"][0]["OutTime"] != ""
+                            ? Padding(
+                                padding: EdgeInsets.only(left: 15),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 1, horizontal: 10),
+                                    child: Text("Outside",
+                                        style: TextStyle(color: Colors.white)),
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.only(left: 15),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 1, horizontal: 10),
+                                    child: Text("Inside",
+                                        style: TextStyle(color: Colors.white)),
+                                  ),
+                                ),
+                              )
+                      ],
+                    ),
+                    widget.maidData["lastentry"].length > 0
+                        ? Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.arrow_downward,
+                                color: Colors.red,
+                              ),
+                              Text(
+                                  "${setTime(widget.maidData["lastentry"][0]["InTime"])}"),
+                              widget.maidData["lastentry"][0]["OutTime"] ==
+                                          null ||
+                                      widget.maidData["lastentry"][0]
+                                              ["OutTime"] ==
+                                          ""
+                                  ? Container()
+                                  : Icon(
+                                      Icons.arrow_upward,
+                                      color: Colors.green,
+                                    ),
+                              widget.maidData["lastentry"][0]["OutTime"] ==
+                                          null ||
+                                      widget.maidData["lastentry"][0]
+                                              ["OutTime"] ==
+                                          ""
+                                  ? Container()
+                                  : Text(
+                                      "${setTime(widget.maidData["lastentry"][0]["OutTime"])}"),
+                            ],
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 9, right: 7),
+                child: GestureDetector(
+                    onTap: () {
+                      launch("tel://${widget.maidData["ContactNo"]}");
+                    },
+                    child: Icon(Icons.phone, color: Colors.green, size: 25)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    launch("tel://${widget.maidData["EmergencyContactNo"]}");
+                  },
+                  child: Image.asset("images/emergancycall.png",
+                      color: Colors.red, height: 25, width: 25),
+                ),
+              ),
+            ],
+          )
         ],
-      )
+      ),
     );
   }
 }

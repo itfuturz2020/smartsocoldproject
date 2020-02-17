@@ -1492,4 +1492,62 @@ class Services {
       throw Exception(e.toString());
     }
   }
+
+  static Future<List> GetMaidListing() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String societyId = prefs.getString(constant.Session.SocietyId);
+    String url = API_URL + 'GetMaidData?SocietyId=$societyId';
+    print("GetMaidData Url:" + url);
+
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetMaidData Response: " + response.data.toString());
+        var responseData = response.data;
+
+        if (responseData["IsSuccess"] == true) {
+          print(responseData["Data"]);
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("No Internet Connection");
+      }
+    } catch (e) {
+      print("Check GetMaidData Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
+  static Future<List> GetOtherListing() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String societyId = prefs.getString(constant.Session.SocietyId);
+    String url = API_URL + 'GetStaffData?SocietyId=$societyId';
+    print("GetStaffData Url:" + url);
+
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetStaffData Response: " + response.data.toString());
+        var responseData = response.data;
+
+        if (responseData["IsSuccess"] == true) {
+          print(responseData["Data"]);
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("No Internet Connection");
+      }
+    } catch (e) {
+      print("Check GetStaffData Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
 }

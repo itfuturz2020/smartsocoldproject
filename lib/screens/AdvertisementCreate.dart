@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/screens/PaymentWebView.dart';
@@ -23,7 +22,7 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
   TextEditingController edtWebsiteURL = new TextEditingController();
   TextEditingController edtEmail = new TextEditingController();
   TextEditingController edtVideoLink = new TextEditingController();
-
+  FocusNode myFocusNode;
   String selectedType;
   String selectedLocationType;
   String selectedLocations = "";
@@ -39,11 +38,13 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
   bool isLoading = false;
   ProgressDialog pr;
   String _lat = "", _long = "";
+  bool invisible = true;
 
   @override
   void initState() {
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(message: 'Please Wait');
+    myFocusNode = FocusNode();
     getPackages();
     getPaymentDetails();
     _getLocation();
@@ -237,39 +238,53 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
         edtDescription.text != "" &&
         edtWebsiteURL.text != "" &&
         edtEmail.text != "") {
-      DateTime expiredDate = DateTime.now();
+      final validCharacters =
+          RegExp(r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$');
+      //final validCharacters = RegExp(r'^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$');
+      var validate = validCharacters.hasMatch(edtEmail.text);
+      if (validate == false) {
+        Fluttertoast.showToast(
+            msg: "Please enter valid E-mail",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        DateTime expiredDate = DateTime.now();
 
-      expiredDate = expiredDate
-          .add(Duration(days: _packageList[selected_package]["Duration"]));
+        expiredDate = expiredDate
+            .add(Duration(days: _packageList[selected_package]["Duration"]));
 
-      var data = {
-        "key": "${_paymentDetails[0]["InstaMojoKey"]}",
-        "token": "${_paymentDetails[0]["InstaMojoToken"]}",
-        "amount": "${double.parse(
-          (_packageList[selected_package]["Price"] * _selectedCheckList.length)
-              .toString(),
-        )}",
-        "title": "${edtTitle.text}",
-        "desc": "${edtDescription.text}",
-        "photo": image,
-        "packageId": "${_packageList[selected_package]["Id"]}",
-        "expiredDate": "${expiredDate.toString()}",
-        "type": "${selectedLocationType}",
-        "targetedId": "${selectedLocations}",
-        "renew": "false",
-        "WebsiteURL": edtWebsiteURL.text,
-        "VideoLink": edtVideoLink.text,
-        "Email": edtEmail.text,
-        "GoogleMap": _lat + "," + _long,
-      };
+        var data = {
+          "key": "${_paymentDetails[0]["InstaMojoKey"]}",
+          "token": "${_paymentDetails[0]["InstaMojoToken"]}",
+          "amount": "${double.parse(
+            (_packageList[selected_package]["Price"] *
+                    _selectedCheckList.length)
+                .toString(),
+          )}",
+          "title": "${edtTitle.text}",
+          "desc": "${edtDescription.text}",
+          "photo": image,
+          "packageId": "${_packageList[selected_package]["Id"]}",
+          "expiredDate": "${expiredDate.toString()}",
+          "type": "${selectedLocationType}",
+          "targetedId": "${selectedLocations}",
+          "renew": "false",
+          "WebsiteURL": edtWebsiteURL.text,
+          "VideoLink": edtVideoLink.text,
+          "Email": edtEmail.text,
+          "GoogleMap": _lat + "," + _long,
+        };
 
-      print(data);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PaymentWebView(data),
-        ),
-      );
+        print(data);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentWebView(data),
+          ),
+        );
+      }
     } else
       Fluttertoast.showToast(
           msg: "Please Enter All Fields",
@@ -434,7 +449,7 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                                   top: 15.0, right: 5.0, left: 5.0),
                               child: Row(
                                 children: <Widget>[
-                                  Text("EMail",
+                                  Text("E-Mail",
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.grey[600],
@@ -657,6 +672,8 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                                       selectedType = newValue;
                                       _locationsData.clear();
                                       _selectedCheckList.clear();
+                                      FocusScope.of(context)
+                                          .requestFocus(myFocusNode);
                                     });
                                     getLocationData(newValue);
                                   },
@@ -673,6 +690,12 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                                     );
                                   }).toList(),
                                 ))),
+                            !invisible
+                                ? TextFormField(
+                                    focusNode: myFocusNode,
+                                    keyboardType: TextInputType.text,
+                                  )
+                                : Container(),
                             _packageList.length > 0
                                 ? Padding(
                                     padding: const EdgeInsets.only(
