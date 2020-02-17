@@ -109,7 +109,8 @@ class Services {
   static Future<List> GetMyVisitorList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String MemberId = prefs.getString(constant.Session.Member_Id);
-    String url = API_URL + 'GetVisitorByMemberId?memberId=$MemberId';
+    String SocietyID = prefs.getString(constant.Session.Member_Id);
+    String url = API_URL + 'GetVisitorsByMemberId?societyId=$SocietyID&memberId=$MemberId';
     print("GetVisitorurl url : " + url);
     try {
       final response = await dio.get(
