@@ -15,8 +15,14 @@ class _OtherHelpComponentState extends State<OtherHelpComponent> {
   setTime(String datetime) {
     var time = datetime.split(" ");
     var t = time[1].split(":");
-
-    return "${t[0]}:${t[1]}";
+    var meridiam = "";
+    if (int.parse(t[0]) > 12) {
+      meridiam = "PM";
+      t[0]=(int.parse(t[0])-12).toString();
+    } else {
+      meridiam = "AM";
+    }
+    return "${t[0]}:${t[1]} ${meridiam}";
   }
 
   @override

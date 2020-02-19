@@ -16,8 +16,14 @@ class _MaidComponentState extends State<MaidComponent> {
   setTime(String datetime) {
     var time = datetime.split(" ");
     var t = time[1].split(":");
-
-    return "${t[0]}:${t[1]}";
+    var meridiam = "";
+    if (int.parse(t[0]) > 12) {
+      meridiam = "PM";
+      t[0]=(int.parse(t[0])-12).toString();
+    } else {
+      meridiam = "AM";
+    }
+    return "${t[0]}:${t[1]} ${meridiam}";
   }
 
   @override
@@ -30,7 +36,8 @@ class _MaidComponentState extends State<MaidComponent> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                widget.maidData["Image"] != null || widget.maidData["Image"] != ""
+                widget.maidData["Image"] != null ||
+                        widget.maidData["Image"] != ""
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ClipOval(
@@ -49,9 +56,7 @@ class _MaidComponentState extends State<MaidComponent> {
                           'images/user.png',
                           width: 50,
                           height: 50,
-                         )
-                        )
-                ),
+                        ))),
                 Container(
                   width: MediaQuery.of(context).size.width / 1.63,
                   child: Column(
@@ -59,12 +64,13 @@ class _MaidComponentState extends State<MaidComponent> {
                     children: <Widget>[
                       Text("${widget.maidData["Name"]}",
                           style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w600)),
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600)),
                       Text("${widget.maidData["Work"]}",
                           style: TextStyle(color: Colors.black)),
                       widget.maidData["lastentry"].length > 0
                           ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Icon(
                                   Icons.arrow_downward,
@@ -85,33 +91,55 @@ class _MaidComponentState extends State<MaidComponent> {
                                 widget.maidData["lastentry"][0]["OutTime"] ==
                                             null ||
                                         widget.maidData["lastentry"][0]
-                                                ["OutTime"] == ""
+                                                ["OutTime"] ==
+                                            ""
                                     ? Container()
                                     : Text(
                                         "${setTime(widget.maidData["lastentry"][0]["OutTime"])}"),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: widget.maidData["lastentry"].length > 0 ?
-                                  widget.maidData["lastentry"][0]["OutTime"] == null ||
-                                      widget.maidData["lastentry"][0]["OutTime"] == ""  ?
-                                   Container(
-                                    height: 25,
-                                    width: 75,
-                                    child: Center(child: Text('Inside',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green[500],
-                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
-                                    ),
-                                  ):
-                                  Container(
-                                    height: 25,
-                                    width: 75,
-                                    child: Center(child: Text('OutSide',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
-                                    decoration: BoxDecoration(
-                                        color: Colors.red[500],
-                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
-                                    ),
-                                  ):Container(),
+                                  child: widget.maidData["lastentry"].length > 0
+                                      ? widget.maidData["lastentry"][0]
+                                                      ["OutTime"] ==
+                                                  null ||
+                                              widget.maidData["lastentry"][0]
+                                                      ["OutTime"] ==
+                                                  ""
+                                          ? Container(
+                                              height: 25,
+                                              width: 75,
+                                              child: Center(
+                                                  child: Text('Inside',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontSize: 13))),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.green[500],
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              6.0))),
+                                            )
+                                          : Container(
+                                              height: 25,
+                                              width: 75,
+                                              child: Center(
+                                                  child: Text('OutSide',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontSize: 13))),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.red[500],
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              6.0))),
+                                            )
+                                      : Container(),
                                 )
                               ],
                             )
