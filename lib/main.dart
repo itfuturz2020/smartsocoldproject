@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
         '/Gallery': (context) => GalleryScreen(),
         '/UpdateProfile': (context) => UpdateProfile(),
         '/AddGuest': (context) => AddGuest(),
-        '/MyGuestList': (context) => MyGuestlist(),
+        '/MyGuestList': (context) => MyGuestList(),
         '/Rules': (context) => SocietyRules(),
         '/GetMyFamily': (context) => GetMyFamily(),
         '/AddFamily': (context) => AddFamilyMember(),

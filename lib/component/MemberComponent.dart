@@ -142,13 +142,11 @@ class _MemberComponentState extends State<MemberComponent> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          child: Text("${widget.MemberData["MemberData"]["Name"]}",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey[700])),
-                        ),
+                        Text("${widget.MemberData["MemberData"]["Name"]}",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey[700])),
                         widget.MemberData["MemberData"]["IsPrivate"] == false ||
                                 widget.MemberData["MemberData"]["IsPrivate"] ==
                                     null

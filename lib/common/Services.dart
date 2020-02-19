@@ -109,7 +109,7 @@ class Services {
   static Future<List> GetMyVisitorList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String MemberId = prefs.getString(constant.Session.Member_Id);
-    String SocietyID = prefs.getString(constant.Session.Member_Id);
+    String SocietyID = prefs.getString(constant.Session.SocietyId);
     String url = API_URL + 'GetVisitorsByMemberId?societyId=$SocietyID&memberId=$MemberId';
     print("GetVisitorurl url : " + url);
     try {
@@ -1550,4 +1550,37 @@ class Services {
       throw Exception(e);
     }
   }
+
+  static Future<List> GetGuestData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String MemberId = prefs.getString(constant.Session.Member_Id);
+    String SocietyID = prefs.getString(constant.Session.SocietyId);
+    String url = API_URL + 'GetGuestsByMemberId?societyId=$SocietyID&memberId=$MemberId';
+    print("GetVisitorurl url : " + url);
+    try {
+      final response = await dio.get(
+        url,
+      );
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetVisitorurl Response: " + response.data.toString());
+        var VisitorData = response.data;
+        if (VisitorData["IsSuccess"] == true) {
+          print(VisitorData["Data"]);
+          list = VisitorData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        print("Error GetVisitorurl");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error GetVisitorurl   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+
 }

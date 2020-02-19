@@ -25,12 +25,6 @@ class _MaidComponentState extends State<MaidComponent> {
     return Card(
       elevation: 1,
       child: Container(
-        color: widget.maidData["lastentry"].length > 0
-            ? widget.maidData["lastentry"][0]["OutTime"] == null ||
-            widget.maidData["lastentry"][0]["OutTime"] == ""
-            ? Colors.green[300]
-            : Colors.amberAccent
-            : Colors.amberAccent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -55,7 +49,9 @@ class _MaidComponentState extends State<MaidComponent> {
                           'images/user.png',
                           width: 50,
                           height: 50,
-                        ))),
+                         )
+                        )
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width / 1.63,
                   child: Column(
@@ -68,6 +64,7 @@ class _MaidComponentState extends State<MaidComponent> {
                           style: TextStyle(color: Colors.black)),
                       widget.maidData["lastentry"].length > 0
                           ? Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Icon(
                                   Icons.arrow_downward,
@@ -88,11 +85,34 @@ class _MaidComponentState extends State<MaidComponent> {
                                 widget.maidData["lastentry"][0]["OutTime"] ==
                                             null ||
                                         widget.maidData["lastentry"][0]
-                                                ["OutTime"] ==
-                                            ""
+                                                ["OutTime"] == ""
                                     ? Container()
                                     : Text(
                                         "${setTime(widget.maidData["lastentry"][0]["OutTime"])}"),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: widget.maidData["lastentry"].length > 0 ?
+                                  widget.maidData["lastentry"][0]["OutTime"] == null ||
+                                      widget.maidData["lastentry"][0]["OutTime"] == ""  ?
+                                   Container(
+                                    height: 25,
+                                    width: 75,
+                                    child: Center(child: Text('Inside',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green[500],
+                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
+                                    ),
+                                  ):
+                                  Container(
+                                    height: 25,
+                                    width: 75,
+                                    child: Center(child: Text('OutSide',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red[500],
+                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
+                                    ),
+                                  ):Container(),
+                                )
                               ],
                             )
                           : Container(),

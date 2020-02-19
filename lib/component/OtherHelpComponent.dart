@@ -24,12 +24,6 @@ class _OtherHelpComponentState extends State<OtherHelpComponent> {
     return Card(
       elevation: 1,
       child: Container(
-        color: widget.data["lastentry"].length > 0
-            ? widget.data["lastentry"][0]["OutTime"] == null ||
-                    widget.data["lastentry"][0]["OutTime"] == ""
-                ? Colors.green[300]
-                : Colors.amberAccent
-            : Colors.amberAccent,
         /*decoration: BoxDecoration(
             border: Border.all(
                 color: widget.data["lastentry"].length > 0
@@ -102,6 +96,31 @@ class _OtherHelpComponentState extends State<OtherHelpComponent> {
                                     ? Container()
                                     : Text(
                                         "${setTime(widget.data["lastentry"][0]["OutTime"])}"),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: widget.data["lastentry"].length > 0 ?
+                                  widget.data["lastentry"][0]["OutTime"] == null ||
+                                      widget.data["lastentry"][0]["OutTime"] == ""  ?
+                                  Container(
+                                    height: 25,
+                                    width: 75,
+                                    child: Center(child: Text('Inside',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green[500],
+                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
+                                    ),
+                                  ):
+                                  Container(
+                                    height: 25,
+                                    width: 75,
+                                    child: Center(child: Text('OutSide',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red[500],
+                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
+                                    ),
+                                  ):Container(),
+                                )
+
                               ],
                             )
                           : Container(),
