@@ -612,6 +612,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: <Widget>[
                     Divider(),
+
                     Container(
                       margin:
                           EdgeInsets.symmetric(horizontal: 15, vertical: 5),
