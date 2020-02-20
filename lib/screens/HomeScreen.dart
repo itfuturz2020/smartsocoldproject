@@ -2,29 +2,28 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Model/ModelClass.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smart_society_new/common/constant.dart';
-import 'package:smart_society_new/screens/GlobalSearchMembers.dart';
-
-//import 'package:speech_recognition/speech_recognition.dart';
-import 'package:draggable_fab/draggable_fab.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'AdvertismentDetailPage.dart';
 
 class HomeScreen extends StatefulWidget {
   String payload;
- // HomeScreen({this.payload});
+
+  // HomeScreen({this.payload});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -129,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+
 /*
   getProfilePR() async {
     try {
@@ -356,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
       FlatNo = prefs.getString(constant.Session.FlatNo);
       Profile = prefs.getString(constant.Session.Profile);
     });
-   /* if (prefs.getString(constant.Session.ProfileUpdateFlag) == "true")
+    /* if (prefs.getString(constant.Session.ProfileUpdateFlag) == "true")
       getProfilePR();*/
   }
 
@@ -472,130 +472,214 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: Drawer(
-          child: ListView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, '/MyProfile');
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                                border:
-                                    Border.all(color: Colors.grey, width: 0.4)),
-                            width: 76,
-                            height: 76,
-                          ),
-                          ClipOval(
-                            child: Profile != "null" && Profile != ""
-                                ? FadeInImage.assetNetwork(
-                                    placeholder: "images/image_loading.gif",
-                                    image: constant.Image_Url + '$Profile',
-                                    width: 70,
-                                    height: 70,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset(
-                                    "images/man.png",
-                                    width: 70,
-                                    height: 70,
-                                  ),
-                          ),
-                        ],
-                        alignment: Alignment.center,
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(top: 40.0),
-                                child: Text("$Name",
-                                    style: TextStyle(
-                                        //color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, '/MyProfile');
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Stack(
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 0.4)),
+                                  width: 76,
+                                  height: 76,
+                                ),
+                                ClipOval(
+                                  child: Profile != "null" && Profile != ""
+                                      ? FadeInImage.assetNetwork(
+                                          placeholder:
+                                              "images/image_loading.gif",
+                                          image:
+                                              constant.Image_Url + '$Profile',
+                                          width: 70,
+                                          height: 70,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.asset(
+                                          "images/man.png",
+                                          width: 70,
+                                          height: 70,
+                                        ),
+                                ),
+                              ],
+                              alignment: Alignment.center,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 40.0),
+                                      child: Text("$Name",
+                                          style: TextStyle(
+                                              //color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 2, left: 0),
+                                      child: Text("$Wing" " - " "$FlatNo"),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2, left: 0),
-                                child: Text("$Wing" " - " "$FlatNo"),
-                              )
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    ListTile(
+                      title: Text(
+                        'My Visitor',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.person_pin,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/MyGuestList");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Manage Advertisement',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.assessment,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, "/AdvertisementManage");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        "Society Amenities",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.local_laundry_service,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/Amenities");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Logout',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.exit_to_app,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _showConfirmDialog();
+                      },
+                    ),
+                  ],
                 ),
               ),
-              ListTile(
-                title: Text(
-                  'My Visitor',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+              Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Column(
+                  children: <Widget>[
+                    Divider(),
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              launch("tel://9023803870");
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Image.asset("images/call.png",
+                                    height: 24, width: 24),
+                                Padding(
+                                  padding: const EdgeInsets.only(top:5),
+                                  child: Text("Call",style: TextStyle(fontWeight: FontWeight.w600)),
+                                )
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                            launch("https://www.facebook.com/myjinismartsociety/");
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Image.asset("images/facebook.png",
+                                    height: 24, width: 24),
+                                Padding(
+                                  padding: const EdgeInsets.only(top:5),
+                                  child: Text("Facebook",style: TextStyle(fontWeight: FontWeight.w600)),
+                                )
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {launch("https://www.instagram.com/myjini_smartsociety/");},
+                            child: Column(
+                              children: <Widget>[
+                                Image.asset("images/instagram.png",
+                                    height: 24, width: 24),
+                                Padding(
+                                  padding: const EdgeInsets.only(top:5),
+                                  child: Text("Instagram",style: TextStyle(fontWeight: FontWeight.w600)),
+                                )
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {launch("http://www.myjini.in/");},
+                            child: Column(
+                              children: <Widget>[
+                                Image.asset("images/applogo.png",
+                                    height: 24, width: 24),
+                                Padding(
+                                  padding: const EdgeInsets.only(top:5),
+                                  child: Text("Website",style: TextStyle(fontWeight: FontWeight.w600)),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                leading: Icon(
-                  Icons.person_pin,
-                  color: constant.appPrimaryMaterialColor,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, "/MyGuestList");
-                },
-              ),
-              ListTile(
-                title: Text(
-                  'Manage Advertisement',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                leading: Icon(
-                  Icons.assessment,
-                  color: constant.appPrimaryMaterialColor,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, "/AdvertisementManage");
-                },
-              ),
-              ListTile(
-                title: Text(
-                  "Society Amenities",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                leading: Icon(
-                  Icons.local_laundry_service,
-                  color: constant.appPrimaryMaterialColor,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, "/Amenities");
-                },
-              ),
-              ListTile(
-                title: Text(
-                  'Logout',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                leading: Icon(
-                  Icons.exit_to_app,
-                  color: constant.appPrimaryMaterialColor,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showConfirmDialog();
-                },
-              ),
+              )
             ],
           ),
         ),
