@@ -32,11 +32,22 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
       maxHeight: 240.0,
       maxWidth: 240.0,
     );
-
     setState(() {
       _image = image;
     });
   }
+
+  Future galleryImage() async {
+    var image = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 240.0,
+      maxWidth: 240.0,
+    );
+    setState(() {
+      _image = image;
+    });
+  }
+
 
   getLocalData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -304,16 +315,26 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       GestureDetector(
                         child: Image.asset('images/Camera.png',
                             fit: BoxFit.cover,
-                            width: 60,
-                            height: 60,
+                            width: 50,
+                            height: 50,
                             color: Colors.grey),
                         onTap: () {
                           cameraImage();
+                        },
+                      ),
+                      GestureDetector(
+                        child: Image.asset('images/galleryselect.png',
+                            fit: BoxFit.cover,
+                            width: 50,
+                            height: 50,
+                            color: Colors.grey),
+                        onTap: () {
+                          galleryImage();
                         },
                       )
                     ],

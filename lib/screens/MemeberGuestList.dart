@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 
@@ -14,12 +16,24 @@ class _MemberGuestListState extends State<MemberGuestList> {
 
   bool isLoading = false;
   List _GuestList = [];
+  String Address;
+  String Type = 'Visitor';
 
 
   @override
   void initState() {
     _GetVisitorData();
+    _getLocaldata();
   }
+
+  _getLocaldata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      Address = prefs.getString(constant.Session.Address);
+    });
+  }
+
 
   _GetVisitorData() async {
     try {
@@ -145,17 +159,15 @@ class _MemberGuestListState extends State<MemberGuestList> {
                       ],
                     ),
                   ),
-                 /* Padding(
+                  Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: IconButton(
                         icon: Icon(Icons.share, color: Colors.grey),
                         onPressed: () {
-                          Share.share(
-                              'http://smartsociety.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}' +
-                                  "\n ${Address} ");
-                         }
+                          Share.share('http://smartsociety.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}&type=Visitor');
+                        }
                         ),
-                  )*/
+                  )
                 ],
               ),
             ],
