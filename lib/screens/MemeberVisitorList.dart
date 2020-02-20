@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:smart_society_new/common/Services.dart';
+import 'package:smart_society_new/common/constant.dart';
 
 
 class MemberVisitorList extends StatefulWidget {
@@ -12,7 +13,7 @@ class MemberVisitorList extends StatefulWidget {
 class _MemberVisitorListState extends State<MemberVisitorList> {
 
   bool isLoading = false;
-  List _GuestList = [];
+  List _VisitorList = [];
 
 
   @override
@@ -35,7 +36,7 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
           });
           if (data != null && data.length > 0) {
             setState(() {
-              _GuestList = data;
+              _VisitorList = data;
             });
           } else {
             setState(() {
@@ -82,6 +83,27 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
   }
 
 
+  String setDate(String date) {
+    String final_date = "";
+    var tempDate;
+    if (date != "" || date != null) {
+      tempDate = date.toString().split("-");
+      if (tempDate[2].toString().length == 1) {
+        tempDate[2] = "0" + tempDate[2].toString();
+      }
+      if (tempDate[1].toString().length == 1) {
+        tempDate[1] = "0" + tempDate[1].toString();
+      }
+      final_date = date == "" || date == null
+          ? ""
+          : "${tempDate[2].toString().substring(0, 2)}-${tempDate[1].toString()}-${tempDate[0].toString()}"
+          .toString();
+    }
+    return final_date;
+  }
+
+
+
   Widget _MyGuestlistCard(BuildContext context, int index) {
     return Padding(
       padding: const EdgeInsets.only(right: 4.0, left: 4.0),
@@ -105,7 +127,7 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                       height: 40,
                       decoration: BoxDecoration(
                         image: new DecorationImage(
-                            image: AssetImage("images/man.png"),
+                            image: _VisitorList[index]["Image"] == "" || _VisitorList[index]["Image"] == null ? AssetImage("images/man.png"):NetworkImage(Image_Url+_VisitorList[index]["Image"]),
                             fit: BoxFit.cover),
                         borderRadius:
                         BorderRadius.all(new Radius.circular(75.0)),
@@ -120,9 +142,9 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                           padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                           child: Row(
                             children: <Widget>[
-                              Text("${_GuestList[index]["Name"]}",
+                              Text("${_VisitorList[index]["Name"]}",
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                       color: Color.fromRGBO(81, 92, 111, 1))),
                             ],
@@ -133,9 +155,9 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                             Padding(
                               padding:
                               const EdgeInsets.only(left: 1.0, top: 3.0),
-                              child: Text("  ${_GuestList[index]["ContactNo"]}",
+                              child: Text("  ${_VisitorList[index]["ContactNo"]}",
                                   style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.grey[700])),
                             ),
@@ -150,11 +172,12 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                         icon: Icon(Icons.share, color: Colors.grey),
                         onPressed: () {
                           Share.share(
-                              'http://smartsociety.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}' +
+                              'http://smartsociety.itfuturz.com/QRCode.aspx?id=${_VisitorList[index]["Id"]}' +
                                   "\n ${Address} ");
                          }
                         ),
                   )*/
+                  Text(setDate("${setDate(_VisitorList[index]["Date"])}"))
                 ],
               ),
             ],
@@ -170,12 +193,12 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
           ? Container(
         child: Center(child: CircularProgressIndicator()),
       )
-          : _GuestList.length > 0
+          : _VisitorList.length > 0
           ? Container(
         child: Container(
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: _GuestList.length,
+            itemCount: _VisitorList.length,
             itemBuilder: _MyGuestlistCard,
           ),
         ),

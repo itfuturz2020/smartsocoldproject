@@ -233,12 +233,22 @@ class _MaintainanceState extends State<Maintainance> {
                 Navigator.pushReplacementNamed(context, "/HomeScreen");
               }),
           centerTitle: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+            ),
+          ),
           title: Text(
             "Maintainence",
             style: TextStyle(fontSize: 17),
           ),
         ),
-        body: Column(
+        body: Container(
+          child: Center(
+            child: Text('Work In Progress'),
+          ),
+        )
+      /*   Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Card(
@@ -252,7 +262,7 @@ class _MaintainanceState extends State<Maintainance> {
             ),
             Expanded(child: ListView.builder(itemBuilder: _CardPayment,itemCount: 10,shrinkWrap: true))
           ],
-        )
+        )*/
       ),
     );
   }
