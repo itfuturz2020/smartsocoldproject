@@ -780,7 +780,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 5)),
             Expanded(
               child: isLoading
                   ? Container(
@@ -954,100 +953,98 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
             ),
-            SafeArea(
-              child: Container(
-                height: 60,
-                decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    border: Border(
-                        top: BorderSide(color: Colors.grey, width: 0.3))),
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.home),
-                              Text("Home",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12))
-                            ],
-                          ),
+            Container(
+              height: 54,
+              decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  border: Border(
+                      top: BorderSide(color: Colors.grey, width: 0.3))),
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    child: InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.home,size: 22,),
+                            Text("Home",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11))
+                          ],
                         ),
-                        onTap: () {},
                       ),
+                      onTap: () {},
                     ),
-                    Flexible(
-                      child: InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.person_pin),
-                              Text("Add Visitor",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12))
-                            ],
-                          ),
+                  ),
+                  Flexible(
+                    child: InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.person_pin,size: 22),
+                            Text("Add Visitor",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11))
+                          ],
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, "/MyGuestList");
-                        },
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(context, "/MyGuestList");
+                      },
                     ),
-                    Flexible(
-                      child: InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.new_releases),
-                              Text("Advertisement",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11))
-                            ],
-                          ),
+                  ),
+                  Flexible(
+                    child: InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.new_releases,size: 22),
+                            Text("Advertisement",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11))
+                          ],
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/AdvertisementCreate');
-                        },
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/AdvertisementCreate');
+                      },
                     ),
-                    Flexible(
-                      child: InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.person),
-                              Text("Profile",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12))
-                            ],
-                          ),
+                  ),
+                  Flexible(
+                    child: InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.person,size: 22),
+                            Text("Profile",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11))
+                          ],
                         ),
-                        onTap: () {
-                          Navigator.pushReplacementNamed(context, '/MyProfile');
-                        },
                       ),
-                    )
-                  ],
-                ),
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, '/MyProfile');
+                      },
+                    ),
+                  )
+                ],
               ),
             )
           ],
