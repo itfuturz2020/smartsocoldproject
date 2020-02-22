@@ -30,6 +30,13 @@
             {
               "client_id": "653223090945-valkoh4gc68n93v4iidd3v1bltfks7r4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "653223090945-b9s6o5lf1kilnjjq93u780t5oltvstil.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.itfuturzmyjini"
+              }
             }
           ]
         }

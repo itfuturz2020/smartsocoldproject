@@ -1,8 +1,10 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:smart_society_new/screens/AddFamilyMember.dart';
 import 'package:smart_society_new/screens/AdvertisementCreate.dart';
 import 'package:smart_society_new/screens/AdvertisementManage.dart';
@@ -48,6 +50,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
 
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
@@ -63,11 +67,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initPlayer();
     _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
-      final title = message['notification']['title'];
-      final body = message['notification']['body'];
-      showNotification('$title', '$body');
-      print("onMessage");
-      print(message);
+      Get.to(OverlayScreen(message));
+      audioCache.play('Sound.mp3');
+      print("onMessage  $message");
     }, onResume: (Map<String, dynamic> message) {
       print("onResume");
       print(message);
@@ -95,15 +97,16 @@ class _MyAppState extends State<MyApp> {
 
   Future onSelectNotification(String payload) async {
     debugPrint("payload : $payload");
-   /* await Navigator.push(
+    await Navigator.push(
         context,
         new MaterialPageRoute(
-            builder: (BuildContext context) => new OverlayScreen("hello")));*/
+            builder: (BuildContext context) => new OverlayScreen("hello")));
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: Get.key,
       debugShowCheckedModeBanner: false,
       title: "My JINI",
       initialRoute: '/',
@@ -239,7 +242,7 @@ class _MyAppState extends State<MyApp> {
 */
 
 class OverlayScreen extends StatefulWidget {
-  String data;
+  var data;
 
   OverlayScreen(this.data);
 
@@ -248,7 +251,6 @@ class OverlayScreen extends StatefulWidget {
 }
 
 class _OverlayScreenState extends State<OverlayScreen> {
-
   @override
   void initState() {
     print(widget.data);
@@ -257,7 +259,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Color.fromRGBO(114, 34, 169, 0.8),
+     color: Color.fromRGBO(18, 17, 17, 0.8),
       child: Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -266,10 +268,8 @@ class _OverlayScreenState extends State<OverlayScreen> {
           children: <Widget>[
             Card(
               child: Container(
-                  height: 400,
-                  width: 500,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Padding(
@@ -277,18 +277,18 @@ class _OverlayScreenState extends State<OverlayScreen> {
                         child: Container(
                           child: Center(
                               child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Delivery Boy Waiting At Gate",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            ),
-                          )),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Delivery Boy Waiting At Gate",
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                              )),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                               color: Colors.grey[200],
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0))),
+                              BorderRadius.all(Radius.circular(8.0))),
                         ),
                       ),
                       Padding(
@@ -300,8 +300,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
                           backgroundColor: Colors.transparent,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Column(
                         children: <Widget>[
                           Text(
                             "Amit Patel",
@@ -310,24 +309,36 @@ class _OverlayScreenState extends State<OverlayScreen> {
                                 fontSize: 18,
                                 color: Colors.grey[800]),
                           ),
+                          Image.network('https://i.ya-webdesign.com/images/dominos-pizza-logo-png-4.png',width: 90,height: 55,)
                         ],
+                      ),
+                      Text(
+                        "GJ-05-KP-5555",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey[800]),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                Image.asset('images/success.png',
-                                    width: 45, height: 45),
-                                Text(
-                                  "APPROVE",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12),
-                                )
-                              ],
+                            GestureDetector(
+                              onTap: (){
+
+                              },
+                              child: Column(
+                                children: <Widget>[
+                                  Image.asset('images/success.png',
+                                      width: 45, height: 45),
+                                  Text(
+                                    "APPROVE",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12),
+                                  )
+                                ],
+                              ),
                             ),
                             Column(
                               children: <Widget>[

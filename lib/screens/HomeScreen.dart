@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,12 +12,15 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Model/ModelClass.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/common/constant.dart';
+import 'package:smart_society_new/component/VisitorPopup.dart';
+import 'package:smart_society_new/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AdvertismentDetailPage.dart';
@@ -31,6 +36,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
+
+
+  AudioPlayer advancedPlayer;
+  AudioCache audioCache;
+
+  void initPlayer() {
+    advancedPlayer = new AudioPlayer();
+    audioCache = new AudioCache(fixedPlayer: advancedPlayer);
+  }
 
   // SpeechRecognition _speechRecognition;
 
@@ -53,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    initPlayer();
     _getLocaldata();
     getAdvertisementData();
     // initSpeechRecognizer();
@@ -1043,7 +1058,6 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 50,
             child: FloatingActionButton(
               onPressed: () {
-                //   showDialog(context: context, child: OverlayScreen(''));
               },
               backgroundColor: Colors.red[200],
               child: Container(
@@ -1067,3 +1081,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

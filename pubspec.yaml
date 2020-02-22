@@ -57,6 +57,7 @@ dependencies:
   geolocator: ^4.0.3
   neeko: ^0.0.6
   youtube_player_flutter: ^6.0.0
+  get: ^1.10.5
 
 dev_dependencies:
   flutter_test:
@@ -149,6 +150,7 @@ flutter:
     - images/instagram.png
     - images/website.png
     - images/galleryselect.png
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
