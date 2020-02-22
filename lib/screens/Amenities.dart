@@ -106,89 +106,92 @@ class _AmenitiesState extends State<Amenities> {
                 ? Container(
                     child: Swiper(
                       itemBuilder: (BuildContext, int index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            FadeInImage.assetNetwork(
-                              placeholder: "images/placeholder.png",
-                              image: Image_Url +
-                                  '${_aminitiesData[index]["Photo"]}',
-                              width: 80,
-                              height: 80,
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 15)),
-                            Text(
-                              "${_aminitiesData[index]["Name"]}",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: constant.appPrimaryMaterialColor,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 17.0, left: 30, right: 30),
-                              child: Text(
-                                "A swimming pool, swimming bath, wading pool, paddling pool, or simply pool is a structure designed to hold water to enable swimming or other leisure activities",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: constant.appprimarycolors[400],
-                                ),
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              FadeInImage.assetNetwork(
+                                placeholder: "images/placeholder.png",
+                                image: Image_Url +
+                                    '${_aminitiesData[index]["Photo"]}',
+                                width: MediaQuery.of(context).size.width,
+                                height: 200,
                               ),
-                            ),
-                            Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 12.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text("${_aminitiesData[index]["Type"]}",
-                                          style: TextStyle(
-                                              color: _aminitiesData[index]
-                                                              ["Type"]
+                              Padding(padding: EdgeInsets.only(top: 15)),
+                              Text(
+                                "${_aminitiesData[index]["Name"]}",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: constant.appPrimaryMaterialColor,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 17.0, left: 30, right: 30),
+                                /*child: Text(
+                                  "A swimming pool, swimming bath, wading pool, paddling pool, or simply pool is a structure designed to hold water to enable swimming or other leisure activities",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: constant.appprimarycolors[400],
+                                  ),
+                                ),*/
+                              ),
+                              Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text("${_aminitiesData[index]["Type"]}",
+                                            style: TextStyle(
+                                                color: _aminitiesData[index]
+                                                                ["Type"]
+                                                            .toString()
+                                                            .toLowerCase() ==
+                                                        "free"
+                                                    ? Colors.green
+                                                    : Colors.orange,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700)),
+                                        Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Icon(Icons.verified_user,
+                                              size: 18,
+                                              color: _aminitiesData[index]["Type"]
                                                           .toString()
                                                           .toLowerCase() ==
                                                       "free"
                                                   ? Colors.green
-                                                  : Colors.orange,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700)),
-                                      Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: Icon(Icons.verified_user,
-                                            size: 18,
-                                            color: _aminitiesData[index]["Type"]
-                                                        .toString()
-                                                        .toLowerCase() ==
-                                                    "free"
-                                                ? Colors.green
-                                                : Colors.orange),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      new Radius.circular(10.0)),
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 25),
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    "Avaliable Timing",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black54,
+                                                  : Colors.orange),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  Text(
-                                    "${_aminitiesData[index]["AvailableTimeSlot"]}",
-                                    style: TextStyle(color: Colors.black),
-                                  )
-                                ],
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        new Radius.circular(10.0)),
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      "Avaliable Timing",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${_aminitiesData[index]["AvailableTimeSlot"]}",
+                                      style: TextStyle(color: Colors.black),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       },
                       itemCount: _aminitiesData.length,
@@ -196,7 +199,7 @@ class _AmenitiesState extends State<Amenities> {
                           builder: DotSwiperPaginationBuilder(
                         color: Colors.grey[400],
                       )),
-                      control: new SwiperControl(size: 17),
+//                      control: new SwiperControl(size: 17),
                     ),
                   )
                 : Container(

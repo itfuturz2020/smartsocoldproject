@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const String API_URL = "http://smartsociety.itfuturz.com/api/AppAPI/";
-const String Image_Url = "http://smartsociety.itfuturz.com";
+const String Image_Url = "http://smartsociety.itfuturz.com/";
 const Inr_Rupee = "₹";
 
 const String whatsAppLink = "https://wa.me/#mobile?text=#msg";
