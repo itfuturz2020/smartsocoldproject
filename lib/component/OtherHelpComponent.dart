@@ -73,8 +73,36 @@ class _OtherHelpComponentState extends State<OtherHelpComponent> {
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w600)),
-                      Text("${widget.data["Work"]}",
-                          style: TextStyle(color: Colors.black)),
+                      Row(
+                        children: <Widget>[
+                          Text("${widget.data["Work"]}",
+                              style: TextStyle(color: Colors.black)),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: widget.data["lastentry"].length > 0 ?
+                            widget.data["lastentry"][0]["OutTime"] == null ||
+                                widget.data["lastentry"][0]["OutTime"] == ""  ?
+                            Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(child: Text('Inside',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 12))),
+                              decoration: BoxDecoration(
+                                  color: Colors.green[500],
+                                  borderRadius: BorderRadius.all(Radius.circular(6.0))
+                              ),
+                            ):
+                            Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(child: Text('OutSide',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 12))),
+                              decoration: BoxDecoration(
+                                  color: Colors.red[500],
+                                  borderRadius: BorderRadius.all(Radius.circular(6.0))
+                              ),
+                            ):Container(),
+                          )
+                        ],
+                      ),
                       widget.data["lastentry"].length > 0
                           ? Row(
                               children: <Widget>[
@@ -102,30 +130,6 @@ class _OtherHelpComponentState extends State<OtherHelpComponent> {
                                     ? Container()
                                     : Text(
                                         "${setTime(widget.data["lastentry"][0]["OutTime"])}"),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: widget.data["lastentry"].length > 0 ?
-                                  widget.data["lastentry"][0]["OutTime"] == null ||
-                                      widget.data["lastentry"][0]["OutTime"] == ""  ?
-                                  Container(
-                                    height: 25,
-                                    width: 75,
-                                    child: Center(child: Text('Inside',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green[500],
-                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
-                                    ),
-                                  ):
-                                  Container(
-                                    height: 25,
-                                    width: 75,
-                                    child: Center(child: Text('OutSide',style: TextStyle(fontWeight: FontWeight.w600,color: Colors.white,fontSize: 13))),
-                                    decoration: BoxDecoration(
-                                        color: Colors.red[500],
-                                        borderRadius: BorderRadius.all(Radius.circular(6.0))
-                                    ),
-                                  ):Container(),
-                                )
 
                               ],
                             )

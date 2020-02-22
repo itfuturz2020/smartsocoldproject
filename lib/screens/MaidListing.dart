@@ -31,7 +31,6 @@ class _MaidListingState extends State<MaidListing> {
           if (data != null && data.length > 0) {
             setState(() {
               maidList = data;
-
               isLoading = false;
             });
           } else {

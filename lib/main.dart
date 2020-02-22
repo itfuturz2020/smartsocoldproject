@@ -49,9 +49,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  final GlobalKey<NavigatorState> navigatorKey =
-      new GlobalKey<NavigatorState>();
 
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
@@ -87,20 +84,6 @@ class _MyAppState extends State<MyApp> {
       print("Setting reqistered : $settings");
     });
 
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iOS = new IOSInitializationSettings();
-    var initSetttings = new InitializationSettings(android, iOS);
-    flutterLocalNotificationsPlugin.initialize(initSetttings,
-        onSelectNotification: onSelectNotification);
-  }
-
-  Future onSelectNotification(String payload) async {
-    debugPrint("payload : $payload");
-    await Navigator.push(
-        context,
-        new MaterialPageRoute(
-            builder: (BuildContext context) => new OverlayScreen("hello")));
   }
 
   @override
@@ -147,16 +130,6 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: constant.appPrimaryMaterialColor,
       ),
     );
-  }
-
-  showNotification(String title, String body) async {
-    var android = new AndroidNotificationDetails(
-        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
-        priority: Priority.High, importance: Importance.Max, playSound: false);
-    var iOS = new IOSNotificationDetails();
-    var platform = new NotificationDetails(android, iOS);
-    await flutterLocalNotificationsPlugin.show(0, '$title', '$body', platform,
-        payload: 'MY JINI');
   }
 }
 
@@ -375,7 +348,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
                   size: 40,
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 }),
           ],
         ),

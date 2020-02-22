@@ -66,9 +66,58 @@ class _MaidComponentState extends State<MaidComponent> {
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w600)),
-                      Text("${widget.maidData["Work"]}",
-                          style: TextStyle(color: Colors.black)),
-                      widget.maidData["lastentry"].length > 0
+                      Row(
+                        children: <Widget>[
+                          Text("${widget.maidData["Work"]}",
+                              style: TextStyle(color: Colors.black)),
+                          Padding(
+                            padding: const EdgeInsets.only(left:8.0,bottom: 4.0,top: 4.0),
+                            child: widget.maidData.length > 0
+                                ? widget.maidData
+                            ["OutTime"] ==
+                                null ||
+                                widget.maidData
+                                ["OutTime"] ==
+                                    ""
+                                ? Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(
+                                  child: Text('Inside',
+                                      style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize: 12))),
+                              decoration: BoxDecoration(
+                                  color: Colors.green[500],
+                                  borderRadius:
+                                  BorderRadius.all(
+                                      Radius.circular(
+                                          6.0))),
+                            )
+                                : Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(
+                                  child: Text('OutSide',
+                                      style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize: 12))),
+                              decoration: BoxDecoration(
+                                  color: Colors.red[500],
+                                  borderRadius:
+                                  BorderRadius.all(
+                                      Radius.circular(
+                                          6.0))),
+                            )
+                                : Container(),
+                          )
+                        ],
+                      ),
+                      widget.maidData.length > 0
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
@@ -77,10 +126,10 @@ class _MaidComponentState extends State<MaidComponent> {
                                   color: Colors.green,
                                 ),
                                 Text(
-                                    "${setTime(widget.maidData["lastentry"][0]["InTime"])}"),
-                                widget.maidData["lastentry"][0]["OutTime"] ==
+                                    "${setTime(widget.maidData["InTime"])}"),
+                                widget.maidData["OutTime"] ==
                                             null ||
-                                        widget.maidData["lastentry"][0]
+                                        widget.maidData
                                                 ["OutTime"] ==
                                             ""
                                     ? Container()
@@ -88,59 +137,14 @@ class _MaidComponentState extends State<MaidComponent> {
                                         Icons.arrow_upward,
                                         color: Colors.red,
                                       ),
-                                widget.maidData["lastentry"][0]["OutTime"] ==
+                                widget.maidData["OutTime"] ==
                                             null ||
-                                        widget.maidData["lastentry"][0]
+                                        widget.maidData
                                                 ["OutTime"] ==
                                             ""
                                     ? Container()
                                     : Text(
-                                        "${setTime(widget.maidData["lastentry"][0]["OutTime"])}"),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: widget.maidData["lastentry"].length > 0
-                                      ? widget.maidData["lastentry"][0]
-                                                      ["OutTime"] ==
-                                                  null ||
-                                              widget.maidData["lastentry"][0]
-                                                      ["OutTime"] ==
-                                                  ""
-                                          ? Container(
-                                              height: 25,
-                                              width: 75,
-                                              child: Center(
-                                                  child: Text('Inside',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                          fontSize: 13))),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.green[500],
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              6.0))),
-                                            )
-                                          : Container(
-                                              height: 25,
-                                              width: 75,
-                                              child: Center(
-                                                  child: Text('OutSide',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                          fontSize: 13))),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.red[500],
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              6.0))),
-                                            )
-                                      : Container(),
-                                )
+                                        "${setTime(widget.maidData["OutTime"])}"),
                               ],
                             )
                           : Container(),
