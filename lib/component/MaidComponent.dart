@@ -15,15 +15,10 @@ class MaidComponent extends StatefulWidget {
 class _MaidComponentState extends State<MaidComponent> {
   setTime(String datetime) {
     var time = datetime.split(" ");
+    print("datetime: ${datetime}");
+    print("time: ${time[1]}");
     var t = time[1].split(":");
-    var meridiam = "";
-    if (int.parse(t[0]) > 12) {
-      meridiam = "PM";
-      t[0]=(int.parse(t[0])-12).toString();
-    } else {
-      meridiam = "AM";
-    }
-    return "${t[0]}:${t[1]} ${meridiam}";
+    return "${t[0]}:${t[1]} ${time[2]}";
   }
 
   @override

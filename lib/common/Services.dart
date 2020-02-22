@@ -5,10 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/common/Classlist.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/common/constant.dart';
-import 'package:smart_society_new/screens/EmergencyNumber.dart';
-import 'package:smart_society_new/screens/EmergencyNumber.dart';
-import 'package:smart_society_new/screens/EmergencyNumber.dart';
-import 'package:smart_society_new/screens/EmergencyNumber.dart';
 import 'package:xml2json/xml2json.dart';
 
 Dio dio = new Dio();
