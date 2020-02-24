@@ -37,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
 
-
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
 
@@ -485,7 +484,53 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
-        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text(
+            "MY JINI",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
+          centerTitle: true,
+          bottom: PreferredSize(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/GlobalSearch");
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 10),
+                  height: 40,
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  //width: MediaQuery.of(context).size.width - 50,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.search,
+                        size: 15,
+                      ),
+                      Padding(padding: EdgeInsets.only(left: 4)),
+                      Expanded(
+                        child: Text(
+                          "Search...",
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ),
+                      /*IconButton(
+                              icon: Icon(
+                                Icons.keyboard_voice,
+                                color: constant.appPrimaryMaterialColor,
+                              ),
+                              onPressed: () {
+                                requestPermission(PermissionGroup.microphone);
+                              })*/
+                    ],
+                  ),
+                ),
+              ),
+              preferredSize: Size.fromHeight(40.0)),
+        ),
         drawer: Drawer(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -628,8 +673,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Divider(),
                     Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -642,49 +686,63 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Image.asset("images/call.png",
                                     height: 24, width: 24),
                                 Padding(
-                                  padding: const EdgeInsets.only(top:5),
-                                  child: Text("Call",style: TextStyle(fontWeight: FontWeight.w600)),
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Text("Call",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600)),
                                 )
                               ],
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                            launch("https://www.facebook.com/myjinismartsociety/");
+                              launch(
+                                  "https://www.facebook.com/myjinismartsociety/");
                             },
                             child: Column(
                               children: <Widget>[
                                 Image.asset("images/facebook.png",
                                     height: 24, width: 24),
                                 Padding(
-                                  padding: const EdgeInsets.only(top:5),
-                                  child: Text("Facebook",style: TextStyle(fontWeight: FontWeight.w600)),
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Text("Facebook",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600)),
                                 )
                               ],
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {launch("https://www.instagram.com/myjini_smartsociety/");},
+                            onTap: () {
+                              launch(
+                                  "https://www.instagram.com/myjini_smartsociety/");
+                            },
                             child: Column(
                               children: <Widget>[
                                 Image.asset("images/instagram.png",
                                     height: 24, width: 24),
                                 Padding(
-                                  padding: const EdgeInsets.only(top:5),
-                                  child: Text("Instagram",style: TextStyle(fontWeight: FontWeight.w600)),
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Text("Instagram",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600)),
                                 )
                               ],
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {launch("http://www.myjini.in/");},
+                            onTap: () {
+                              launch("http://www.myjini.in/");
+                            },
                             child: Column(
                               children: <Widget>[
                                 Image.asset("images/applogo.png",
                                     height: 24, width: 24),
                                 Padding(
-                                  padding: const EdgeInsets.only(top:5),
-                                  child: Text("Website",style: TextStyle(fontWeight: FontWeight.w600)),
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Text("Website",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600)),
                                 )
                               ],
                             ),
@@ -698,364 +756,284 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        body: Column(
-          children: <Widget>[
+        body: isLoading ?
             Container(
-              padding: EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
-                  color: constant.appPrimaryMaterialColor,
-                  boxShadow: [
-                    new BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 2.0,
-                    ),
-                  ]),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                          icon: Icon(
-                            Icons.menu,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            _scaffoldKey.currentState.openDrawer();
-                          }),
-                      Padding(padding: EdgeInsets.only(left: 4)),
-                      Expanded(
-                        child: Text(
-                          "MY JINI",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                              color: Colors.white),
-                        ),
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.notifications,
-                              color: Colors.white, size: 20),
-                          onPressed: () {})
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, "/GlobalSearch");
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: 5, left: 15, right: 15, bottom: 10),
-                      height: 40,
-                      padding: EdgeInsets.only(left: 10, right: 10),
-                      //width: MediaQuery.of(context).size.width - 50,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.search,
-                            size: 15,
-                          ),
-                          Padding(padding: EdgeInsets.only(left: 4)),
-                          Expanded(
-                            child: Text(
-                              "Search...",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.grey),
-                            ),
-                          ),
-                          /*IconButton(
-                              icon: Icon(
-                                Icons.keyboard_voice,
-                                color: constant.appPrimaryMaterialColor,
-                              ),
-                              onPressed: () {
-                                requestPermission(PermissionGroup.microphone);
-                              })*/
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-            Expanded(
-              child: isLoading
-                  ? Container(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          _advertisementData.length > 0
-                              ? Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: <Widget>[
-                                    CarouselSlider(
-                                      height: 170,
-                                      viewportFraction: 1.0,
-                                      autoPlayAnimationDuration:
-                                          Duration(milliseconds: 1500),
-                                      reverse: false,
-                                      autoPlayCurve: Curves.fastOutSlowIn,
-                                      autoPlay: true,
-                                      onPageChanged: (index) {
-                                        setState(() {
-                                          _current = index;
-                                        });
-                                      },
-                                      items: _advertisementData.map((i) {
-                                        return Builder(
-                                            builder: (BuildContext context) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AdvertisemnetDetail(
-                                                    i,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Image.network(
-                                                    Image_Url + i["Image"],
-                                                    fit: BoxFit.fill)),
-                                          );
-                                        });
-                                      }).toList(),
+            ):
+            Column(
+              children: <Widget>[
+                _advertisementData.length > 0
+                    ? Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: <Widget>[
+                    CarouselSlider(
+                      height: 150,
+                      viewportFraction: 1.0,
+                      autoPlayAnimationDuration:
+                      Duration(milliseconds: 1500),
+                      reverse: false,
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      autoPlay: true,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _current = index;
+                        });
+                      },
+                      items: _advertisementData.map((i) {
+                        return Builder(
+                            builder: (BuildContext context) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AdvertisemnetDetail(
+                                            i,
+                                          ),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: map<Widget>(
-                                        _advertisementData,
-                                        (index, url) {
-                                          return Container(
-                                            width: 7.0,
-                                            height: 7.0,
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 10.0,
-                                                horizontal: 2.0),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5)),
-                                                color: _current == index
-                                                    ? Colors.white
-                                                    : Colors.grey),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                          Container(
+                                  );
+                                },
+                                child: Container(
+                                    width: MediaQuery.of(context)
+                                        .size
+                                        .width,
+                                    child: Image.network(
+                                        Image_Url + i["Image"],
+                                        fit: BoxFit.fill)),
+                              );
+                            });
+                      }).toList(),
+                    ),
+                    Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.center,
+                      children: map<Widget>(
+                        _advertisementData,
+                            (index, url) {
+                          return Container(
+                            width: 7.0,
+                            height: 7.0,
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal: 2.0),
                             decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Colors.grey[500], width: 0.3))),
-                            child: AnimationLimiter(
-                              child: GridView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: _getMenuItem,
-                                itemCount: _allMenuList.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  childAspectRatio:
-                                      MediaQuery.of(context).size.width /
-                                          (MediaQuery.of(context).size.height /
-                                              2.3),
-                                ),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(5)),
+                                color: _current == index
+                                    ? Colors.white
+                                    : Colors.grey),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                )
+                    : Container(),
+                Padding(padding: EdgeInsets.all(4.0)),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.grey[500], width: 0.3))),
+                          child: AnimationLimiter(
+                            child: GridView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: _getMenuItem,
+                              itemCount: _allMenuList.length,
+                              gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio:
+                                MediaQuery.of(context).size.width /
+                                    (MediaQuery.of(context).size.height /
+                                        2.3),
                               ),
                             ),
                           ),
-                          Padding(padding: EdgeInsets.only(top: 10)),
-                          _advertisementData.length > 0
-                              ? Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: <Widget>[
-                                    CarouselSlider(
-                                      height: 170,
-                                      viewportFraction: 1.0,
-                                      autoPlayAnimationDuration:
-                                          Duration(milliseconds: 1500),
-                                      reverse: false,
-                                      autoPlayCurve: Curves.fastOutSlowIn,
-                                      autoPlay: true,
-                                      onPageChanged: (index) {
-                                        setState(() {
-                                          _current = index;
-                                        });
-                                      },
-                                      items: _advertisementData.map((i) {
-                                        return Builder(
-                                            builder: (BuildContext context) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AdvertisemnetDetail(
+                        ),
+                        Padding(padding: EdgeInsets.all(8.0)),
+                        _advertisementData.length > 0
+                            ? Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: <Widget>[
+                            CarouselSlider(
+                              height: 170,
+                              viewportFraction: 1.0,
+                              autoPlayAnimationDuration:
+                              Duration(milliseconds: 1500),
+                              reverse: false,
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              autoPlay: true,
+                              onPageChanged: (index) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              },
+                              items: _advertisementData.map((i) {
+                                return Builder(
+                                    builder: (BuildContext context) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AdvertisemnetDetail(
                                                     i,
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                            child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Image.network(
-                                                    Image_Url + i["Image"],
-                                                    fit: BoxFit.fill)),
-                                          );
-                                        });
-                                      }).toList(),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: map<Widget>(
-                                        _advertisementData,
-                                        (index, url) {
-                                          return Container(
-                                            width: 7.0,
-                                            height: 7.0,
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 10.0,
-                                                horizontal: 2.0),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5)),
-                                                color: _current == index
-                                                    ? Colors.white
-                                                    : Colors.grey),
+                                            ),
                                           );
                                         },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
-            ),
-            Container(
-              height: 54,
-              decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  border: Border(
-                      top: BorderSide(color: Colors.grey, width: 0.3))),
-              child: Row(
-                children: <Widget>[
-                  Flexible(
-                    child: InkWell(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.home,size: 22,),
-                            Text("Home",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11))
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Image.network(
+                                                Image_Url + i["Image"],
+                                                fit: BoxFit.fill)),
+                                      );
+                                    });
+                              }).toList(),
+                            ),
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: map<Widget>(
+                                _advertisementData,
+                                    (index, url) {
+                                  return Container(
+                                    width: 7.0,
+                                    height: 7.0,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10.0,
+                                        horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5)),
+                                        color: _current == index
+                                            ? Colors.white
+                                            : Colors.grey),
+                                  );
+                                },
+                              ),
+                            ),
                           ],
-                        ),
-                      ),
-                      onTap: () {},
+                        )
+                            : Container(),
+                      ],
                     ),
                   ),
-                  Flexible(
-                    child: InkWell(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.person_pin,size: 22),
-                            Text("Add Visitor",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11))
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, "/MyGuestList");
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    child: InkWell(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.new_releases,size: 22),
-                            Text("Advertisement",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11))
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/AdvertisementCreate');
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    child: InkWell(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.person,size: 22),
-                            Text("Profile",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11))
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context, '/MyProfile');
-                      },
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             )
-          ],
+          ,
+        bottomNavigationBar: Container(
+          height: 54,
+          decoration: BoxDecoration(
+              color: Colors.grey[100],
+              border: Border(top: BorderSide(color: Colors.grey, width: 0.3))),
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                child: InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.home,
+                          size: 22,
+                        ),
+                        Text("Home",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 11))
+                      ],
+                    ),
+                  ),
+                  onTap: () {},
+                ),
+              ),
+              Flexible(
+                child: InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.person_pin, size: 22),
+                        Text("Add Visitor",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 11))
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/MyGuestList");
+                  },
+                ),
+              ),
+              Flexible(
+                child: InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.new_releases, size: 22),
+                        Text("Advertisement",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 11))
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/AdvertisementCreate');
+                  },
+                ),
+              ),
+              Flexible(
+                child: InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.person, size: 22),
+                        Text("Profile",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 11))
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/MyProfile');
+                  },
+                ),
+              )
+            ],
+          ),
         ),
         floatingActionButton: DraggableFab(
           child: SizedBox(
             height: 50,
             width: 50,
             child: FloatingActionButton(
-              onPressed: () {
-              },
+              onPressed: () {},
               backgroundColor: Colors.red[200],
               child: Container(
                   decoration: BoxDecoration(
@@ -1078,4 +1056,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

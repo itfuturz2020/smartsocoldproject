@@ -6,6 +6,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
+import 'package:smart_society_new/component/masktext.dart';
 
 class MyProfileScreen extends StatefulWidget {
   @override
@@ -790,29 +791,30 @@ class _Addvehicale_dialogueState extends State<Addvehicale_dialogue> {
                 }),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 6.0),
-            child: Text(
-              "Enter Your Vehicale Number",
-              style: TextStyle(fontSize: 14),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: TextFormField(
-                  controller: vehicleNumber,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "DD-05-DL-2812",
-                      hintStyle:
-                          TextStyle(fontSize: 14, color: Colors.grey[400])),
-                ),
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              height: 50,
+              child: TextFormField(
+                inputFormatters: [
+                  MaskedTextInputFormatter(
+                    mask: 'xx-xx-xx-xxxx',
+                    separator: '-',
+                  ),
+                ],
+                controller: vehicleNumber,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.characters,
+                decoration: InputDecoration(
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(5.0),
+                      borderSide: new BorderSide(),
+                    ),
+                    counterText: "",
+                    labelText: "Enter Vehicle Number",
+                    hintText: "XX-00-XX-0000",
+                    hasFloatingPlaceholder: true,
+                    labelStyle: TextStyle(fontSize: 13)),
               ),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  border: Border.all(width: 1, color: Colors.indigo)),
             ),
           ),
           Padding(
