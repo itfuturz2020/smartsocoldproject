@@ -36,8 +36,7 @@ class _AmenitiesState extends State<Amenities> {
             setState(() {
               _aminitiesData = data;
             });
-          }
-          else {
+          } else {
             setState(() {
               isLoading = false;
             });
@@ -141,7 +140,8 @@ class _AmenitiesState extends State<Amenities> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 12.0),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Text("${_aminitiesData[index]["Type"]}",
                                             style: TextStyle(
@@ -158,7 +158,8 @@ class _AmenitiesState extends State<Amenities> {
                                           padding: const EdgeInsets.all(2.0),
                                           child: Icon(Icons.verified_user,
                                               size: 18,
-                                              color: _aminitiesData[index]["Type"]
+                                              color: _aminitiesData[index]
+                                                              ["Type"]
                                                           .toString()
                                                           .toLowerCase() ==
                                                       "free"
@@ -172,6 +173,11 @@ class _AmenitiesState extends State<Amenities> {
                                     borderRadius: BorderRadius.all(
                                         new Radius.circular(10.0)),
                                   )),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: _aminitiesData[index]["Description"] == "" || _aminitiesData[index]["Description"] == null ?
+                                Container():Text(_aminitiesData[index]["Description"]),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 25),
                                 child: Column(

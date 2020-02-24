@@ -772,7 +772,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 150,
                       viewportFraction: 1.0,
                       autoPlayAnimationDuration:
-                      Duration(milliseconds: 1500),
+                      Duration(milliseconds: 1000),
                       reverse: false,
                       autoPlayCurve: Curves.fastOutSlowIn,
                       autoPlay: true,
@@ -1021,7 +1021,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/MyProfile');
+                    Navigator.pushReplacementNamed(context,'/MyProfile');
                   },
                 ),
               )

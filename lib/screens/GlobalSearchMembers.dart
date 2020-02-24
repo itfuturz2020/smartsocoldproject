@@ -146,6 +146,7 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
               ),
             )
           : SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Column(
                 children: <Widget>[
                   searchMemberData.length > 0
@@ -171,6 +172,7 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
                                 ),
                                 Expanded(
                                   child: ListView.separated(
+                                    physics: BouncingScrollPhysics(),
                                     itemCount: searchMemberData.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
@@ -211,6 +213,7 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
                                 ),
                                 Expanded(
                                   child: ListView.separated(
+                                    physics: BouncingScrollPhysics(),
                                     itemCount: serviceData.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {

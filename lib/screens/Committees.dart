@@ -120,7 +120,7 @@ class _CommitteesState extends State<Committees> {
                             child: _committeeData[index]["Image"] != "null" &&
                                     _committeeData[index]["Image"] != ""
                                 ? FadeInImage.assetNetwork(
-                                    placeholder: "images/image_loading.gif",
+                                    placeholder: "images/user.png",
                                     image: Image_Url +
                                         '${_committeeData[index]["Image"]}',
                                     width: 60,
@@ -128,7 +128,7 @@ class _CommitteesState extends State<Committees> {
                                     fit: BoxFit.cover,
                                   )
                                 : Image.asset(
-                                    "images/man.png",
+                                    "images/user.png",
                                     width: 60,
                                     height: 60,
                                   ),
