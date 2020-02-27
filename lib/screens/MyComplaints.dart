@@ -42,7 +42,7 @@ class _MyComplaintsState extends State<MyComplaints> {
       final_date = date == "" || date == null
           ? ""
           : "${tempDate[2].toString().substring(0, 2)}-${setMonth(DateTime.parse(date))}"
-          .toString();
+              .toString();
     }
     return final_date;
   }
@@ -298,7 +298,8 @@ class _MyComplaintsState extends State<MyComplaints> {
                           height: 100,
                           child: FadeInImage.assetNetwork(
                             placeholder: "images/placeholder.png",
-                            image: Image_Url + '${ComplainData[index]["Image"]}',
+                            image:
+                                Image_Url + '${ComplainData[index]["Image"]}',
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.cover,
                           ),
@@ -312,12 +313,14 @@ class _MyComplaintsState extends State<MyComplaints> {
                             children: <Widget>[
                               Container(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Wrap(
                                       children: <Widget>[
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 5.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
                                           child: Text(
                                             "${ComplainData[index]["Title"]}",
                                             overflow: TextOverflow.visible,
@@ -361,14 +364,15 @@ class _MyComplaintsState extends State<MyComplaints> {
                               Wrap(
                                 children: <Widget>[
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 5.0, right: 2.0),
+                                    padding: const EdgeInsets.only(
+                                        top: 5.0, right: 2.0),
                                     child: Text(
                                       "${ComplainData[index]["Description"]}",
                                       overflow: TextOverflow.fade,
                                       textAlign: TextAlign.justify,
                                       style: TextStyle(
-                                          color: Colors.grey[700], fontSize: 14),
+                                          color: Colors.grey[700],
+                                          fontSize: 14),
                                     ),
                                   )
                                 ],
@@ -389,12 +393,14 @@ class _MyComplaintsState extends State<MyComplaints> {
                   ),
                   FlatButton(
                       onPressed: () {
-                        _showConfirmDialog(ComplainData[index]["Id"].toString());
+                        _showConfirmDialog(
+                            ComplainData[index]["Id"].toString());
                       },
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.grey[100],
-                            borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0))),
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Row(
@@ -404,7 +410,8 @@ class _MyComplaintsState extends State<MyComplaints> {
                               Text(
                                 "Delete",
                                 style: TextStyle(
-                                    color: Colors.red, fontWeight: FontWeight.w600),
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w600),
                               )
                             ],
                           ),
@@ -444,22 +451,35 @@ class _MyComplaintsState extends State<MyComplaints> {
             ? Container(
                 child: Center(child: CircularProgressIndicator()),
               )
-            : ComplainData.length > 0
-                ? AnimationLimiter(
-                    child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: ComplainData.length,
-                    itemBuilder: _MyComplaint,
-                  ))
-                : Container(child: Center(child: Text("No Complaints Found"))),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: constant.appPrimaryMaterialColor,
-        icon: Icon(Icons.add),
-        label: Text("Add Complaint"),
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, '/AddComplaints');
-        },
+            : Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ComplainData.length > 0
+                        ? AnimationLimiter(
+                            child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: ComplainData.length,
+                            itemBuilder: _MyComplaint,
+                          ))
+                        : Container(
+                            child: Center(child: Text("No Complaints Found"))),
+                  ),
+                  MaterialButton(
+                      height: 45,
+                      minWidth: MediaQuery.of(context).size.width,
+                      color: constant.appprimarycolors[600],
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/AddComplaints");
+                      },
+                      child: Text(
+                        "Add Complaint",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      )),
+                ],
+              ),
       ),
     );
   }

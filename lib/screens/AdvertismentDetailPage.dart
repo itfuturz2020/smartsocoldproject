@@ -32,18 +32,21 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
 
     //SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
   }
-  _setVideo(){
-    _controller = YoutubePlayerController(
-      initialVideoId:
-      YoutubePlayer.convertUrlToId(widget.data["VideoLink"]),
-      flags: YoutubePlayerFlags(
-        mute: false,
-        autoPlay: false,
-        forceHideAnnotation: true,
-        loop: true,
-      ),
-    )..addListener(listener);
+
+  _setVideo() {
+    if (widget.data["VideoLink"] != null && widget.data["VideoLink"] != "") {
+      _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(widget.data["VideoLink"]),
+        flags: YoutubePlayerFlags(
+          mute: false,
+          autoPlay: false,
+          forceHideAnnotation: true,
+          loop: true,
+        ),
+      )..addListener(listener);
+    }
   }
+
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       mapController = controller;
@@ -68,12 +71,6 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -84,12 +81,10 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-
               Card(
                 elevation: 3,
                 child: Column(
                   children: <Widget>[
-
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 8, right: 8, top: 10),
@@ -157,51 +152,55 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
                         );
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Stack(children: [
-                        Container(
-                          height: 170,
-                          width: MediaQuery.of(context).size.width,
-                          child: YoutubePlayer(
-                            controller: _controller,
-                            showVideoProgressIndicator: true,
-                            progressIndicatorColor: appPrimaryMaterialColor,
-                            topActions: <Widget>[
-                              IconButton(
-                                icon: Icon(
-                                  Icons.arrow_back_ios,
-                                  color: Colors.white,
-                                  size: 20.0,
+                    widget.data["VideoLink"] != null &&
+                            widget.data["VideoLink"] != ""
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Stack(children: [
+                              Container(
+                                height: 170,
+                                width: MediaQuery.of(context).size.width,
+                                child: YoutubePlayer(
+                                  controller: _controller,
+                                  showVideoProgressIndicator: true,
+                                  progressIndicatorColor:
+                                      appPrimaryMaterialColor,
+                                  topActions: <Widget>[
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.arrow_back_ios,
+                                        color: Colors.white,
+                                        size: 20.0,
+                                      ),
+                                      onPressed: () {
+                                        _controller.toggleFullScreenMode();
+                                      },
+                                    ),
+                                  ],
+                                  onReady: () {
+                                    _isPlayerReady = true;
+                                  },
                                 ),
-                                onPressed: () {
-                                  _controller.toggleFullScreenMode();
-                                },
                               ),
-                            ],
-                            onReady: () {
-                              _isPlayerReady = true;
-                            },
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 2,
-                          child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _controller.value.isPlaying
-                                      ? _controller.pause()
-                                      : _controller.play();
-                                });
-                              },
-                              icon: Icon(
-                                  _controller.value.isPlaying
-                                      ? Icons.pause
-                                      : Icons.play_arrow,
-                                  size: 27)),
-                        ),
-                      ]),
-                    ),
+                              Positioned(
+                                bottom: 2,
+                                child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _controller.value.isPlaying
+                                            ? _controller.pause()
+                                            : _controller.play();
+                                      });
+                                    },
+                                    icon: Icon(
+                                        _controller.value.isPlaying
+                                            ? Icons.pause
+                                            : Icons.play_arrow,
+                                        size: 27)),
+                              ),
+                            ]),
+                          )
+                        : Container(),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(

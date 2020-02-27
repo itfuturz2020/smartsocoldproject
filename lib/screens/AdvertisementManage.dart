@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
@@ -252,192 +253,292 @@ class _AdvertisementManageState extends State<AdvertisementManage> {
                 children: <Widget>[
                   Expanded(
                     child: _advertisementData.length > 0
-                        ? ListView.builder(
-                            itemCount: _advertisementData.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              DateTime expiredDate = DateTime.parse(
-                                  _advertisementData[index]["ExpiryDate"]);
-                              return Card(
-                                elevation: 3,
-                                margin:
-                                    EdgeInsets.only(top: 7, left: 8, right: 8),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(7),
-                                  child: Column(
-                                    children: <Widget>[
-                                      FadeInImage.assetNetwork(
-                                        placeholder: "images/placeholder.png",
-                                        image: Image_Url +
-                                            '${_advertisementData[index]["Image"]}',
-                                        height: 130,
-                                        fit: BoxFit.fill,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 7, left: 9),
+                        ? AnimationLimiter(
+                            child: ListView.builder(
+                              itemCount: _advertisementData.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                DateTime expiredDate = DateTime.parse(
+                                    _advertisementData[index]["ExpiryDate"]);
+                                return AnimationConfiguration.staggeredList(
+                                  duration: const Duration(milliseconds: 375),
+                                  child: SlideAnimation(
+                                    verticalOffset: 100,
+                                    child: Card(
+                                      elevation: 3,
+                                      margin: EdgeInsets.only(
+                                          top: 7, left: 8, right: 8),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(7),
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            Row(
-                                              children: <Widget>[
-                                                Icon(
-                                                  Icons.new_releases,
-                                                  size: 15,
-                                                  color: Colors.grey[600],
-                                                ),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 4)),
-                                                Expanded(
-                                                  child: Column(
+                                            FadeInImage.assetNetwork(
+                                              placeholder:
+                                                  "images/placeholder.png",
+                                              image: Image_Url +
+                                                  '${_advertisementData[index]["Image"]}',
+                                              height: 130,
+                                              fit: BoxFit.fill,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 7, left: 9),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.new_releases,
+                                                        size: 15,
+                                                        color: Colors.grey[600],
+                                                      ),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 4)),
+                                                      Expanded(
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            Text(
+                                                              "${_advertisementData[index]["Title"]}",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      700]),
+                                                            ),
+                                                            Text(
+                                                              "Published On :${setDate(_advertisementData[index]["Date"])}",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .green),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      expiredDate.isAfter(
+                                                              DateTime.now())
+                                                          ? Row(
+                                                              children: <
+                                                                  Widget>[
+                                                                Icon(
+                                                                  Icons
+                                                                      .done_all,
+                                                                  size: 17,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                                Padding(
+                                                                    padding: EdgeInsets
+                                                                        .only(
+                                                                            left:
+                                                                                3)),
+                                                                Text(
+                                                                  "Active",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      color: Colors
+                                                                          .green),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          : Text(
+                                                              "Expired",
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .redAccent),
+                                                            )
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 5)),
+                                                  Row(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: <Widget>[
-                                                      Text(
-                                                        "${_advertisementData[index]["Title"]}",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: Colors
-                                                                .grey[700]),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 4),
+                                                        child: Icon(
+                                                          Icons.message,
+                                                          size: 15,
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
-                                                      Text(
-                                                        "Published On :${setDate(_advertisementData[index]["Date"])}",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                Colors.green),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 4)),
+                                                      Expanded(
+                                                        child: Text(
+                                                          "${_advertisementData[index]["Description"]}",
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                                expiredDate
-                                                        .isAfter(DateTime.now())
-                                                    ? Row(
-                                                        children: <Widget>[
-                                                          Icon(
-                                                            Icons.done_all,
-                                                            size: 17,
-                                                            color: Colors.green,
-                                                          ),
-                                                          Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      left: 3)),
-                                                          Text(
-                                                            "Active",
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 18,
+                                                                right: 10),
+                                                        child: Text(
+                                                          "Selected Package :${constant.Inr_Rupee}${double.parse(_advertisementData[index]["Price"].toString()).toStringAsFixed(0)}-${_advertisementData[index]["Duration"]}day",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: constant
+                                                                  .appPrimaryMaterialColor),
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          showLocations(
+                                                              _advertisementData[
+                                                                      index][
+                                                                  "TargetList"],
+                                                              _advertisementData[
+                                                                      index]
+                                                                  ["Type"]);
+                                                        },
+                                                        child: Container(
+                                                          child: Text(
+                                                            "Locations",
                                                             style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w600,
-                                                                color: Colors
-                                                                    .green),
+                                                                        .w600),
                                                           ),
-                                                        ],
-                                                      )
-                                                    : Text(
-                                                        "Expired",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: Colors
-                                                                .redAccent),
-                                                      )
-                                              ],
-                                            ),
-                                            Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 5)),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 4),
-                                                  child: Icon(
-                                                    Icons.message,
-                                                    size: 15,
-                                                    color: Colors.grey,
+                                                          decoration: BoxDecoration(
+                                                              color:
+                                                                  Colors.grey,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          4))),
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 3,
+                                                                  bottom: 3,
+                                                                  left: 6,
+                                                                  right: 6),
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 6),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 4)),
-                                                Expanded(
-                                                  child: Text(
-                                                    "${_advertisementData[index]["Description"]}",
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        color: Colors.grey),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 18, right: 10),
-                                                  child: Text(
-                                                    "Selected Package :${constant.Inr_Rupee}${double.parse(_advertisementData[index]["Price"].toString()).toStringAsFixed(0)}-${_advertisementData[index]["Duration"]}day",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: constant
-                                                            .appPrimaryMaterialColor),
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    showLocations(
-                                                        _advertisementData[
-                                                                index]
-                                                            ["TargetList"],
-                                                        _advertisementData[
-                                                            index]["Type"]);
-                                                  },
-                                                  child: Container(
-                                                    child: Text(
-                                                      "Locations",
-                                                      style: TextStyle(
-                                                          fontSize: 13,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.grey,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    4))),
-                                                    padding: EdgeInsets.only(
-                                                        top: 3,
-                                                        bottom: 3,
-                                                        left: 6,
-                                                        right: 6),
-                                                    margin: EdgeInsets.only(
-                                                        right: 6),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                expiredDate.isBefore(
-                                                        DateTime.now())
-                                                    ? Container(
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      expiredDate.isBefore(
+                                                              DateTime.now())
+                                                          ? Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width /
+                                                                  2.4,
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      top: 10),
+                                                              child:
+                                                                  MaterialButton(
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        new BorderRadius.circular(
+                                                                            5.0)),
+                                                                color: Colors
+                                                                    .green,
+                                                                onPressed: () {
+                                                                  var data = {
+                                                                    "title":
+                                                                        "${_advertisementData[index]["Title"]}",
+                                                                    "desc":
+                                                                        "${_advertisementData[index]["Description"]}",
+                                                                    "image": _advertisementData[
+                                                                            index]
+                                                                        [
+                                                                        "Image"],
+                                                                    "packageId":
+                                                                        "${_advertisementData[index]["PackageId"]}",
+                                                                    "type":
+                                                                        "${_advertisementData[index]["Type"]}",
+                                                                    "targetedId":
+                                                                        "${_advertisementData[index]["TargetedId"]}",
+                                                                  };
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              AdvertisementRenew(
+                                                                        data,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Icon(
+                                                                      Icons
+                                                                          .assignment_turned_in,
+                                                                      size: 16,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                    Padding(
+                                                                        padding:
+                                                                            EdgeInsets.only(left: 3)),
+                                                                    Text(
+                                                                      "Renew",
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.w600),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : Container(),
+                                                      Container(
                                                         width: MediaQuery.of(
                                                                     context)
                                                                 .size
@@ -451,34 +552,14 @@ class _AdvertisementManageState extends State<AdvertisementManage> {
                                                                   new BorderRadius
                                                                           .circular(
                                                                       5.0)),
-                                                          color: Colors.green,
+                                                          color: Colors.red,
                                                           onPressed: () {
-                                                            var data = {
-                                                              "title":
-                                                                  "${_advertisementData[index]["Title"]}",
-                                                              "desc":
-                                                                  "${_advertisementData[index]["Description"]}",
-                                                              "image":
-                                                                  _advertisementData[
-                                                                          index]
-                                                                      ["Image"],
-                                                              "packageId":
-                                                                  "${_advertisementData[index]["PackageId"]}",
-                                                              "type":
-                                                                  "${_advertisementData[index]["Type"]}",
-                                                              "targetedId":
-                                                                  "${_advertisementData[index]["TargetedId"]}",
-                                                            };
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        AdvertisementRenew(
-                                                                  data,
-                                                                ),
-                                                              ),
-                                                            );
+                                                            _showConfirmDialog(
+                                                                _advertisementData[
+                                                                            index]
+                                                                        ["Id"]
+                                                                    .toString(),
+                                                                index);
                                                           },
                                                           child: Row(
                                                             mainAxisAlignment:
@@ -486,8 +567,7 @@ class _AdvertisementManageState extends State<AdvertisementManage> {
                                                                     .center,
                                                             children: <Widget>[
                                                               Icon(
-                                                                Icons
-                                                                    .assignment_turned_in,
+                                                                Icons.clear,
                                                                 size: 16,
                                                                 color: Colors
                                                                     .white,
@@ -498,7 +578,7 @@ class _AdvertisementManageState extends State<AdvertisementManage> {
                                                                           left:
                                                                               3)),
                                                               Text(
-                                                                "Renew",
+                                                                "Delete",
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
@@ -509,65 +589,20 @@ class _AdvertisementManageState extends State<AdvertisementManage> {
                                                             ],
                                                           ),
                                                         ),
-                                                      )
-                                                    : Container(),
-                                                Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      2.4,
-                                                  margin:
-                                                      EdgeInsets.only(top: 10),
-                                                  child: MaterialButton(
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            new BorderRadius
-                                                                .circular(5.0)),
-                                                    color: Colors.red,
-                                                    onPressed: () {
-                                                      _showConfirmDialog(
-                                                          _advertisementData[
-                                                                  index]["Id"]
-                                                              .toString(),
-                                                          index);
-                                                    },
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Icon(
-                                                          Icons.clear,
-                                                          size: 16,
-                                                          color: Colors.white,
-                                                        ),
-                                                        Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 3)),
-                                                        Text(
-                                                          "Delete",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           )
                         : Container(
                             child: Center(child: Text("No Data Found")),

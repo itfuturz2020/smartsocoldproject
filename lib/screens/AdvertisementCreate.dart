@@ -693,7 +693,6 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                             !invisible
                                 ? TextFormField(
                                     focusNode: myFocusNode,
-                                    keyboardType: TextInputType.text,
                                   )
                                 : Container(),
                             _packageList.length > 0

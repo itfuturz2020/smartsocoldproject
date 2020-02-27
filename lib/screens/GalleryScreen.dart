@@ -12,13 +12,13 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  List EventData = new List();
-  bool isLoading = false;
+  List EventData = [];
+  bool isLoading = true;
   String SocietyId;
 
   @override
   void initState() {
-    GetNoticeDetail();
+    GetGallaryData();
     _getLocaldata();
   }
 
@@ -27,7 +27,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     SocietyId = prefs.getString(constant.Session.SocietyId);
   }
 
-  GetNoticeDetail() async {
+  GetGallaryData() async {
     try {
       //check Internet Connection
       final result = await InternetAddress.lookup('google.com');
@@ -59,11 +59,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
           });
           showHHMsg("Try Again.", "");
         });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        showHHMsg("No Internet Connection.", "");
       }
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");

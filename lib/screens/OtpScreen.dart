@@ -10,10 +10,10 @@ import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/component/LoadingComponent.dart';
 
 class OtpScreen extends StatefulWidget {
-  String MobileNo,Id;
+  String MobileNo, Id;
   Function onsuccess;
-  OtpScreen(this.MobileNo,this.Id,this.onsuccess);
 
+  OtpScreen(this.MobileNo, this.Id, this.onsuccess);
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
@@ -89,7 +89,8 @@ class _OtpScreenState extends State<OtpScreen> {
             });
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString(constant.Session.IsVerified, "true");
-            Navigator.pushReplacementNamed(context, '/HomeScreen');
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/HomeScreen', (Route<dynamic> route) => false);
           } else {
             setState(() {
               isLoading = false;
@@ -198,7 +199,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             style: TextStyle(fontSize: 16),
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               _sendVerificationCode(widget.MobileNo);
                             },
                             child: Text(" Resend",
@@ -236,10 +237,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       child: GestureDetector(
                         onTap: () {
                           if (controller.text == rndnumber) {
-                            widget.onsuccess( );
-                            _MemberVerification( );
-                          }
-                            else
+                            widget.onsuccess();
+                            _MemberVerification();
+                          } else
                             Fluttertoast.showToast(
                                 msg: "Wrong OTP..",
                                 toastLength: Toast.LENGTH_LONG,

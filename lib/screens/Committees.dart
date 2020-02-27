@@ -101,123 +101,151 @@ class _CommitteesState extends State<Committees> {
             child: Container(
               padding: EdgeInsets.all(10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                                border:
-                                    Border.all(color: Colors.grey, width: 0.4)),
-                            width: 64,
-                            height: 64,
-                          ),
-                          ClipOval(
-                            child: _committeeData[index]["Image"] != "null" &&
-                                    _committeeData[index]["Image"] != ""
-                                ? FadeInImage.assetNetwork(
-                                    placeholder: "images/user.png",
-                                    image: Image_Url +
-                                        '${_committeeData[index]["Image"]}',
-                                    width: 60,
-                                    height: 60,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset(
-                                    "images/user.png",
-                                    width: 60,
-                                    height: 60,
+                  Text(
+                    "${_committeeData[index]["Name"]} :",
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  _committeeData[index]["committelist"] != null
+                      ? SizedBox(
+                          height: _committeeData[index]["committelist"].length *
+                              120.0,
+                          child: ListView.separated(
+                            itemBuilder: (BuildContext context, int index2) {
+                              return Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Stack(
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(100)),
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 0.4)),
+                                            width: 64,
+                                            height: 64,
+                                          ),
+                                          ClipOval(
+                                            child: _committeeData[index]
+                                                                ["committelist"]
+                                                            [index2]["Image"] !=
+                                                        "null" &&
+                                                    _committeeData[index]
+                                                                ["committelist"]
+                                                            [index2]["Image"] !=
+                                                        ""
+                                                ? FadeInImage.assetNetwork(
+                                                    placeholder:
+                                                        "images/user.png",
+                                                    image: Image_Url +
+                                                        '${_committeeData[index]["committelist"][index2]["Image"]}',
+                                                    width: 60,
+                                                    height: 60,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Image.asset(
+                                                    "images/user.png",
+                                                    width: 60,
+                                                    height: 60,
+                                                  ),
+                                          ),
+                                        ],
+                                        alignment: Alignment.center,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(left: 10)),
+                                      Expanded(
+                                          child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  "${_committeeData[index]["committelist"][index2]["Name"]}",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.grey[700],
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                Text(
+                                                  "${_committeeData[index]["committelist"][index2]["ContactNo"]}",
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          IconButton(
+                                              icon: Icon(
+                                                Icons.call,
+                                                size: 23,
+                                                color: Colors.green[700],
+                                              ),
+                                              onPressed: () {
+                                                launch(
+                                                    "tel:${_committeeData[index]["committelist"][index2]["ContactNo"]}");
+                                              }),
+                                          GestureDetector(
+                                            onTap: () {
+                                              _openWhatsapp(
+                                                  _committeeData[index]
+                                                          ["committelist"]
+                                                      [index2]["ContactNo"]);
+                                            },
+                                            child: Image.asset(
+                                                "images/whatsapp.png",
+                                                width: 30,
+                                                height: 30),
+                                          ),
+                                        ],
+                                      )),
+                                    ],
                                   ),
-                          ),
-                        ],
-                        alignment: Alignment.center,
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 10)),
-                      Expanded(
-                          child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "${_committeeData[index]["Name"]}",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.grey[700],
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Text(
-                                  "${_committeeData[index]["ContactNo"]}",
-                                  style: TextStyle(
-                                    color: Colors.grey,
+                                  Padding(padding: EdgeInsets.only(top: 10)),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "Designation ",
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 12),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          ": ${_committeeData[index]["committelist"][index2]["Designation"]}",
+                                          style: TextStyle(
+                                              color: constant
+                                                  .appPrimaryMaterialColor),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                              icon: Icon(
-                                Icons.call,
-                                size: 23,
-                                color: Colors.green[700],
-                              ),
-                              onPressed: () {
-                                launch(
-                                    "tel:${_committeeData[index]["ContactNo"]}");
-                              }),
-                          GestureDetector(
-                            onTap: () {
-                              _openWhatsapp(_committeeData[index]["ContactNo"]);
+                                ],
+                              );
                             },
-                            child: Image.asset("images/whatsapp.png",
-                                width: 30, height: 30),
+                            itemCount:
+                                _committeeData[index]["committelist"].length,
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return Divider();
+                            },
                           ),
-                        ],
-                      )),
-                    ],
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3.3,
-                        child: Text(
-                          "Designation",
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          ": ${_committeeData[index]["Designation"]}",
-                          style: TextStyle(
-                              color: constant.appPrimaryMaterialColor),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3.3,
-                        child: Text(
-                          "Committee Name",
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          ": ${_committeeData[index]["CommitteName"]}",
-                          style: TextStyle(
-                              color: constant.appPrimaryMaterialColor),
-                        ),
-                      )
-                    ],
-                  ),
+                        )
+                      : Text("No Data Found"),
                 ],
               ),
             ),

@@ -498,17 +498,6 @@ class _AdvertisementRenewState extends State<AdvertisementRenew> {
                                     BorderRadius.all(Radius.circular(6.0))),
                               ),
                             ),
-                            Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 15.0, right: 5.0, left: 5.0),
-                                  child: Text("Location:" + _result,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.grey[600],
-                                          fontWeight: FontWeight.w500)),
-                                )),
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 15.0, right: 8.0, left: 8.0),

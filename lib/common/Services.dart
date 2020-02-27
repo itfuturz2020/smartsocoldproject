@@ -106,7 +106,8 @@ class Services {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String MemberId = prefs.getString(constant.Session.Member_Id);
     String SocietyID = prefs.getString(constant.Session.SocietyId);
-    String url = API_URL + 'GetVisitorsByMemberId?societyId=$SocietyID&memberId=$MemberId';
+    String url = API_URL +
+        'GetVisitorsByMemberId?societyId=$SocietyID&memberId=$MemberId';
     print("GetVisitorurl url : " + url);
     try {
       final response = await dio.get(
@@ -117,7 +118,6 @@ class Services {
         print("GetVisitorurl Response: " + response.data.toString());
         var VisitorData = response.data;
         if (VisitorData["IsSuccess"] == true) {
-          print(VisitorData["Data"]);
           list = VisitorData["Data"];
         } else {
           list = [];
@@ -321,7 +321,6 @@ class Services {
         print("GetServicesData Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -349,7 +348,6 @@ class Services {
         print("GetVendorData Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -414,7 +412,6 @@ class Services {
         print("GetWingData Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -443,7 +440,6 @@ class Services {
         print("GetComplain Response: " + response.data.toString());
         var VisitorData = response.data;
         if (VisitorData["IsSuccess"] == true) {
-          print(VisitorData["Data"]);
           list = VisitorData["Data"];
         } else {
           list = [];
@@ -669,7 +665,6 @@ class Services {
         print("VehicleData Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -751,7 +746,6 @@ class Services {
         print("FamilyMemberData Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -967,7 +961,6 @@ class Services {
         print("Vcard Response: " + response.data.toString());
         var VisitorData = response.data;
         if (VisitorData["IsSuccess"] == true) {
-          print(VisitorData["Data"]);
           Vcard = VisitorData["Data"];
         } else {
           Vcard = "";
@@ -1052,7 +1045,6 @@ class Services {
         print("GetPackage Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1080,7 +1072,6 @@ class Services {
         print("GetPaymentDetails Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1216,7 +1207,6 @@ class Services {
         print("GetMyAdvertisement Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1244,7 +1234,6 @@ class Services {
         print("GetAllAdvertisement Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1389,7 +1378,6 @@ class Services {
         print("GetCommittees Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1417,7 +1405,6 @@ class Services {
         print("GetAminitiesDetails Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1503,7 +1490,6 @@ class Services {
         var responseData = response.data;
 
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1532,7 +1518,6 @@ class Services {
         var responseData = response.data;
 
         if (responseData["IsSuccess"] == true) {
-          print(responseData["Data"]);
           list = responseData["Data"];
         } else {
           list = [];
@@ -1551,7 +1536,8 @@ class Services {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String MemberId = prefs.getString(constant.Session.Member_Id);
     String SocietyID = prefs.getString(constant.Session.SocietyId);
-    String url = API_URL + 'GetGuestsByMemberId?societyId=$SocietyID&memberId=$MemberId';
+    String url =
+        API_URL + 'GetGuestsByMemberId?societyId=$SocietyID&memberId=$MemberId';
     print("GetVisitorurl url : " + url);
     try {
       final response = await dio.get(
@@ -1562,7 +1548,6 @@ class Services {
         print("GetVisitorurl Response: " + response.data.toString());
         var VisitorData = response.data;
         if (VisitorData["IsSuccess"] == true) {
-          print(VisitorData["Data"]);
           list = VisitorData["Data"];
         } else {
           list = [];

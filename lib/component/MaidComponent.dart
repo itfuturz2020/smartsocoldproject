@@ -31,7 +31,7 @@ class _MaidComponentState extends State<MaidComponent> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                widget.maidData["Image"] != null ||
+                widget.maidData["Image"] != null &&
                         widget.maidData["Image"] != ""
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
