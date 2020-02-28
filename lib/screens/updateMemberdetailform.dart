@@ -17,8 +17,6 @@ class updateFamilyMemberForm extends StatefulWidget {
 }
 
 class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
-  //
-
   String Gender;
   String Relation;
   ProgressDialog pr;
