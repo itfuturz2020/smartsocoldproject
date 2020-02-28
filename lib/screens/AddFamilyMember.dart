@@ -18,18 +18,18 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
   String Gender;
   String Relation;
   ProgressDialog pr;
-  String MemberId,WingId,WingName,FlatNo,Address,Residenttype,SocietyId;
+  String MemberId, WingId, WingName, FlatNo, Address, Residenttype, SocietyId;
 
   getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       MemberId = prefs.getString(constant.Session.Member_Id);
-      WingId=prefs.getString(constant.Session.WingId);
-      WingName=prefs.getString(constant.Session.Wing);
-      FlatNo=prefs.getString(constant.Session.FlatNo);
-      Address=prefs.getString(constant.Session.Address);
-      Residenttype=prefs.getString(constant.Session.ResidenceType);
-      SocietyId=prefs.getString(constant.Session.SocietyId);
+      WingId = prefs.getString(constant.Session.WingId);
+      WingName = prefs.getString(constant.Session.Wing);
+      FlatNo = prefs.getString(constant.Session.FlatNo);
+      Address = prefs.getString(constant.Session.Address);
+      Residenttype = prefs.getString(constant.Session.ResidenceType);
+      SocietyId = prefs.getString(constant.Session.SocietyId);
     });
   }
 
@@ -40,8 +40,8 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
     getLocaldata();
   }
 
-  TextEditingController txtname=new TextEditingController();
-  TextEditingController txtmobile=new TextEditingController();
+  TextEditingController txtname = new TextEditingController();
+  TextEditingController txtmobile = new TextEditingController();
 
   _SaveFamilymember() async {
     if (txtname.text != "" && txtmobile.text != "") {
@@ -67,11 +67,9 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
             Services.AddFamilyMember(data).then((data) async {
               pr.hide();
               if (data.Data != "0" && data.IsSuccess == true) {
-                showHHMsg("Member Added Successfully",
-                    "");
+                showHHMsg("Member Added Successfully", "");
               } else {
-                showHHMsg("Mobile Number Already Exist !",
-                    "");
+                showHHMsg("Mobile Number Already Exist !", "");
                 pr.hide();
               }
             }, onError: (e) {
@@ -116,7 +114,6 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -254,31 +251,46 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left:8.0,right: 8.0),
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width/1,
+                      width: MediaQuery.of(context).size.width / 1,
                       child: DropdownButton<String>(
                         value: Relation,
                         isExpanded: true,
                         iconSize: 24,
                         hint: Text("- -Select Relation- -"),
-                        style: TextStyle(
-                            color: Colors.black54,fontSize: 15
-                        ),
+                        style: TextStyle(color: Colors.black54, fontSize: 15),
                         onChanged: (String newValue) {
                           setState(() {
                             Relation = newValue;
                             print(Relation);
                           });
                         },
-                        items: <String>['Daughter', 'Son', 'Wife', 'Brother','Sister','Father','Mother']
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: <String>[
+                          'Daughter',
+                          'Son',
+                          'Wife',
+                          'Brother',
+                          'Sister',
+                          'Father',
+                          'Mother',
+                          'Husband',
+                          'Grand Father',
+                          'Grandson',
+                          'Uncle',
+                          'Nephew',
+                          'Cousin',
+                          'Niece',
+                          'Aunt',
+                          'Grand Daughter',
+                          'Grand Mother',
+                          'Wife'
+                        ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
                           );
-                        })
-                            .toList(),
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -298,8 +310,8 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
                   textColor: Colors.white,
                   splashColor: Colors.white,
                   child: Text("Save",
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w600)),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                   onPressed: () {
                     _SaveFamilymember();
                   },

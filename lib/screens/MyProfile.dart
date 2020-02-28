@@ -564,7 +564,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, "/GetMyFamily");
+                    Navigator.pushNamed(context, "/FamilyMemberDetail");
                   },
                   child: ListTile(
                     leading: Image.asset('images/family.png',

@@ -6,12 +6,12 @@ import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/screens/updateMemberdetailform.dart';
 
-class GetMyFamily extends StatefulWidget {
+class FamilyMemberDetail extends StatefulWidget {
   @override
-  _GetMyFamilyState createState() => _GetMyFamilyState();
+  _FamilyMemberDetailState createState() => _FamilyMemberDetailState();
 }
 
-class _GetMyFamilyState extends State<GetMyFamily> {
+class _FamilyMemberDetailState extends State<FamilyMemberDetail> {
   List FmemberData = new List();
   bool isLoading = false;
   String SocietyId, MemberId, ParentId;
@@ -227,7 +227,7 @@ class _GetMyFamilyState extends State<GetMyFamily> {
               children: <Widget>[
                 InkWell(
                   onTap: (){
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => updateFamilyMemberForm(FmemberData[index]),

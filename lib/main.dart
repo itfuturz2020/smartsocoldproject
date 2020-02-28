@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> {
         '/AddGuest': (context) => AddGuest(),
         '/MyGuestList': (context) => MyGuestList(),
         '/Rules': (context) => SocietyRules(),
-        '/GetMyFamily': (context) => GetMyFamily(),
+        '/FamilyMemberDetail': (context) => FamilyMemberDetail(),
         '/AddFamily': (context) => AddFamilyMember(),
         '/GetMyVehicle': (context) => GetMyvehicle(),
         '/Polling': (context) => PollingScreen(),

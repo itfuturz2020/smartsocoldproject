@@ -8,7 +8,6 @@ import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 
 class updateFamilyMemberForm extends StatefulWidget {
-
   var FmemberData;
 
   updateFamilyMemberForm(this.FmemberData);
@@ -24,18 +23,15 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
   String Relation;
   ProgressDialog pr;
   String FamilyMemberId;
-  String MemberId,WingId,WingName,FlatNo,Address,Residenttype,SocietyId;
+  String MemberId, WingId, WingName, FlatNo, Address, Residenttype, SocietyId;
 
-
-
-  setData (){
+  setData() {
     setState(() {
-
-        txtname.text=widget.FmemberData["Name"];
-        txtmobile.text=widget.FmemberData["ContactNo"];
-        Gender=widget.FmemberData["Gender"];
-        Relation=widget.FmemberData["Relation"];
-        FamilyMemberId=widget.FmemberData["Id"].toString();
+      txtname.text = widget.FmemberData["Name"];
+      txtmobile.text = widget.FmemberData["ContactNo"];
+      Gender = widget.FmemberData["Gender"];
+      Relation = widget.FmemberData["Relation"];
+      FamilyMemberId = widget.FmemberData["Id"].toString();
     });
   }
 
@@ -46,8 +42,8 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
     setData();
   }
 
-  TextEditingController txtname=new TextEditingController();
-  TextEditingController txtmobile=new TextEditingController();
+  TextEditingController txtname = new TextEditingController();
+  TextEditingController txtmobile = new TextEditingController();
 
   _UpdateFamilyMember() async {
     if (txtname.text != "" && txtmobile.text != "") {
@@ -66,12 +62,10 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
             Services.UpdateFamilyMember(data).then((data) async {
               pr.hide();
               if (data.Data != "0" && data.IsSuccess == true) {
-                showHHMsg("Update Successfully","");
+                showHHMsg("Update Successfully", "");
+              } else {
+                showHHMsg("Try Again", "");
               }
-              else
-                {
-                  showHHMsg("Try Again", "");
-                }
             }, onError: (e) {
               pr.hide();
               showHHMsg("Try Again.", "");
@@ -106,7 +100,7 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
             new FlatButton(
               child: new Text("Done"),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/GetMyFamily');
+                Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
               },
             ),
           ],
@@ -115,18 +109,19 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
-        Navigator.pushReplacementNamed(context, '/GetMyFamily');
+      onWillPop: () {
+        Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
       },
       child: Scaffold(
         appBar: new AppBar(
-          leading: IconButton(icon: Icon(Icons.keyboard_backspace), onPressed: (){
-            Navigator.pushReplacementNamed(context, '/GetMyFamily');
-          }),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
+              }),
           centerTitle: true,
           title: new Text(
             "Update Member Detail",
@@ -259,31 +254,35 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left:8.0,right: 8.0),
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width/1,
+                        width: MediaQuery.of(context).size.width / 1,
                         child: DropdownButton<String>(
                           value: Relation,
                           isExpanded: true,
                           iconSize: 24,
                           hint: Text("- -Select Relation- -"),
-                          style: TextStyle(
-                              color: Colors.black54,fontSize: 15
-                          ),
+                          style: TextStyle(color: Colors.black54, fontSize: 15),
                           onChanged: (String newValue) {
                             setState(() {
                               Relation = newValue;
                               print(Relation);
                             });
                           },
-                          items: <String>['Daughter', 'Son', 'Wife', 'Brother','Sister','Father','Mother']
-                              .map<DropdownMenuItem<String>>((String value) {
+                          items: <String>[
+                            'Daughter',
+                            'Son',
+                            'Wife',
+                            'Brother',
+                            'Sister',
+                            'Father',
+                            'Mother'
+                          ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
                             );
-                          })
-                              .toList(),
+                          }).toList(),
                         ),
                       ),
                     ),
