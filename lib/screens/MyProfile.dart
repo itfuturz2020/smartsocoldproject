@@ -689,6 +689,7 @@ class _Addvehicale_dialogueState extends State<Addvehicale_dialogue> {
               'VehicleNo': vehicleNumber.text.trim(),
               'Type': VehicleName,
             };
+            print(data);
             pr.show();
             Services.AddVehicle(data).then((data) async {
               pr.hide();
@@ -744,9 +745,6 @@ class _Addvehicale_dialogueState extends State<Addvehicale_dialogue> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      /*shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0))),
-      contentPadding: EdgeInsets.only(top: 12.0),*/
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

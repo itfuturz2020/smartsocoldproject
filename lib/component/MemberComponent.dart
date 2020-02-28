@@ -137,29 +137,31 @@ class _MemberComponentState extends State<MemberComponent> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, bottom: 6.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text("${widget.MemberData["MemberData"]["Name"]}",
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey[700])),
-                        widget.MemberData["MemberData"]["IsPrivate"] == false ||
-                                widget.MemberData["MemberData"]["IsPrivate"] ==
-                                    null
-                            ? Text(
-                                '${widget.MemberData["MemberData"]["ContactNo"]}')
-                            : Text(
-                                '${widget.MemberData["MemberData"]["ContactNo"]}'
-                                    .replaceRange(0, 6, "******")),
-                        Text(
-                          "Flat No: ${widget.MemberData["MemberData"]["FlatNo"]}",
-                          style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                        )
-                      ],
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0, bottom: 6.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("${widget.MemberData["MemberData"]["Name"]}",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[700])),
+                          widget.MemberData["MemberData"]["IsPrivate"] == false ||
+                                  widget.MemberData["MemberData"]["IsPrivate"] ==
+                                      null
+                              ? Text(
+                                  '${widget.MemberData["MemberData"]["ContactNo"]}')
+                              : Text(
+                                  '${widget.MemberData["MemberData"]["ContactNo"]}'
+                                      .replaceRange(0, 6, "******")),
+                          Text(
+                            "Flat No: ${widget.MemberData["MemberData"]["FlatNo"]}",
+                            style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],
