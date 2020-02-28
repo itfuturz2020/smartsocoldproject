@@ -113,11 +113,12 @@ class _CommitteesState extends State<Committees> {
                   SizedBox(
                     height: 8,
                   ),
-                  _committeeData[index]["committelist"] != null
+                  _committeeData[index]["committelist"].length > 0
                       ? SizedBox(
                           height: _committeeData[index]["committelist"].length *
-                              120.0,
+                              110.0,
                           child: ListView.separated(
+                            physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index2) {
                               return Column(
                                 children: <Widget>[
