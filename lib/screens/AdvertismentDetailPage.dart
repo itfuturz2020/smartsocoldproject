@@ -156,49 +156,31 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
                             widget.data["VideoLink"] != ""
                         ? Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Stack(children: [
-                              Container(
-                                height: 170,
-                                width: MediaQuery.of(context).size.width,
-                                child: YoutubePlayer(
-                                  controller: _controller,
-                                  showVideoProgressIndicator: true,
-                                  progressIndicatorColor:
-                                      appPrimaryMaterialColor,
-                                  topActions: <Widget>[
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.arrow_back_ios,
-                                        color: Colors.white,
-                                        size: 20.0,
-                                      ),
-                                      onPressed: () {
-                                        _controller.toggleFullScreenMode();
-                                      },
-                                    ),
-                                  ],
-                                  onReady: () {
-                                    _isPlayerReady = true;
-                                  },
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 2,
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _controller.value.isPlaying
-                                            ? _controller.pause()
-                                            : _controller.play();
-                                      });
-                                    },
+                            child: Container(
+                              height: 170,
+                              width: MediaQuery.of(context).size.width,
+                              child: YoutubePlayer(
+                                controller: _controller,
+                                showVideoProgressIndicator: true,
+                                progressIndicatorColor:
+                                    appPrimaryMaterialColor,
+                                topActions: <Widget>[
+                                  IconButton(
                                     icon: Icon(
-                                        _controller.value.isPlaying
-                                            ? Icons.pause
-                                            : Icons.play_arrow,
-                                        size: 27)),
+                                      Icons.arrow_back_ios,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    ),
+                                    onPressed: () {
+                                      _controller.toggleFullScreenMode();
+                                    },
+                                  ),
+                                ],
+                                onReady: () {
+                                  _isPlayerReady = true;
+                                },
                               ),
-                            ]),
+                            ),
                           )
                         : Container(),
                     Align(
