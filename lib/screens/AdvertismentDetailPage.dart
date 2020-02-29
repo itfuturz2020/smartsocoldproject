@@ -34,7 +34,13 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
   }
 
   _setVideo() {
-    if (widget.data["VideoLink"] != null && widget.data["VideoLink"] != "") {
+    print(widget.data["VideoLink"]);
+    if (widget.data["VideoLink"] != null &&
+        widget.data["VideoLink"] != "" &&
+        widget.data["VideoLink"]
+            .toString()
+            .toLowerCase()
+            .contains("youtube.com")) {
       _controller = YoutubePlayerController(
         initialVideoId: YoutubePlayer.convertUrlToId(widget.data["VideoLink"]),
         flags: YoutubePlayerFlags(
@@ -153,7 +159,11 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
                       },
                     ),
                     widget.data["VideoLink"] != null &&
-                            widget.data["VideoLink"] != ""
+                            widget.data["VideoLink"] != "" &&
+                            widget.data["VideoLink"]
+                                .toString()
+                                .toLowerCase()
+                                .contains("youtube.com")
                         ? Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Container(
@@ -162,8 +172,7 @@ class _AdvertisemnetDetailState extends State<AdvertisemnetDetail> {
                               child: YoutubePlayer(
                                 controller: _controller,
                                 showVideoProgressIndicator: true,
-                                progressIndicatorColor:
-                                    appPrimaryMaterialColor,
+                                progressIndicatorColor: appPrimaryMaterialColor,
                                 topActions: <Widget>[
                                   IconButton(
                                     icon: Icon(
