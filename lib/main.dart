@@ -83,7 +83,6 @@ class _MyAppState extends State<MyApp> {
         .listen((IosNotificationSettings settings) {
       print("Setting reqistered : $settings");
     });
-
   }
 
   @override
@@ -232,7 +231,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-     color: Color.fromRGBO(18, 17, 17, 0.8),
+      color: Color.fromRGBO(18, 17, 17, 0.8),
       child: Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -242,104 +241,100 @@ class _OverlayScreenState extends State<OverlayScreen> {
             Card(
               child: Container(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: Center(
+                          child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Delivery Boy Waiting At Gate",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      )),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      radius: 45.0,
+                      backgroundImage: NetworkImage(
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQE4-uDm61plRUuMRwIbT0QFf3qLTf5P54CB5MCk68Ww8uhj1VB"),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
+                  Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Delivery Boy Waiting At Gate",
-                                  style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
-                                ),
-                              )),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(8.0))),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircleAvatar(
-                          radius: 45.0,
-                          backgroundImage: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQE4-uDm61plRUuMRwIbT0QFf3qLTf5P54CB5MCk68Ww8uhj1VB"),
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Text(
-                            "Amit Patel",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Colors.grey[800]),
-                          ),
-                          Image.network('https://i.ya-webdesign.com/images/dominos-pizza-logo-png-4.png',width: 90,height: 55,)
-                        ],
-                      ),
                       Text(
-                        "GJ-05-KP-5555",
+                        "Amit Patel",
                         style: TextStyle(
+                            fontWeight: FontWeight.w600,
                             fontSize: 18,
                             color: Colors.grey[800]),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: (){
-
-                              },
-                              child: Column(
-                                children: <Widget>[
-                                  Image.asset('images/success.png',
-                                      width: 45, height: 45),
-                                  Text(
-                                    "APPROVE",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Image.asset('images/callvisitor.png',
-                                    width: 45,
-                                    height: 45,
-                                    color: constant.appPrimaryMaterialColor),
-                                Text("CALL",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12))
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Image.asset('images/deny.png',
-                                    width: 45, height: 45),
-                                Text("DENY",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12))
-                              ],
-                            ),
-                          ],
-                        ),
+                      Image.network(
+                        'https://i.ya-webdesign.com/images/dominos-pizza-logo-png-4.png',
+                        width: 90,
+                        height: 55,
                       )
                     ],
-                  )),
+                  ),
+                  Text(
+                    "GJ-05-KP-5555",
+                    style: TextStyle(fontSize: 18, color: Colors.grey[800]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: <Widget>[
+                              Image.asset('images/success.png',
+                                  width: 45, height: 45),
+                              Text(
+                                "APPROVE",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 12),
+                              )
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Image.asset('images/callvisitor.png',
+                                width: 45,
+                                height: 45,
+                                color: constant.appPrimaryMaterialColor),
+                            Text("CALL",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 12))
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Image.asset('images/deny.png',
+                                width: 45, height: 45),
+                            Text("DENY",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 12))
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )),
             ),
             IconButton(
                 icon: Icon(

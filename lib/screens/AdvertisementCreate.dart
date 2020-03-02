@@ -166,11 +166,6 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
           setState(() {
             selectedLocationType = "City";
           });
-        else if (selectedType == "For State")
-          setState(() {
-            selectedLocationType = "State";
-          });
-
         Future res = Services.GetAdvertiseFor(selectedLocationType);
         pr.show();
         res.then((data) async {
@@ -681,7 +676,6 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                                     'For Society',
                                     'For Area',
                                     'For City',
-                                    'For State',
                                   ].map<DropdownMenuItem<String>>(
                                       (String value) {
                                     return DropdownMenuItem<String>(

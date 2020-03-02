@@ -513,7 +513,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(padding: EdgeInsets.only(left: 4)),
                       Expanded(
                         child: Text(
-                          "Search...",
+                          "Search Member or Services..",
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ),
@@ -769,7 +769,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   alignment: Alignment.bottomCenter,
                   children: <Widget>[
                     CarouselSlider(
-                      height: 150,
+                      height: 180,
                       viewportFraction: 1.0,
                       autoPlayAnimationDuration:
                       Duration(milliseconds: 1000),
@@ -866,7 +866,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           alignment: Alignment.bottomCenter,
                           children: <Widget>[
                             CarouselSlider(
-                              height: 170,
+                              height: 140,
                               viewportFraction: 1.0,
                               autoPlayAnimationDuration:
                               Duration(milliseconds: 1500),
