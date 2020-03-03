@@ -57,7 +57,6 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
       _lat = position.latitude.toString();
       _long = position.longitude.toString();
     });
-
     print(position);
   }
 
