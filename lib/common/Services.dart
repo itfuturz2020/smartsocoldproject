@@ -1338,9 +1338,11 @@ class Services {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String memberId = prefs.getString(Session.Member_Id);
+    String mobileno = prefs.getString(Session.session_login);
+    String SocietyId = prefs.getString(Session.SocietyId);
 
     String url =
-        API_URL + 'UpdateMemberFCMToken?memberId=$memberId&fcmToken=$fcmToken';
+        API_URL + 'NewUpdateMemberFCMToken?fcmToken=$fcmToken&mobileno=$mobileno&societyId=$SocietyId&memberId=$memberId';
     print("SendTokanToServer: " + url);
     try {
       Response response = await dio.get(url);
