@@ -176,7 +176,7 @@ class _AmenitiesState extends State<Amenities> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: _aminitiesData[index]["Description"] == "" || _aminitiesData[index]["Description"] == null ?
-                                Container():Text(_aminitiesData[index]["Description"]),
+                                Container():Text(_aminitiesData[index]["Description"],textAlign: TextAlign.center),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 25),
