@@ -49,9 +49,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
+  String Title;
+  String bodymessage;
 
   void initPlayer() {
     advancedPlayer = new AudioPlayer();
@@ -64,10 +67,19 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initPlayer();
     _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
-      Get.to(OverlayScreen(message));
-      audioCache.play('Sound.mp3');
+      Title = message["notification"]["title"];
+      bodymessage = message["notification"]["body"];
+      //Get.to(OverlayScreen(message))
       print("onMessage  $message");
+      if (message["data"]["Type"] == 'Staff') {
+        Get.to(OverlayScreen(message));
+        audioCache.play('Sound.mp3');
+      } else {
+        showNotification('$Title', '$bodymessage');
+        audioCache.play('Sound.mp3');
+      }
     }, onResume: (Map<String, dynamic> message) {
+      showNotification('$Title', '$bodymessage');
       print("onResume");
       print(message);
     }, onLaunch: (Map<String, dynamic> message) {
@@ -83,6 +95,12 @@ class _MyAppState extends State<MyApp> {
         .listen((IosNotificationSettings settings) {
       print("Setting reqistered : $settings");
     });
+
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = new IOSInitializationSettings();
+    var initSetttings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSetttings);
   }
 
   @override
@@ -129,6 +147,15 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: constant.appPrimaryMaterialColor,
       ),
     );
+  }
+
+  showNotification(String title, String body) async {
+    var android = new AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.High, importance: Importance.Max, playSound: false);
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, iOS);
+    await flutterLocalNotificationsPlugin.show(0, '$title', '$body', platform);
   }
 }
 
@@ -266,30 +293,29 @@ class _OverlayScreenState extends State<OverlayScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CircleAvatar(
                       radius: 45.0,
-                      backgroundImage: NetworkImage(
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQE4-uDm61plRUuMRwIbT0QFf3qLTf5P54CB5MCk68Ww8uhj1VB"),
+                      backgroundImage: NetworkImage(constant.Image_Url+
+                          "${widget.data["data"]["Image"]}"),
                       backgroundColor: Colors.transparent,
                     ),
                   ),
                   Column(
                     children: <Widget>[
                       Text(
-                        "Amit Patel",
+                        "${widget.data["data"]["Name"]}",
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
                             color: Colors.grey[800]),
                       ),
-                      Image.network(
-                        'https://i.ya-webdesign.com/images/dominos-pizza-logo-png-4.png',
+                      Image.network(constant.Image_Url+'${widget.data["data"]["CompanyImage"]}',
                         width: 90,
-                        height: 55,
+                        height: 40,
                       )
                     ],
                   ),
                   Text(
-                    "GJ-05-KP-5555",
-                    style: TextStyle(fontSize: 18, color: Colors.grey[800]),
+                    "${widget.data["data"]["CompanyName"]}",
+                    style: TextStyle(fontSize: 15, color: Colors.grey[800]),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
