@@ -215,7 +215,7 @@ class Services {
 
   static Future<SaveDataClass> AddVisitor(body) async {
     print(body.toString());
-    String url = API_URL + 'SaveVisitors';
+    String url = API_URL + 'SaveVisitorsV1';
     print("SaveVisitor : " + url);
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.json;

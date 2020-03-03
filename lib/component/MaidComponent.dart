@@ -14,11 +14,16 @@ class MaidComponent extends StatefulWidget {
 
 class _MaidComponentState extends State<MaidComponent> {
   setTime(String datetime) {
+    String hour = "";
     var time = datetime.split(" ");
-    print("datetime: ${datetime}");
-    print("time: ${time[1]}");
     var t = time[1].split(":");
-    return "${t[0]}:${t[1]} ${time[2]}";
+    if (int.parse(t[0]) > 12) {
+      hour = (int.parse(t[0]) - 12).toString();
+      return "${hour}:${t[1]} PM";
+    } else {
+      hour = int.parse(t[0]).toString();
+      return "${hour}:${t[1]} AM";
+    }
   }
 
   @override
@@ -66,83 +71,64 @@ class _MaidComponentState extends State<MaidComponent> {
                           Text("${widget.maidData["Work"]}",
                               style: TextStyle(color: Colors.black)),
                           Padding(
-                            padding: const EdgeInsets.only(left:8.0,bottom: 4.0,top: 4.0),
+                            padding: const EdgeInsets.only(
+                                left: 8.0, bottom: 4.0, top: 4.0),
                             child: widget.maidData.length > 0
-                                ? widget.maidData
-                            ["OutTime"] ==
-                                null ||
-                                widget.maidData
-                                ["OutTime"] ==
-                                    ""
-                                ? Container(
-                              height: 20,
-                              width: 60,
-                              child: Center(
-                                  child: Text('Inside',
-                                      style: TextStyle(
-                                          fontWeight:
-                                          FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: 12))),
-                              decoration: BoxDecoration(
-                                  color: Colors.green[500],
-                                  borderRadius:
-                                  BorderRadius.all(
-                                      Radius.circular(
-                                          6.0))),
-                            )
-                                : Container(
-                              height: 20,
-                              width: 60,
-                              child: Center(
-                                  child: Text('OutSide',
-                                      style: TextStyle(
-                                          fontWeight:
-                                          FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: 12))),
-                              decoration: BoxDecoration(
-                                  color: Colors.red[500],
-                                  borderRadius:
-                                  BorderRadius.all(
-                                      Radius.circular(
-                                          6.0))),
-                            )
+                                ? widget.maidData["OutTime"] == null ||
+                                        widget.maidData["OutTime"] == ""
+                                    ? Container(
+                                        height: 20,
+                                        width: 60,
+                                        child: Center(
+                                            child: Text('Inside',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white,
+                                                    fontSize: 12))),
+                                        decoration: BoxDecoration(
+                                            color: Colors.green[500],
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6.0))),
+                                      )
+                                    : Container(
+                                        height: 20,
+                                        width: 60,
+                                        child: Center(
+                                            child: Text('OutSide',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white,
+                                                    fontSize: 12))),
+                                        decoration: BoxDecoration(
+                                            color: Colors.red[500],
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(6.0))),
+                                      )
                                 : Container(),
                           )
                         ],
                       ),
-                      widget.maidData.length > 0
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.arrow_downward,
-                                  color: Colors.green,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Icon(
+                            Icons.arrow_downward,
+                            color: Colors.green,
+                          ),
+                          Text("${setTime(widget.maidData["InTime"])}"),
+                          widget.maidData["OutTime"] == null ||
+                                  widget.maidData["OutTime"] == ""
+                              ? Container()
+                              : Icon(
+                                  Icons.arrow_upward,
+                                  color: Colors.red,
                                 ),
-                                Text(
-                                    "${setTime(widget.maidData["InTime"])}"),
-                                widget.maidData["OutTime"] ==
-                                            null ||
-                                        widget.maidData
-                                                ["OutTime"] ==
-                                            ""
-                                    ? Container()
-                                    : Icon(
-                                        Icons.arrow_upward,
-                                        color: Colors.red,
-                                      ),
-                                widget.maidData["OutTime"] ==
-                                            null ||
-                                        widget.maidData
-                                                ["OutTime"] ==
-                                            ""
-                                    ? Container()
-                                    : Text(
-                                        "${setTime(widget.maidData["OutTime"])}"),
-                              ],
-                            )
-                          : Container(),
+                          widget.maidData["OutTime"] == null ||
+                                  widget.maidData["OutTime"] == ""
+                              ? Container()
+                              : Text("${setTime(widget.maidData["OutTime"])}"),
+                        ],
+                      )
                     ],
                   ),
                 ),
