@@ -56,11 +56,6 @@ class _WingListItemState extends State<WingListItem> {
           });
           showHHMsg("Try Again.", "");
         });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        showHHMsg("No Internet Connection.", "");
       }
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");

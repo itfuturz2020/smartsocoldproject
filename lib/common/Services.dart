@@ -1341,8 +1341,8 @@ class Services {
     String mobileno = prefs.getString(Session.session_login);
     String SocietyId = prefs.getString(Session.SocietyId);
 
-    String url =
-        API_URL + 'NewUpdateMemberFCMToken?fcmToken=$fcmToken&mobileno=$mobileno&societyId=$SocietyId&memberId=$memberId';
+    String url = API_URL +
+        'NewUpdateMemberFCMToken?fcmToken=$fcmToken&mobileno=$mobileno&societyId=$SocietyId&memberId=$memberId';
     print("SendTokanToServer: " + url);
     try {
       Response response = await dio.get(url);
@@ -1561,6 +1561,34 @@ class Services {
       }
     } catch (e) {
       print("Error GetVisitorurl   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<SaveDataClass> AddSOS(body) async {
+    print(body.toString());
+    String url = API_URL + '';
+    print("SOS url : " + url);
+    try {
+      final response = await dio.post(url, data: body);
+      if (response.statusCode == 200) {
+        SaveDataClass saveData = new SaveDataClass(
+            Message: 'No Data', IsSuccess: false, Data: '0', IsRecord: false);
+
+        print("SOS Response: " + response.data.toString());
+        var memberDataClass = response.data;
+
+        saveData.Message = memberDataClass["Message"];
+        saveData.IsSuccess = memberDataClass["IsSuccess"];
+        saveData.Data = memberDataClass["Data"].toString();
+
+        return saveData;
+      } else {
+        print("Error SOS");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error SOS : ${e.toString()}");
       throw Exception(e.toString());
     }
   }

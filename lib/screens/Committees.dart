@@ -49,11 +49,6 @@ class _CommitteesState extends State<Committees> {
           });
           showHHMsg("Try Again.", "");
         });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        showHHMsg("No Internet Connection.", "");
       }
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");

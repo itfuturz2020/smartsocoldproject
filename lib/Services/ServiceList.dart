@@ -54,12 +54,7 @@ class _ServiceListState extends State<ServiceList> {
           });
           showHHMsg("Try Again.", "");
         });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        showHHMsg("No Internet Connection.", "");
-      }
+      } 
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");
     }
@@ -94,12 +89,7 @@ class _ServiceListState extends State<ServiceList> {
           });
           showHHMsg("Try Again.", "");
         });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        showHHMsg("No Internet Connection.", "");
-      }
+      } 
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");
     }

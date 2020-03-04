@@ -61,11 +61,6 @@ class _FamilyMemberDetailState extends State<FamilyMemberDetail> {
           });
           showHHMsg("Try Again.", "");
         });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        showHHMsg("No Internet Connection.", "");
       }
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");

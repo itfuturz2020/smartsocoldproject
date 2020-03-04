@@ -23,7 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List<WingClass> _winglist = [];
   WingClass _wingClass;
 
-
   ProgressDialog pr;
 
   String Gender = "Male";
@@ -47,7 +46,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   _CodeVerification() async {
     if (CodeControler.text != "") {
       try {
-        //check Internet Connection
         final result = await InternetAddress.lookup('google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
           setState(() {
@@ -76,11 +74,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             });
             showHHMsg("Something Went Wrong", "Error");
           });
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-          showHHMsg("No Internet Connection.", "");
         }
       } on SocketException catch (_) {
         showHHMsg("No Internet Connection.", "");
@@ -146,13 +139,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'WingId': _wingClass.WingId,
               'Wing': _wingClass.WingName,
               'FlatNo': txtFlatNo.text.trim(),
-
             };
             pr.show();
             Services.Registration(data).then((data) async {
               pr.hide();
               if (data.Data != "0" && data.IsSuccess == true) {
-                showHHMsg("Registration Successfully","");
+                showHHMsg("Registration Successfully", "");
               } else {
                 showHHMsg("Mobile Number Already Exist !", "");
                 pr.hide();
@@ -161,9 +153,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               pr.hide();
               showHHMsg("Try Again.", "");
             });
-          } else {
-            pr.hide();
-            showHHMsg("No Internet Connection.", "");
           }
         } on SocketException catch (_) {
           showHHMsg("No Internet Connection.", "");
@@ -435,7 +424,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(5.0),
+                                        new BorderRadius.circular(5.0),
                                     borderSide: new BorderSide(),
                                   ),
                                   hintText: "Enter Society Code",
@@ -606,7 +595,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:
-                                    new BorderRadius.circular(5.0),
+                                        new BorderRadius.circular(5.0),
                                     borderSide: new BorderSide(),
                                   ),
                                   hintText: "Your Flat Number",

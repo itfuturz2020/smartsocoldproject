@@ -21,6 +21,7 @@ import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/common/constant.dart';
 import 'package:smart_society_new/component/VisitorPopup.dart';
 import 'package:smart_society_new/main.dart';
+import 'package:smart_society_new/screens/SOSDailog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AdvertismentDetailPage.dart';
@@ -983,7 +984,10 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 50,
             width: 50,
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                print("aaaa");
+                showDialog(context: context, child: SOSDailog());
+              },
               backgroundColor: Colors.red[200],
               child: Container(
                   decoration: BoxDecoration(
