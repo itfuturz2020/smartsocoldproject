@@ -427,57 +427,12 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         resultText.text = "";
       });
-      // _voiceInput();
     } else
       Fluttertoast.showToast(
           msg: "Permission Not Granted",
           gravity: ToastGravity.TOP,
           toastLength: Toast.LENGTH_SHORT);
   }
-
-/*
-  _voiceInput() async {
-//    _speechRecognition.listen(locale: "en_US").then((result) {
-//      print('$result');
-//    });
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Image.asset(
-            "images/record.gif",
-            height: 100,
-            width: MediaQuery.of(context).size.width,
-          ),
-          titlePadding: EdgeInsets.only(bottom: 10, top: 10),
-          content: Container(
-            height: 70,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.0),
-                      border: Border.all(color: Colors.grey)),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 12.0,
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                    controller: resultText,
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-*/
 
   @override
   Widget build(BuildContext context) {
@@ -756,120 +711,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        body: isLoading ?
-            Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ):
-            Column(
-              children: <Widget>[
-                _advertisementData.length > 0
-                    ? Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    CarouselSlider(
-                      height: 180,
-                      viewportFraction: 1.0,
-                      autoPlayAnimationDuration:
-                      Duration(milliseconds: 1000),
-                      reverse: false,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      autoPlay: true,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
-                      items: _advertisementData.map((i) {
-                        return Builder(
-                            builder: (BuildContext context) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          AdvertisemnetDetail(
-                                            i,
-                                          ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                    width: MediaQuery.of(context)
-                                        .size
-                                        .width,
-                                    child: Image.network(
-                                        Image_Url + i["Image"],
-                                        fit: BoxFit.fill)),
-                              );
-                            });
-                      }).toList(),
-                    ),
-                    Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.center,
-                      children: map<Widget>(
-                        _advertisementData,
-                            (index, url) {
-                          return Container(
-                            width: 7.0,
-                            height: 7.0,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10.0,
-                                horizontal: 2.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(5)),
-                                color: _current == index
-                                    ? Colors.white
-                                    : Colors.grey),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                )
-                    : Container(),
-                Padding(padding: EdgeInsets.all(4.0)),
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: Colors.grey[500], width: 0.3))),
-                          child: AnimationLimiter(
-                            child: GridView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: _getMenuItem,
-                              itemCount: _allMenuList.length,
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio:
-                                MediaQuery.of(context).size.width /
-                                    (MediaQuery.of(context).size.height /
-                                        2.3),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.all(8.0)),
-                        _advertisementData.length > 0
-                            ? Stack(
+        body: isLoading
+            ? Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Column(
+                children: <Widget>[
+                  _advertisementData.length > 0
+                      ? Stack(
                           alignment: Alignment.bottomCenter,
                           children: <Widget>[
                             CarouselSlider(
-                              height: 140,
+                              height: 180,
                               viewportFraction: 1.0,
                               autoPlayAnimationDuration:
-                              Duration(milliseconds: 1500),
+                                  Duration(milliseconds: 1000),
                               reverse: false,
                               autoPlayCurve: Curves.fastOutSlowIn,
                               autoPlay: true,
@@ -879,43 +737,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                 });
                               },
                               items: _advertisementData.map((i) {
-                                return Builder(
-                                    builder: (BuildContext context) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AdvertisemnetDetail(
-                                                    i,
-                                                  ),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Image.network(
-                                                Image_Url + i["Image"],
-                                                fit: BoxFit.fill)),
+                                return Builder(builder: (BuildContext context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdvertisemnetDetail(
+                                            i,
+                                          ),
+                                        ),
                                       );
-                                    });
+                                    },
+                                    child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Image.network(
+                                            Image_Url + i["Image"],
+                                            fit: BoxFit.fill)),
+                                  );
+                                });
                               }).toList(),
                             ),
                             Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: map<Widget>(
                                 _advertisementData,
-                                    (index, url) {
+                                (index, url) {
                                   return Container(
                                     width: 7.0,
                                     height: 7.0,
                                     margin: EdgeInsets.symmetric(
-                                        vertical: 10.0,
-                                        horizontal: 2.0),
+                                        vertical: 10.0, horizontal: 2.0),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5)),
@@ -928,14 +782,110 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         )
-                            : Container(),
-                      ],
+                      : Container(),
+                  Padding(padding: EdgeInsets.all(4.0)),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.grey[500], width: 0.3))),
+                            child: AnimationLimiter(
+                              child: GridView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: _getMenuItem,
+                                itemCount: _allMenuList.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  childAspectRatio:
+                                      MediaQuery.of(context).size.width /
+                                          (MediaQuery.of(context).size.height /
+                                              2.3),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.all(8.0)),
+                          _advertisementData.length > 0
+                              ? Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: <Widget>[
+                                    CarouselSlider(
+                                      height: 140,
+                                      viewportFraction: 1.0,
+                                      autoPlayAnimationDuration:
+                                          Duration(milliseconds: 1500),
+                                      reverse: false,
+                                      autoPlayCurve: Curves.fastOutSlowIn,
+                                      autoPlay: true,
+                                      onPageChanged: (index) {
+                                        setState(() {
+                                          _current = index;
+                                        });
+                                      },
+                                      items: _advertisementData.map((i) {
+                                        return Builder(
+                                            builder: (BuildContext context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AdvertisemnetDetail(
+                                                    i,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Image.network(
+                                                    Image_Url + i["Image"],
+                                                    fit: BoxFit.fill)),
+                                          );
+                                        });
+                                      }).toList(),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: map<Widget>(
+                                        _advertisementData,
+                                        (index, url) {
+                                          return Container(
+                                            width: 7.0,
+                                            height: 7.0,
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 2.0),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(5)),
+                                                color: _current == index
+                                                    ? Colors.white
+                                                    : Colors.grey),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
-            )
-          ,
+                  )
+                ],
+              ),
         bottomNavigationBar: Container(
           height: 54,
           decoration: BoxDecoration(
@@ -1021,7 +971,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context,'/MyProfile');
+                    Navigator.pushReplacementNamed(context, '/MyProfile');
                   },
                 ),
               )

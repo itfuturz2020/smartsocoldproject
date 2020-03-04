@@ -79,7 +79,6 @@ class _MyAppState extends State<MyApp> {
         audioCache.play('Sound.mp3');
       }
     }, onResume: (Map<String, dynamic> message) {
-      showNotification('$Title', '$bodymessage');
       print("onResume");
       print(message);
     }, onLaunch: (Map<String, dynamic> message) {
@@ -293,7 +292,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CircleAvatar(
                       radius: 45.0,
-                      backgroundImage: NetworkImage(constant.Image_Url+
+                      backgroundImage: NetworkImage(constant.Image_Url +
                           "${widget.data["data"]["Image"]}"),
                       backgroundColor: Colors.transparent,
                     ),
@@ -307,7 +306,9 @@ class _OverlayScreenState extends State<OverlayScreen> {
                             fontSize: 18,
                             color: Colors.grey[800]),
                       ),
-                      Image.network(constant.Image_Url+'${widget.data["data"]["CompanyImage"]}',
+                      Image.network(
+                        constant.Image_Url +
+                            '${widget.data["data"]["CompanyImage"]}',
                         width: 90,
                         height: 40,
                       )
