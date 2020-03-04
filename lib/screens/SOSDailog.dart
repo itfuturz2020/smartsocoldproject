@@ -133,15 +133,16 @@ class _SOSDailogState extends State<SOSDailog> {
               child: TextFormField(
                 controller: txtMsg,
                 decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: constant.appPrimaryMaterialColor[600])),
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    labelText: "Any Message",
-                    hintStyle: TextStyle(fontSize: 13)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: constant.appPrimaryMaterialColor[600])),
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(5.0),
+                    borderSide: new BorderSide(),
+                  ),
+                  labelText: "Any Message",
+                  hintStyle: TextStyle(fontSize: 13),
+                ),
               ),
             ),
           ),
