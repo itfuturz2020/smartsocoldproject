@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
   _checkLogin() async {
     if (_MobileNumber.text != '') {
       try {
-        //check Internet Connection
+
         final result = await InternetAddress.lookup('google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
           setState(() {
@@ -131,12 +131,12 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
+
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
+
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {

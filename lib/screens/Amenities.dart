@@ -57,12 +57,12 @@ class _AmenitiesState extends State<Amenities> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
+
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
+
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {

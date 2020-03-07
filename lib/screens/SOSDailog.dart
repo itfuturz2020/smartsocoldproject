@@ -55,7 +55,7 @@ class _SOSDailogState extends State<SOSDailog> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
+
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),

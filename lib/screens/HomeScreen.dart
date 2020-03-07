@@ -326,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        // return object of type Dialog
+
         return AlertDialog(
           title: new Text("My JINI"),
           content: new Text("Are You Sure You Want To Exit?"),
