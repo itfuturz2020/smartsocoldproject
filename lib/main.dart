@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:smart_society_new/screens/AddFamilyMember.dart';
@@ -40,7 +41,9 @@ import 'package:smart_society_new/Services/ServiceList.dart';
 import 'package:smart_society_new/screens/UpdateProfileScreen.dart';
 import 'package:smart_society_new/screens/AddGuest.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -157,87 +160,6 @@ class _MyAppState extends State<MyApp> {
     await flutterLocalNotificationsPlugin.show(0, '$title', '$body', platform);
   }
 }
-
-/*
-  onSelectNotification() {
-    showDialog(
-      context: context,
-      builder: (_) => new Dialog(
-          elevation: 10.0, backgroundColor: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Card(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      child: Center(child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Delivery Boy Waiting At Gate",style: TextStyle(fontSize: 16),),
-                      )),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.all(Radius.circular(8.0))
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      radius: 45.0,
-                      backgroundImage:
-                      NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQE4-uDm61plRUuMRwIbT0QFf3qLTf5P54CB5MCk68Ww8uhj1VB"),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("Amit Patel",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 18,color: Colors.grey[800]),),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:25.0,bottom: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-
-                        Column(
-                          children: <Widget>[
-                            Image.asset('images/success.png',width: 45,height: 45),
-                            Text("APPROVE",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 12),)
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Image.asset('images/callvisitor.png',width: 45,height: 45,color: constant.appPrimaryMaterialColor),
-                            Text("CALL",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 12))
-
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Image.asset('images/deny.png',width: 45,height: 45),
-                            Text("DENY",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 12))
-
-                          ],
-                        ) ,
-
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-      ),
-    );
-  }
-*/
 
 class OverlayScreen extends StatefulWidget {
   var data;
