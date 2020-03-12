@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/common/Classlist.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
@@ -1542,9 +1543,7 @@ class Services {
         API_URL + 'GetGuestsByMemberId?societyId=$SocietyID&memberId=$MemberId';
     print("GetVisitorurl url : " + url);
     try {
-      final response = await dio.get(
-        url,
-      );
+      final response = await dio.get(url);
       if (response.statusCode == 200) {
         List list = [];
         print("GetVisitorurl Response: " + response.data.toString());
@@ -1566,30 +1565,57 @@ class Services {
   }
 
   static Future<SaveDataClass> AddSOS(body) async {
-    print(body.toString());
+    print( body.toString( ) );
     String url = API_URL + '';
-    print("SOS url : " + url);
+    print( "SOS url : " + url );
     try {
-      final response = await dio.post(url, data: body);
+      final response = await dio.post( url, data: body );
       if (response.statusCode == 200) {
         SaveDataClass saveData = new SaveDataClass(
-            Message: 'No Data', IsSuccess: false, Data: '0', IsRecord: false);
+            Message: 'No Data', IsSuccess: false, Data: '0', IsRecord: false );
 
-        print("SOS Response: " + response.data.toString());
+        print( "SOS Response: " + response.data.toString( ) );
         var memberDataClass = response.data;
 
         saveData.Message = memberDataClass["Message"];
         saveData.IsSuccess = memberDataClass["IsSuccess"];
-        saveData.Data = memberDataClass["Data"].toString();
+        saveData.Data = memberDataClass["Data"].toString( );
 
         return saveData;
       } else {
-        print("Error SOS");
-        throw Exception(response.data.toString());
+        print( "Error SOS" );
+        throw Exception( response.data.toString( ) );
       }
     } catch (e) {
-      print("Error SOS : ${e.toString()}");
+      print( "Error SOS : ${e.toString( )}" );
+      throw Exception( e.toString( ) );
+    }
+  }
+  static Future<SaveDataClass> NotificationReply(String Msg,String EntryId,String WatchManId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String SocietyID = prefs.getString(Session.SocietyId);
+    String url =
+        API_URL + 'LeaveAtGate?Message=$Msg&EntryId=$EntryId&SocietyId=$SocietyID&WatchmanId=$WatchManId';
+    print("GetVisitorurl url-- : " + url);
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        SaveDataClass saveData = new SaveDataClass(
+            Message: 'No Data', IsSuccess: false, IsRecord: false, Data: "");
+        print("Notification Reply Response: " + response.data.toString());
+        var responseData = response.data;
+        saveData.Message = responseData["Message"];
+        saveData.IsSuccess = responseData["IsSuccess"];
+        saveData.Data = responseData["Data"].toString();
+
+        return saveData;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("Error Notification Reply   : ${e.toString()}");
       throw Exception(e.toString());
     }
   }
+
 }

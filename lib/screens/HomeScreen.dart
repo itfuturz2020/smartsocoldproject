@@ -12,12 +12,15 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Model/ModelClass.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/common/constant.dart';
+import 'package:smart_society_new/component/NotificationPopup.dart';
+import 'package:smart_society_new/main.dart';
 import 'package:smart_society_new/screens/SOSDailog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -982,8 +985,8 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 50,
             child: FloatingActionButton(
               onPressed: () {
-                print("aaaa");
-                showDialog(context: context, child: SOSDailog());
+                //Get.to(OverlayScreen({}));
+               //  showDialog(context: context, child: SOSDailog());
               },
               backgroundColor: Colors.red[200],
               child: Container(

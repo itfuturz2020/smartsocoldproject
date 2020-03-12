@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:smart_society_new/component/NotificationPopup.dart';
 import 'package:smart_society_new/screens/AddFamilyMember.dart';
 import 'package:smart_society_new/screens/AdvertisementCreate.dart';
 import 'package:smart_society_new/screens/AdvertisementManage.dart';
@@ -74,8 +75,8 @@ class _MyAppState extends State<MyApp> {
       bodymessage = message["notification"]["body"];
       //Get.to(OverlayScreen(message))
       print("onMessage  $message");
-      if (message["data"]["Type"] == 'Staff') {
-        Get.to(OverlayScreen(message));
+      if (message["data"]["Type"] == 'Visitor') {
+        Get.to(NotificationPopup(message));
         audioCache.play('Sound.mp3');
       } else {
         showNotification('$Title', '$bodymessage');
@@ -210,6 +211,7 @@ class _OverlayScreenState extends State<OverlayScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(8.0))),
                     ),
                   ),
+                  widget.data["data"]["Image"] == null && widget.data["data"]["Image"] == "" ?
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CircleAvatar(
@@ -218,6 +220,9 @@ class _OverlayScreenState extends State<OverlayScreen> {
                           "${widget.data["data"]["Image"]}"),
                       backgroundColor: Colors.transparent,
                     ),
+                  ): Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('images/user.png',width: 100,height: 100,),
                   ),
                   Column(
                     children: <Widget>[
