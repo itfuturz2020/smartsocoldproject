@@ -177,7 +177,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
                         GestureDetector(
                           onTap: () {
                               NotificationReply(_notifcationReplylist[0],widget.data["data"]["EntryId"],widget.data["data"]["WatchmanId"]);
-                              print(_notifcationReplylist[0]);
+                              Get.back();
                           },
                           child: Column(
                             children: <Widget>[
@@ -222,7 +222,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            NotificationReply(_notifcationReplylist[0],widget.data["data"]["EntryId"],widget.data["data"]["WatchmanId"]);
+                            NotificationReply(_notifcationReplylist[2],widget.data["data"]["EntryId"],widget.data["data"]["WatchmanId"]);
                             Get.back();
                           },
                           child: Column(
