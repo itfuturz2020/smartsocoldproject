@@ -986,7 +986,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: FloatingActionButton(
               onPressed: () {
                 //Get.to(OverlayScreen({}));
-               //  showDialog(context: context, child: SOSDailog());
+               showDialog(context: context, child: SOSDailog());
               },
               backgroundColor: Colors.red[200],
               child: Container(
