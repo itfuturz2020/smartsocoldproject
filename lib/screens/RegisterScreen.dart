@@ -591,7 +591,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 50,
                             child: TextFormField(
                               controller: txtFlatNo,
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.characters,
                               decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:

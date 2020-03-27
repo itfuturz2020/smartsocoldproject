@@ -139,7 +139,7 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                   ],
                 ),
               ),
-              Padding(
+              /*Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
                   "${setDate(_VisitorList[index]["Date"])}",
@@ -148,7 +148,7 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                       color: constant.appPrimaryMaterialColor,
                       fontWeight: FontWeight.w600),
                 ),
-              )
+              )*/
             ],
           )),
     );
