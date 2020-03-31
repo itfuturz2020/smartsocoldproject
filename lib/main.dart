@@ -3,9 +3,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:smart_society_new/Mall/Screens/Mall.dart';
 import 'package:smart_society_new/component/NotificationPopup.dart';
 import 'package:smart_society_new/screens/AddFamilyMember.dart';
 import 'package:smart_society_new/screens/AdvertisementCreate.dart';
@@ -24,7 +24,6 @@ import 'package:smart_society_new/screens/PollingScreen.dart';
 import 'package:smart_society_new/screens/Society_Rules.dart';
 import 'package:smart_society_new/screens/Splashscreen.dart';
 import 'package:smart_society_new/screens/LoginScreen.dart';
-import 'package:smart_society_new/screens/OtpScreen.dart';
 import 'package:smart_society_new/screens/HomeScreen.dart';
 import 'package:smart_society_new/screens/ComplaintScreen.dart';
 import 'package:smart_society_new/screens/NoticeScreen.dart';
@@ -35,10 +34,8 @@ import 'package:smart_society_new/screens/MyProfile.dart';
 import 'package:smart_society_new/screens/EmergencyNumber.dart';
 import 'package:smart_society_new/screens/Approval_Pending.dart';
 import 'package:smart_society_new/screens/WinglistScreen.dart';
-
 import 'package:smart_society_new/screens/GalleryScreen.dart';
 import 'package:smart_society_new/Services/ServicesScreen.dart';
-import 'package:smart_society_new/Services/ServiceList.dart';
 import 'package:smart_society_new/screens/UpdateProfileScreen.dart';
 import 'package:smart_society_new/screens/AddGuest.dart';
 
@@ -144,6 +141,7 @@ class _MyAppState extends State<MyApp> {
         '/Committee': (context) => Committees(),
         '/Amenities': (context) => Amenities(),
         '/DailyHelp': (context) => DailyHelp(),
+        '/Mall': (context) => Mall(),
       },
       theme: ThemeData(
         fontFamily: 'OpenSans',
@@ -211,19 +209,25 @@ class _OverlayScreenState extends State<OverlayScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(8.0))),
                     ),
                   ),
-                  widget.data["data"]["Image"] == null && widget.data["data"]["Image"] == "" ?
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      radius: 45.0,
-                      backgroundImage: NetworkImage(constant.Image_Url +
-                          "${widget.data["data"]["Image"]}"),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ): Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset('images/user.png',width: 100,height: 100,),
-                  ),
+                  widget.data["data"]["Image"] == null &&
+                          widget.data["data"]["Image"] == ""
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            radius: 45.0,
+                            backgroundImage: NetworkImage(constant.Image_Url +
+                                "${widget.data["data"]["Image"]}"),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'images/user.png',
+                            width: 100,
+                            height: 100,
+                          ),
+                        ),
                   Column(
                     children: <Widget>[
                       Text(

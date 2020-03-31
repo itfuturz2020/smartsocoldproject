@@ -11,14 +11,13 @@ class Maintainance extends StatefulWidget {
 }
 
 class _MaintainanceState extends State<Maintainance> {
-
   List MaintainanceData = new List();
   bool isLoading = false;
   String Member_Id;
 
   @override
   void initState() {
-    GetMaintainanceData();
+    //GetMaintainanceData();
     _getLocaldata();
   }
 
@@ -41,7 +40,7 @@ class _MaintainanceState extends State<Maintainance> {
       final_date = date == "" || date == null
           ? ""
           : "${tempDate[2].toString().substring(0, 2)}\n${setMonth(DateTime.parse(date))}"
-          .toString();
+              .toString();
     }
     return final_date;
   }
@@ -89,7 +88,6 @@ class _MaintainanceState extends State<Maintainance> {
 
   GetMaintainanceData() async {
     try {
-
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
@@ -125,12 +123,10 @@ class _MaintainanceState extends State<Maintainance> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {
@@ -143,8 +139,6 @@ class _MaintainanceState extends State<Maintainance> {
     );
   }
 
-
-
   Widget _CardPayment(BuildContext context, int index) {
     return Card(
       child: Container(
@@ -156,12 +150,15 @@ class _MaintainanceState extends State<Maintainance> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left:8.0,bottom: 2.0),
-                  child: Text("Paid Date",style: TextStyle(fontSize: 10,color: Colors.grey),),
+                  padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
+                  child: Text(
+                    "Paid Date",
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  ),
                 ),
                 Container(
                   width: 60,
-                  height:60,
+                  height: 60,
                   padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
@@ -178,22 +175,36 @@ class _MaintainanceState extends State<Maintainance> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top:16.0,right: 35.0),
+              padding: const EdgeInsets.only(top: 16.0, right: 35.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text("PaymentMode: ",style: TextStyle(fontSize: 13),),
-                      Text("Cheque",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),)
+                      Text(
+                        "PaymentMode: ",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      Text(
+                        "Cheque",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
                   Column(
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text("Ref No: ",style: TextStyle(fontSize: 13),),
-                          Text("056895364",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),)
+                          Text(
+                            "Ref No: ",
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          Text(
+                            "056895364",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
                         ],
                       )
                     ],
@@ -204,7 +215,14 @@ class _MaintainanceState extends State<Maintainance> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                 Align(child: Text("₹ 2000/- ",style: TextStyle(fontSize:18,fontWeight: FontWeight.bold,color: Colors.green),))
+                Align(
+                    child: Text(
+                  "₹ 2000/- ",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green),
+                ))
               ],
             )
           ],
@@ -220,30 +238,30 @@ class _MaintainanceState extends State<Maintainance> {
         Navigator.pushReplacementNamed(context, "/HomeScreen");
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, "/HomeScreen");
-              }),
-          centerTitle: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(10),
+          appBar: AppBar(
+            elevation: 0,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, "/HomeScreen");
+                }),
+            centerTitle: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(10),
+              ),
+            ),
+            title: Text(
+              "Maintainence",
+              style: TextStyle(fontSize: 17),
             ),
           ),
-          title: Text(
-            "Maintainence",
-            style: TextStyle(fontSize: 17),
-          ),
-        ),
-        body: Container(
-          child: Center(
-            child: Text('Work In Progress'),
-          ),
-        )
-      /*   Column(
+          body: Container(
+            child: Center(
+              child: Text('Work In Progress'),
+            ),
+          )
+          /*   Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Card(
@@ -258,7 +276,7 @@ class _MaintainanceState extends State<Maintainance> {
             Expanded(child: ListView.builder(itemBuilder: _CardPayment,itemCount: 10,shrinkWrap: true))
           ],
         )*/
-      ),
+          ),
     );
   }
 }

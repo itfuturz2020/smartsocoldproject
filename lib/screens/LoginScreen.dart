@@ -73,7 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
   _checkLogin() async {
     if (_MobileNumber.text != '') {
       try {
-
         final result = await InternetAddress.lookup('google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
           setState(() {
@@ -89,12 +88,13 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => OtpScreen(data[0]["ContactNo"].toString(),data[0]["Id"].toString(),(){
+                  builder: (context) => OtpScreen(
+                      data[0]["ContactNo"].toString(), data[0]["Id"].toString(),
+                      () {
                     localdata();
                   }),
                 ),
               );
-              Navigator.pushNamed(context, '/OtpScreen');
             } else {
               Fluttertoast.showToast(
                   msg: "Incorrect Mobile Number",
@@ -131,12 +131,10 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {

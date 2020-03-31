@@ -1350,7 +1350,7 @@ class Services {
 
       if (response.statusCode == 200) {
         List list = [];
-        print("Commities List URL: " + response.data.toString());
+        print("SendTokanToServer URL: " + response.data.toString());
         var memberDataClass = response.data;
         if (memberDataClass["IsSuccess"] == true &&
             memberDataClass["IsRecord"] == true) {
@@ -1565,37 +1565,39 @@ class Services {
   }
 
   static Future<SaveDataClass> AddSOS(body) async {
-    print( body.toString( ) );
+    print(body.toString());
     String url = API_URL + '';
-    print( "SOS url : " + url );
+    print("SOS url : " + url);
     try {
-      final response = await dio.post( url, data: body );
+      final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData = new SaveDataClass(
-            Message: 'No Data', IsSuccess: false, Data: '0', IsRecord: false );
+            Message: 'No Data', IsSuccess: false, Data: '0', IsRecord: false);
 
-        print( "SOS Response: " + response.data.toString( ) );
+        print("SOS Response: " + response.data.toString());
         var memberDataClass = response.data;
 
         saveData.Message = memberDataClass["Message"];
         saveData.IsSuccess = memberDataClass["IsSuccess"];
-        saveData.Data = memberDataClass["Data"].toString( );
+        saveData.Data = memberDataClass["Data"].toString();
 
         return saveData;
       } else {
-        print( "Error SOS" );
-        throw Exception( response.data.toString( ) );
+        print("Error SOS");
+        throw Exception(response.data.toString());
       }
     } catch (e) {
-      print( "Error SOS : ${e.toString( )}" );
-      throw Exception( e.toString( ) );
+      print("Error SOS : ${e.toString()}");
+      throw Exception(e.toString());
     }
   }
-  static Future<SaveDataClass> NotificationReply(String Msg,String EntryId,String WatchManId) async {
+
+  static Future<SaveDataClass> NotificationReply(
+      String Msg, String EntryId, String WatchManId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String SocietyID = prefs.getString(Session.SocietyId);
-    String url =
-        API_URL + 'LeaveAtGate?Message=$Msg&EntryId=$EntryId&SocietyId=$SocietyID&WatchmanId=$WatchManId';
+    String url = API_URL +
+        'LeaveAtGate?Message=$Msg&EntryId=$EntryId&SocietyId=$SocietyID&WatchmanId=$WatchManId';
     print("GetVisitorurl url-- : " + url);
     try {
       final response = await dio.get(url);
@@ -1617,5 +1619,4 @@ class Services {
       throw Exception(e.toString());
     }
   }
-
 }

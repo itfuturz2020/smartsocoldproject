@@ -12,32 +12,23 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Model/ModelClass.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/common/constant.dart';
-import 'package:smart_society_new/component/NotificationPopup.dart';
-import 'package:smart_society_new/main.dart';
 import 'package:smart_society_new/screens/SOSDailog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AdvertismentDetailPage.dart';
 
 class HomeScreen extends StatefulWidget {
-  String payload;
-
-  // HomeScreen({this.payload});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int _currentIndex = 0;
-
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
 
@@ -329,7 +320,6 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text("My JINI"),
           content: new Text("Are You Sure You Want To Exit?"),
@@ -944,7 +934,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Icon(Icons.new_releases, size: 22),
-                        Text("Advertisement",
+                        Text("Promote",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 11))
@@ -953,6 +943,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   onTap: () {
                     Navigator.pushNamed(context, '/AdvertisementCreate');
+                  },
+                ),
+              ),
+              Flexible(
+                child: InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.shopping_cart, size: 22),
+                        Text("Mall",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 11))
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/Mall');
                   },
                 ),
               ),
@@ -986,7 +997,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: FloatingActionButton(
               onPressed: () {
                 //Get.to(OverlayScreen({}));
-               showDialog(context: context, child: SOSDailog());
+                showDialog(context: context, child: SOSDailog());
               },
               backgroundColor: Colors.red[200],
               child: Container(
