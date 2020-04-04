@@ -49,7 +49,6 @@ class _DirecotryScreenState extends State<DirecotryScreen> {
 
   GetMemberData() async {
     try {
-
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
@@ -85,12 +84,10 @@ class _DirecotryScreenState extends State<DirecotryScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {
@@ -224,12 +221,14 @@ class _DirecotryScreenState extends State<DirecotryScreen> {
       for (int i = 0; i < MemberData.length; i++) {
         String name = MemberData[i]["MemberData"]["Name"];
         String flat = MemberData[i]["MemberData"]["FlatNo"].toString();
+        String mobile = MemberData[i]["MemberData"]["ContactNo"].toString();
         String bloodGroup =
             MemberData[i]["MemberData"]["BloodGroup"].toString();
         String designation =
             MemberData[i]["MemberData"]["Designation"].toString();
         if (name.toLowerCase().contains(searchText.toLowerCase()) ||
             designation.toLowerCase().contains(searchText.toLowerCase()) ||
+            mobile.toLowerCase().contains(searchText.toLowerCase()) ||
             bloodGroup.toLowerCase().contains(searchText.toLowerCase()) ||
             flat.toLowerCase().contains(searchText.toLowerCase())) {
           searchMemberData.add(MemberData[i]);

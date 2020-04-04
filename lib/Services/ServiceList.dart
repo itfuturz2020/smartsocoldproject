@@ -5,6 +5,7 @@ import 'package:smart_society_new/Services/ServiceDetailScreen.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:smart_society_new/common/constant.dart' as cnst;
 
 class ServiceList extends StatefulWidget {
   var ServiceData;
@@ -25,6 +26,13 @@ class _ServiceListState extends State<ServiceList> {
     print("Service Id" + widget.ServiceData["Id"].toString());
     _getServiceData();
     _getVendorData();
+  }
+
+  _openWhatsapp(mobile) {
+    String whatsAppLink = cnst.whatsAppLink;
+    String urlwithmobile = whatsAppLink.replaceAll("#mobile", "91$mobile");
+    String urlwithmsg = urlwithmobile.replaceAll("#msg", "");
+    launch(urlwithmsg);
   }
 
   _getServiceData() async {
@@ -54,7 +62,7 @@ class _ServiceListState extends State<ServiceList> {
           });
           showHHMsg("Try Again.", "");
         });
-      } 
+      }
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");
     }
@@ -62,7 +70,6 @@ class _ServiceListState extends State<ServiceList> {
 
   _getVendorData() async {
     try {
-
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
@@ -89,7 +96,7 @@ class _ServiceListState extends State<ServiceList> {
           });
           showHHMsg("Try Again.", "");
         });
-      } 
+      }
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");
     }
@@ -99,12 +106,10 @@ class _ServiceListState extends State<ServiceList> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {
@@ -202,7 +207,6 @@ class _ServiceListState extends State<ServiceList> {
             child: Container(
               padding: EdgeInsets.all(8),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
@@ -270,21 +274,33 @@ class _ServiceListState extends State<ServiceList> {
                                 size: 15,
                               ),
                               Padding(padding: EdgeInsets.only(left: 4)),
-                              Text('${_vendorData[index]["About"]}',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  )),
+                              Flexible(
+                                child: Text('${_vendorData[index]["About"]}',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    )),
+                              ),
                             ],
                           ),
                         ],
                       ),
                     ),
                   ),
-                  IconButton(
-                      icon: Icon(Icons.call, color: Colors.green[700]),
-                      onPressed: () {
+                  GestureDetector(
+                      onTap: () {
                         launch("tel:${_vendorData[index]["ContactNo"]}");
-                      }),
+                      },
+                      child: Icon(Icons.call, color: Colors.green[700])),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _openWhatsapp(_vendorData[index]["ContactNo"]);
+                    },
+                    child: Image.asset("images/whatsapp.png",
+                        width: 35, height: 35),
+                  ),
                 ],
               ),
             ),

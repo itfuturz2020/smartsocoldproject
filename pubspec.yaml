@@ -14,14 +14,12 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   pin_code_text_field: ^1.5.0
   image_picker: ^0.6.3+1
@@ -44,7 +42,6 @@ dependencies:
   flutter_webview_plugin: ^0.3.10
   http: ^0.12.0+2
   multiselect_formfield: ^0.1.2
-  path_provider: ^1.2.0
   qr_flutter: ^3.1.0
   datetime_picker_formfield: ^0.4.3
   firebase_messaging: ^6.0.9
@@ -52,12 +49,12 @@ dependencies:
   flutter_local_notifications: ^0.9.1+1
   audioplayers: ^0.13.2
   google_maps_flutter: ^0.5.21+15
-  video_player: ^0.10.5+3
   location: ^2.3.5
   geolocator: ^4.0.3
-  neeko: ^0.0.6
   youtube_player_flutter: ^6.0.0
   get: ^1.10.5
+  flutter_staggered_grid_view: ^0.3.0
+  sqflite: ^1.1.6+4
 
 dev_dependencies:
   flutter_test:
@@ -151,7 +148,7 @@ flutter:
     - images/website.png
     - images/galleryselect.png
     - images/leaveatgate.png
-    - assets/
+    - lib/Mall/Images/daawat.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
