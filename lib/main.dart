@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:smart_society_new/Mall/Screens/Cart.dart';
 import 'package:smart_society_new/Mall/Screens/Mall.dart';
 import 'package:smart_society_new/component/NotificationPopup.dart';
 import 'package:smart_society_new/screens/AddFamilyMember.dart';
@@ -142,6 +143,7 @@ class _MyAppState extends State<MyApp> {
         '/Amenities': (context) => Amenities(),
         '/DailyHelp': (context) => DailyHelp(),
         '/Mall': (context) => Mall(),
+        '/Cart': (context) => Cart(),
       },
       theme: ThemeData(
         fontFamily: 'OpenSans',

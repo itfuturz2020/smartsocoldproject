@@ -64,6 +64,25 @@ class _ProductComponentState extends State<ProductComponent> {
                   )
                 ],
               ),
+              Positioned(
+                top: -15,
+                left: -15,
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 6, top: 6),
+                  decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(50),
+                      )),
+                  child: Text(
+                    "New",
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ).alignAtStart(),
+              ),
               ClipPath(
                 clipper: offerTagClipper(),
                 child: Container(

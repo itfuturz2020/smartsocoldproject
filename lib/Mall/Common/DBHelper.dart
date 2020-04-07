@@ -17,37 +17,37 @@ class DBHelper {
 
   initDatabase() async {
     io.Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, 'student.db');
+    String path = join(documentDirectory.path, 'cart.db');
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
   }
 
   _onCreate(Database db, int version) async {
-    await db
-        .execute('CREATE TABLE student (id INTEGER PRIMARY KEY, date TEXT)');
+    await db.execute(
+        'CREATE TABLE cart (id INTEGER PRIMARY KEY, productId INTEGER)');
   }
 
   Future<AddToCartClass> add(AddToCartClass cart) async {
     var dbClient = await db;
-    cart.productId = await dbClient.insert('student', cart.toMap());
+    cart.productId = await dbClient.insert('cart', cart.toMap());
     return cart;
   }
 
-  Future<List<AddToCartClass>> getStudents() async {
+  Future<List<AddToCartClass>> getCart() async {
     var dbClient = await db;
-    List<Map> maps = await dbClient.query('student', columns: ['id', 'date']);
-    List<AddToCartClass> students = [];
+    List<Map> maps = await dbClient.query('cart', columns: ['id', 'productId']);
+    List<AddToCartClass> cart = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
-        students.add(AddToCartClass.fromMap(maps[i]));
+        cart.add(AddToCartClass.fromMap(maps[i]));
       }
     }
-    return students;
+    return cart;
   }
 
   Future<int> delete() async {
     var dbClient = await db;
-    return await dbClient.delete('student');
+    return await dbClient.delete('cart');
   }
 
   Future close() async {

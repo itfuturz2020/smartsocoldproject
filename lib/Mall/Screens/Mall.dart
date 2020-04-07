@@ -2,11 +2,10 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:smart_society_new/Mall/Common/MallConstants.dart';
 import 'package:smart_society_new/Mall/Common/MallServices.dart';
-import 'package:smart_society_new/Mall/Common/ExtensionMethods.dart';
 import 'package:smart_society_new/Mall/Screens/AllProducts.dart';
+import 'package:smart_society_new/Mall/Screens/Categories.dart';
 import 'package:smart_society_new/Mall/Screens/OtherProducts.dart';
 import 'package:smart_society_new/common/constant.dart' as cnst;
 
@@ -79,6 +78,14 @@ class _MallState extends State<Mall> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Grocery Mall"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.pushNamed(context, "/Cart");
+            },
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -103,9 +110,12 @@ class _MallState extends State<Mall> {
                   }).toList(),
                 )
               : Container(),
-          Expanded(
-            child: currentIndex == 0 ? AllProducts() : OtherProducts(),
-          )
+          if (currentIndex == 0) ...[
+            Expanded(child: AllProducts())
+          ] else if (currentIndex == 1)
+            Expanded(child: Categories())
+          else
+            Expanded(child: OtherProducts()),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -124,6 +134,10 @@ class _MallState extends State<Mall> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             title: Text("All"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            title: Text("Categories"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_offer),
