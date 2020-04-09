@@ -23,19 +23,17 @@ class DBHelper {
   }
 
   _onCreate(Database db, int version) async {
-    await db.execute(
-        'CREATE TABLE cart (id INTEGER PRIMARY KEY, productId INTEGER)');
+    await db.execute('CREATE TABLE cart (productId INTEGER)');
   }
 
   Future<AddToCartClass> add(AddToCartClass cart) async {
     var dbClient = await db;
-    cart.productId = await dbClient.insert('cart', cart.toMap());
-    return cart;
+    await dbClient.insert('cart', cart.toMap());
   }
 
   Future<List<AddToCartClass>> getCart() async {
     var dbClient = await db;
-    List<Map> maps = await dbClient.query('cart', columns: ['id', 'productId']);
+    List<Map> maps = await dbClient.query('cart', columns: ['productId']);
     List<AddToCartClass> cart = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {

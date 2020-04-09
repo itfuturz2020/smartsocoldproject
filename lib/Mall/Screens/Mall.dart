@@ -19,6 +19,7 @@ class _MallState extends State<Mall> {
 
   bool isLoading = false;
   int currentIndex = 0;
+  String selectedCategoryId = "";
 
   @override
   void initState() {
@@ -111,9 +112,19 @@ class _MallState extends State<Mall> {
                 )
               : Container(),
           if (currentIndex == 0) ...[
-            Expanded(child: AllProducts())
+            Expanded(
+                child: AllProducts(
+              selectedCategory: selectedCategoryId,
+            ))
           ] else if (currentIndex == 1)
-            Expanded(child: Categories())
+            Expanded(child: Categories(
+              onSelect: (categoryId) {
+                setState(() {
+                  selectedCategoryId = categoryId;
+                  currentIndex = 0;
+                });
+              },
+            ))
           else
             Expanded(child: OtherProducts()),
         ],
@@ -124,6 +135,7 @@ class _MallState extends State<Mall> {
         onTap: (index) {
           setState(() {
             currentIndex = index;
+            selectedCategoryId = null;
           });
         },
         selectedItemColor: cnst.appPrimaryMaterialColor,

@@ -3,6 +3,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:smart_society_new/common/constant.dart' as cnst;
 
 class Categories extends StatefulWidget {
+  Function onSelect;
+
+  Categories({this.onSelect});
   @override
   _CategoriesState createState() => _CategoriesState();
 }
@@ -77,7 +80,9 @@ class _CategoriesState extends State<Categories> {
                   itemCount: 3,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        widget.onSelect("$index");
+                      },
                       child: Card(
                         child: Stack(
                           alignment: Alignment.center,

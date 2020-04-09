@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smart_society_new/Mall/Common/DBHelper.dart';
+import 'package:smart_society_new/Mall/Common/MallClassList.dart';
 import 'package:smart_society_new/Mall/Components/offerTagClipper.dart';
 import 'package:smart_society_new/Mall/Common/ExtensionMethods.dart';
 import 'package:smart_society_new/Mall/Screens/ProductDetail.dart';
@@ -10,6 +12,14 @@ class ProductComponent extends StatefulWidget {
 }
 
 class _ProductComponentState extends State<ProductComponent> {
+  DBHelper dbHelper;
+  Future<List<AddToCartClass>> cart;
+
+  @override
+  void initState() {
+    dbHelper = DBHelper();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -60,7 +70,10 @@ class _ProductComponentState extends State<ProductComponent> {
                           style: TextStyle(fontSize: 12, color: Colors.white),
                         ),
                         color: cnst.appPrimaryMaterialColor,
-                        onPressed: () {}),
+                        onPressed: () {
+                          dbHelper.add(AddToCartClass(
+                              "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}"));
+                        }),
                   )
                 ],
               ),

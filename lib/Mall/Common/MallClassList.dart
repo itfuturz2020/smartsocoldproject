@@ -14,20 +14,17 @@ class MallAPIClass {
 }
 
 class AddToCartClass {
-  int productId;
-  String productName;
-  AddToCartClass(this.productId, this.productName);
+  String productId;
+  AddToCartClass(this.productId);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'productId': productId,
-      'productName': productName,
     };
     return map;
   }
 
   AddToCartClass.fromMap(Map<String, dynamic> map) {
     productId = map['productId'];
-    productName = map['productName'];
   }
 }

@@ -4,6 +4,9 @@ import 'package:smart_society_new/Mall/Components/ProductComponent.dart';
 import 'package:smart_society_new/common/constant.dart' as cnst;
 
 class AllProducts extends StatefulWidget {
+  String selectedCategory = "";
+
+  AllProducts({this.selectedCategory});
   @override
   _AllProductsState createState() => _AllProductsState();
 }
@@ -19,7 +22,14 @@ class _AllProductsState extends State<AllProducts>
     for (int i = 0; i < 10; i++) {
       tabList.add(Tab(text: 'Tab ${i + 1}'));
     }
-    _tabController = new TabController(vsync: this, length: tabList.length);
+    if (widget.selectedCategory != null) {
+      print(widget.selectedCategory);
+      setState(() {
+        selectedTab = 2;
+      });
+    }
+    _tabController = new TabController(
+        vsync: this, length: tabList.length, initialIndex: selectedTab);
   }
 
   @override
