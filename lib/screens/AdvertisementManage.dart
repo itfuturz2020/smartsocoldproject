@@ -232,7 +232,7 @@ class _AdvertisementManageState extends State<AdvertisementManage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Manage Advertisement"),
+          title: Text("Manage Promotions"),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(10),
@@ -616,7 +616,7 @@ class _AdvertisementManageState extends State<AdvertisementManage> {
                         Navigator.pushNamed(context, "/AdvertisementCreate");
                       },
                       child: Text(
-                        "Post Advertisement",
+                        "Promote",
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,

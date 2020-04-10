@@ -23,7 +23,7 @@ class _AllProductsState extends State<AllProducts>
       tabList.add(Tab(text: 'Tab ${i + 1}'));
     }
     if (widget.selectedCategory != null) {
-      print(widget.selectedCategory);
+      print("->>" + widget.selectedCategory.toString());
       setState(() {
         selectedTab = 2;
       });

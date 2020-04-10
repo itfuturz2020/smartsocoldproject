@@ -569,7 +569,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     ListTile(
                       title: Text(
-                        'Manage Advertisement',
+                        'Manage Promotions',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       leading: Icon(

@@ -292,7 +292,7 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Make Advertisement"),
+          title: Text("Make Promotion"),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(10),

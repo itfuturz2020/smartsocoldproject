@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
 import 'package:smart_society_new/component/MemberComponent.dart';
-import 'package:smart_society_new/screens/MemberProfile.dart';
+import 'package:smart_society_new/Mall/Common/ExtensionMethods.dart';
 
 class DirecotryScreen extends StatefulWidget {
   String wingType, wingId;
@@ -18,7 +18,8 @@ class DirecotryScreen extends StatefulWidget {
 
 class _DirecotryScreenState extends State<DirecotryScreen> {
   List MemberData = new List();
-  bool isLoading = false;
+  List FilterMemberData = new List();
+  bool isLoading = false, isSelected = false;
   String SocietyId;
 
   TextEditingController _controller = TextEditingController();
@@ -29,7 +30,7 @@ class _DirecotryScreenState extends State<DirecotryScreen> {
   );
 
   List searchMemberData = new List();
-  bool _isSearching = false, isfirst = false;
+  bool _isSearching = false, isfirst = false, isFilter = false;
 
   Icon icon = new Icon(
     Icons.search,
@@ -104,59 +105,122 @@ class _DirecotryScreenState extends State<DirecotryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 1.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: isLoading
-                      ? Container(
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
-                      : MemberData.length > 0 && MemberData != null
-                          ? searchMemberData.length > 0
-                              ? ListView.builder(
-                                  itemCount: searchMemberData.length,
-                                  shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return MemberComponent(
-                                        searchMemberData[index]);
-                                  },
-                                )
-                              : _isSearching && isfirst
-                                  ? ListView.builder(
-                                      padding: EdgeInsets.all(0),
-                                      itemCount: searchMemberData.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return MemberComponent(
-                                            searchMemberData[index]);
-                                      },
-                                    )
-                                  : ListView.builder(
-                                      padding: EdgeInsets.all(0),
-                                      itemCount: MemberData.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return MemberComponent(
-                                            MemberData[index]);
-                                      },
-                                    )
-                          : Container(
-                              child: Center(child: Text("No Member Found")),
-                            ),
+      body: Column(
+        children: <Widget>[
+          FlatButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  "Filter",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: constant.appPrimaryMaterialColor,
+                      fontWeight: FontWeight.bold),
                 ),
+                SizedBox(
+                  width: 6,
+                ),
+                Icon(
+                  Icons.filter_list,
+                  size: 19,
+                  color: constant.appPrimaryMaterialColor,
+                ),
+              ],
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return showFilterDailog(
+                      onSelect: (gender, isOwned, isOwner, isRented) {
+                        String owned = isOwned ? "Owned" : "";
+                        String owner = isOwner ? "Owner" : "";
+                        String rented = isRented ? "Rented" : "";
+                        setState(() {
+                          isFilter = true;
+                          FilterMemberData.clear();
+                        });
+                        for (int i = 0; i < MemberData.length; i++) {
+                          if (MemberData[i]["MemberData"]["Gender"] == gender ||
+                              MemberData[i]["MemberData"]["ResidenceType"] ==
+                                  owned ||
+                              MemberData[i]["MemberData"]["ResidenceType"] ==
+                                  owner ||
+                              MemberData[i]["MemberData"]["ResidenceType"] ==
+                                  rented) {
+                            print("matched");
+                            FilterMemberData.add(MemberData[i]);
+                          }
+                        }
+                        setState(() {});
+                      },
+                    );
+                  });
+            },
+          ).alignAtEnd(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 1.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: isLoading
+                    ? Container(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : isFilter
+                        ? FilterMemberData.length > 0
+                            ? ListView.builder(
+                                itemCount: FilterMemberData.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return MemberComponent(
+                                      FilterMemberData[index]);
+                                },
+                              )
+                            : Container(
+                                child: Center(child: Text("No Member Found")),
+                              )
+                        : MemberData.length > 0 && MemberData != null
+                            ? searchMemberData.length > 0
+                                ? ListView.builder(
+                                    itemCount: searchMemberData.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return MemberComponent(
+                                          searchMemberData[index]);
+                                    },
+                                  )
+                                : _isSearching && isfirst
+                                    ? ListView.builder(
+                                        padding: EdgeInsets.all(0),
+                                        itemCount: searchMemberData.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return MemberComponent(
+                                              searchMemberData[index]);
+                                        },
+                                      )
+                                    : ListView.builder(
+                                        padding: EdgeInsets.all(0),
+                                        itemCount: MemberData.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return MemberComponent(
+                                              MemberData[index]);
+                                        },
+                                      )
+                            : Container(
+                                child: Center(child: Text("No Member Found")),
+                              ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -236,5 +300,133 @@ class _DirecotryScreenState extends State<DirecotryScreen> {
       }
     }
     setState(() {});
+  }
+}
+
+class showFilterDailog extends StatefulWidget {
+  Function onSelect;
+
+  showFilterDailog({this.onSelect});
+  @override
+  _showFilterDailogState createState() => _showFilterDailogState();
+}
+
+class _showFilterDailogState extends State<showFilterDailog> {
+  String _gender;
+
+  bool ownerSelect = false, rentedSelect = false, ownedSelect = false;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Filter Your Criteria"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "Gender",
+            style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w600),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 6.0),
+            child: Row(
+              children: <Widget>[
+                Radio(
+                    value: 'Male',
+                    groupValue: _gender,
+                    onChanged: (value) {
+                      setState(() {
+                        _gender = value;
+                      });
+                    }),
+                Text("Male", style: TextStyle(fontSize: 13)),
+                Radio(
+                    value: 'Female',
+                    groupValue: _gender,
+                    onChanged: (value) {
+                      setState(() {
+                        _gender = value;
+                      });
+                    }),
+                Text("Female", style: TextStyle(fontSize: 13))
+              ],
+            ),
+          ),
+          Text(
+            "Residential Type",
+            style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w600),
+          ),
+          Row(
+            children: <Widget>[
+              Checkbox(
+                  activeColor: Colors.green,
+                  value: ownedSelect,
+                  onChanged: (bool value) {
+                    setState(() {
+                      ownedSelect = value;
+                    });
+                  }),
+              Text(
+                "Owned",
+                style: TextStyle(fontSize: 13),
+              )
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Checkbox(
+                  activeColor: Colors.green,
+                  value: rentedSelect,
+                  onChanged: (bool value) {
+                    setState(() {
+                      rentedSelect = value;
+                    });
+                  }),
+              Text(
+                "Rented",
+                style: TextStyle(fontSize: 13),
+              )
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Checkbox(
+                  activeColor: Colors.green,
+                  value: ownerSelect,
+                  onChanged: (bool value) {
+                    setState(() {
+                      ownerSelect = value;
+                    });
+                  }),
+              Text(
+                "Owner",
+                style: TextStyle(fontSize: 13),
+              )
+            ],
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("Cancel"),
+        ),
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+            widget.onSelect(_gender, ownedSelect, ownerSelect, rentedSelect);
+          },
+          child: Text("Done"),
+        )
+      ],
+    );
   }
 }

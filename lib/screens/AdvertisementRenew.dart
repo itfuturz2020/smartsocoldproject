@@ -252,7 +252,10 @@ class _AdvertisementRenewState extends State<AdvertisementRenew> {
 
     for (int i = 0; i < _packageAllList.length; i++) {
       if (_packageAllList[i]["Type"] == selectedLocationType) {
-        print("selected Package-->"+_packageAllList[i]["Id"].toString()+"  "+_packageAllList[i]["Type"]);
+        print("selected Package-->" +
+            _packageAllList[i]["Id"].toString() +
+            "  " +
+            _packageAllList[i]["Type"]);
         setState(() {
           _packageList.add(_packageAllList[i]);
         });
@@ -312,7 +315,7 @@ class _AdvertisementRenewState extends State<AdvertisementRenew> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Renew Advertisement"),
+          title: Text("Renew Promotion"),
         ),
         body: isLoading
             ? Container(
@@ -448,9 +451,9 @@ class _AdvertisementRenewState extends State<AdvertisementRenew> {
                                     border: Border.all(
                                         width: 1,
                                         color:
-                                        constant.appPrimaryMaterialColor),
+                                            constant.appPrimaryMaterialColor),
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(6.0))),
+                                        BorderRadius.all(Radius.circular(6.0))),
                               ),
                             ),
                             Padding(
@@ -493,9 +496,9 @@ class _AdvertisementRenewState extends State<AdvertisementRenew> {
                                     border: Border.all(
                                         width: 1,
                                         color:
-                                        constant.appPrimaryMaterialColor),
+                                            constant.appPrimaryMaterialColor),
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(6.0))),
+                                        BorderRadius.all(Radius.circular(6.0))),
                               ),
                             ),
                             Padding(

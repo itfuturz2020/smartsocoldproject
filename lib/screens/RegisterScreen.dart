@@ -171,7 +171,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),

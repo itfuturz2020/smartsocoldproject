@@ -19,7 +19,7 @@ class _MallState extends State<Mall> {
 
   bool isLoading = false;
   int currentIndex = 0;
-  String selectedCategoryId = "";
+  String selectedCategoryId;
 
   @override
   void initState() {
