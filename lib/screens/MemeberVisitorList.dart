@@ -96,59 +96,122 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
       padding: const EdgeInsets.only(right: 4.0, left: 4.0),
       child: Card(
           elevation: 2,
-          child: Row(
+          child: Column(
             children: <Widget>[
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 10.0, left: 10.0, bottom: 10.0),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    image: new DecorationImage(
-                        image: _VisitorList[index]["Image"] == "" ||
-                                _VisitorList[index]["Image"] == null
-                            ? AssetImage("images/man.png")
-                            : NetworkImage(
-                                Image_Url + _VisitorList[index]["Image"]),
-                        fit: BoxFit.cover),
-                    borderRadius: BorderRadius.all(new Radius.circular(75.0)),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text("${_VisitorList[index]["Name"]}",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Color.fromRGBO(81, 92, 111, 1))),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10.0, left: 10.0, bottom: 10.0),
+                    child: Container(
+                      width: 65,
+                      height: 65,
+                      decoration: BoxDecoration(
+                        image: new DecorationImage(
+                            image: _VisitorList[index]["Image"] == "" ||
+                                    _VisitorList[index]["Image"] == null
+                                ? AssetImage("images/man.png")
+                                : NetworkImage(
+                                    Image_Url + _VisitorList[index]["Image"]),
+                            fit: BoxFit.cover),
+                        borderRadius:
+                            BorderRadius.all(new Radius.circular(75.0)),
+                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 1.0, top: 3.0),
-                      child: Text("  ${_VisitorList[index]["ContactNo"]}",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[700])),
-                    )
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text("${_VisitorList[index]["Name"]}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color.fromRGBO(81, 92, 111, 1))),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 1.0, top: 3.0),
+                          child: Text("  ${_VisitorList[index]["ContactNo"]}",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey[700])),
+                        )
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: <Widget>[
+                      IconButton(
+                          icon: Icon(
+                            Icons.call,
+                            color: Colors.green[700],
+                          ),
+                          onPressed: () {}),
+                      Container(
+                        margin: EdgeInsets.only(right: 5, bottom: 6),
+                        padding: EdgeInsets.only(
+                            top: 3, bottom: 3, left: 5, right: 5),
+                        decoration: BoxDecoration(
+                            color: constant.appPrimaryMaterialColor,
+                            borderRadius: BorderRadius.all(Radius.circular(3))),
+                        child: Text(
+                          "${_VisitorList[index]["VisitorTypeName"]}",
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
-              /*Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
-                  "${setDate(_VisitorList[index]["Date"])}",
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: constant.appPrimaryMaterialColor,
-                      fontWeight: FontWeight.w600),
-                ),
-              )*/
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(bottom: 6, left: 7),
+                    padding: EdgeInsets.only(left: 3, right: 3),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        border: Border.all(color: Colors.green)),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.arrow_downward,
+                          color: Colors.green,
+                          size: 18,
+                        ),
+                        Text(
+                          "08 Mar 2020 11:03 AM",
+                          style: TextStyle(fontSize: 11),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 6, right: 7),
+                    padding: EdgeInsets.only(left: 3, right: 3),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        border: Border.all(
+                            color: constant.appPrimaryMaterialColor)),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.arrow_upward,
+                          color: constant.appPrimaryMaterialColor,
+                          size: 18,
+                        ),
+                        Text(
+                          "08 Mar 2020 12:36 AM",
+                          style: TextStyle(fontSize: 11),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
             ],
           )),
     );

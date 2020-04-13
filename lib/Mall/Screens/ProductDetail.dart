@@ -60,6 +60,32 @@ class _ProductDetailState extends State<ProductDetail> {
                         style: TextStyle(color: Colors.green, fontSize: 16),
                       ).alignAtStart(),
                     ),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 3,
+                      height: 36,
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: Colors.grey)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          IconButton(
+                              icon: Icon(Icons.remove, color: Colors.red),
+                              onPressed: () {}),
+                          Expanded(
+                            child: Text("1",
+                                style: TextStyle(
+                                    color: cnst.appPrimaryMaterialColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                          ),
+                          IconButton(
+                              icon: Icon(Icons.add, color: Colors.red),
+                              onPressed: () {}),
+                        ],
+                      ),
+                    ).alignAtStart(),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 40,

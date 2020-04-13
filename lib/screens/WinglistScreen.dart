@@ -30,7 +30,6 @@ class _WingListItemState extends State<WingListItem> {
 
   GetWingList() async {
     try {
-
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
@@ -66,12 +65,10 @@ class _WingListItemState extends State<WingListItem> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {
@@ -92,13 +89,13 @@ class _WingListItemState extends State<WingListItem> {
         child: FadeInAnimation(
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
+              /*Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => DirecotryScreen(
                             wingType: "${WingData[index]["WingName"]}",
                             wingId: "${WingData[index]["Id"]}",
-                          )));
+                          )));*/
             },
             child: Card(
               child: Center(
@@ -106,10 +103,11 @@ class _WingListItemState extends State<WingListItem> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("${WingData[index]["WingName"]}",style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(81, 92, 111, 1))),
+                    Text("${WingData[index]["WingName"]}",
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromRGBO(81, 92, 111, 1))),
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
                       child: Text(
@@ -142,7 +140,10 @@ class _WingListItemState extends State<WingListItem> {
                   Navigator.pushReplacementNamed(context, "/HomeScreen");
                 }),
             centerTitle: true,
-            title: Text("Directory",style: TextStyle(fontSize: 18),),
+            title: Text(
+              "Directory",
+              style: TextStyle(fontSize: 18),
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(10),

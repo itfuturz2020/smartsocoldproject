@@ -19,7 +19,7 @@ class Menu {
 
     listofmenus.add(new Menu(Icon: "Helpdesk.png", IconName: "Committee"));
     listofmenus.add(new Menu(Icon: "gallery.png", IconName: "Gallery"));
-    listofmenus.add(new Menu(Icon: "Maintainence.png", IconName: "Maintainence"));
+    listofmenus.add(new Menu(Icon: "bill.png", IconName: "Bills"));
     listofmenus.add(new Menu(Icon: "Utilities.png", IconName: "Amenities"));
 
     return listofmenus;

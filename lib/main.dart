@@ -12,8 +12,10 @@ import 'package:smart_society_new/screens/AddFamilyMember.dart';
 import 'package:smart_society_new/screens/AdvertisementCreate.dart';
 import 'package:smart_society_new/screens/AdvertisementManage.dart';
 import 'package:smart_society_new/screens/Amenities.dart';
+import 'package:smart_society_new/screens/Bills.dart';
 import 'package:smart_society_new/screens/Committees.dart';
 import 'package:smart_society_new/screens/ContactList.dart';
+import 'package:smart_society_new/screens/DirectoryScreen.dart';
 import 'package:smart_society_new/screens/DocumentScreen.dart';
 import 'package:smart_society_new/screens/GlobalSearchMembers.dart';
 import 'package:smart_society_new/screens/DailyHelp.dart';
@@ -119,7 +121,7 @@ class _MyAppState extends State<MyApp> {
         '/WaitingScreen': (context) => Approval_admin(),
         '/Complaints': (context) => MyComplaints(),
         '/AddComplaints': (context) => ComplaintScreen(),
-        '/Directory': (context) => WingListItem(),
+        '/Directory': (context) => DirecotryScreen(),
         '/RegisterScreen': (context) => RegisterScreen(),
         '/MyProfile': (context) => MyProfileScreen(),
         '/Documents': (context) => DocumentScreen(),
@@ -144,6 +146,7 @@ class _MyAppState extends State<MyApp> {
         '/DailyHelp': (context) => DailyHelp(),
         '/Mall': (context) => Mall(),
         '/Cart': (context) => Cart(),
+        '/Bills': (context) => Bills(),
       },
       theme: ThemeData(
         fontFamily: 'OpenSans',
