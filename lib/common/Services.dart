@@ -85,7 +85,6 @@ class Services {
         print("GetNotice Response: " + response.data.toString());
         var NoticeData = response.data;
         if (NoticeData["IsSuccess"] == true) {
-          print(NoticeData["Data"]);
           list = NoticeData["Data"];
         } else {
           list = [];
@@ -147,7 +146,6 @@ class Services {
         print("getLogin Response: " + response.data.toString());
         var MemberData = response.data;
         if (MemberData["IsSuccess"] == true) {
-          print(MemberData["Data"]);
           list = MemberData["Data"];
         } else {
           list = [];
@@ -292,7 +290,6 @@ class Services {
         print("GetServices Response: " + response.data.toString());
         var ServicesData = response.data;
         if (ServicesData["IsSuccess"] == true) {
-          print(ServicesData["Data"]);
           list = ServicesData["Data"];
         } else {
           list = [];
@@ -469,7 +466,6 @@ class Services {
         print("Get EventList Response: " + response.data.toString());
         var ServicesData = response.data;
         if (ServicesData["IsSuccess"] == true) {
-          print(ServicesData["Data"]);
           list = ServicesData["Data"];
         } else {
           list = [];
@@ -497,7 +493,6 @@ class Services {
         print("EventGallery Response: " + response.data.toString());
         var ServicesData = response.data;
         if (ServicesData["IsSuccess"] == true) {
-          print(ServicesData["Data"]);
           list = ServicesData["Data"];
         } else {
           list = [];
@@ -525,7 +520,6 @@ class Services {
         print("GetSocietyRules Response: " + response.data.toString());
         var RulesData = response.data;
         if (RulesData["IsSuccess"] == true) {
-          print(RulesData["Data"]);
           list = RulesData["Data"];
         } else {
           list = [];
@@ -553,7 +547,6 @@ class Services {
         print("GetDocument Response: " + response.data.toString());
         var RulesData = response.data;
         if (RulesData["IsSuccess"] == true) {
-          print(RulesData["Data"]);
           list = RulesData["Data"];
         } else {
           list = [];
@@ -610,7 +603,6 @@ class Services {
         print("GetMemberByWing Response: " + response.data.toString());
         var RulesData = response.data;
         if (RulesData["IsSuccess"] == true) {
-          print(RulesData["Data"]);
           list = RulesData["Data"];
         } else {
           list = [];

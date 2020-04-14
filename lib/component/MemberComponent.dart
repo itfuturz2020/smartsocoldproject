@@ -5,10 +5,9 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart' as constant;
-import 'package:smart_society_new/screens/DirectoryScreen.dart';
+import 'package:smart_society_new/common/ExtensionMethods.dart';
 import 'package:smart_society_new/screens/MemberProfile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -83,12 +82,10 @@ class _MemberComponentState extends State<MemberComponent> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-
         return AlertDialog(
           title: new Text(title),
           content: new Text(msg),
           actions: <Widget>[
-
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {
@@ -143,8 +140,10 @@ class _MemberComponentState extends State<MemberComponent> {
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.grey[700])),
-                          widget.MemberData["MemberData"]["IsPrivate"] == false ||
-                                  widget.MemberData["MemberData"]["IsPrivate"] ==
+                          widget.MemberData["MemberData"]["IsPrivate"] ==
+                                      false ||
+                                  widget.MemberData["MemberData"]
+                                          ["IsPrivate"] ==
                                       null
                               ? Text(
                                   '${widget.MemberData["MemberData"]["ContactNo"]}')
@@ -153,7 +152,16 @@ class _MemberComponentState extends State<MemberComponent> {
                                       .replaceRange(0, 6, "******")),
                           Text(
                             "Flat No: ${widget.MemberData["MemberData"]["FlatNo"]}",
-                            style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 13),
+                          ),
+                          Text(
+                            "${widget.MemberData["MemberData"]["ResidenceType"]}"
+                                .checkForNull(),
+                            style: TextStyle(
+                                color: constant.appPrimaryMaterialColor,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
                           )
                         ],
                       ),

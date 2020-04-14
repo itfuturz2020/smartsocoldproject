@@ -24,6 +24,7 @@ import 'package:smart_society_new/screens/MemberVehicleDetail.dart';
 import 'package:smart_society_new/screens/MyGuestList.dart';
 import 'package:smart_society_new/screens/FamilyMemberDetail.dart';
 import 'package:smart_society_new/screens/PollingScreen.dart';
+import 'package:smart_society_new/screens/PrivacyPolicy.dart';
 import 'package:smart_society_new/screens/Society_Rules.dart';
 import 'package:smart_society_new/screens/Splashscreen.dart';
 import 'package:smart_society_new/screens/LoginScreen.dart';
@@ -36,6 +37,7 @@ import 'package:smart_society_new/screens/RegisterScreen.dart';
 import 'package:smart_society_new/screens/MyProfile.dart';
 import 'package:smart_society_new/screens/EmergencyNumber.dart';
 import 'package:smart_society_new/screens/Approval_Pending.dart';
+import 'package:smart_society_new/screens/TermsAndConditions.dart';
 import 'package:smart_society_new/screens/WinglistScreen.dart';
 import 'package:smart_society_new/screens/GalleryScreen.dart';
 import 'package:smart_society_new/Services/ServicesScreen.dart';
@@ -147,6 +149,8 @@ class _MyAppState extends State<MyApp> {
         '/Mall': (context) => Mall(),
         '/Cart': (context) => Cart(),
         '/Bills': (context) => Bills(),
+        '/TermsAndConditions': (context) => TermsAndConditions(),
+        '/PrivacyPolicy': (context) => PrivacyPolicy(),
       },
       theme: ThemeData(
         fontFamily: 'OpenSans',

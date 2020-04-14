@@ -5,23 +5,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_society_new/common/Classlist.dart';
-import 'package:smart_society_new/common/Classlist.dart';
 import 'package:smart_society_new/common/Services.dart';
 import 'package:smart_society_new/common/constant.dart';
 import 'package:smart_society_new/common/constant.dart' as cnst;
 import 'package:smart_society_new/component/LoadingComponent.dart';
-import 'package:xml2json/xml2json.dart';
-
-import 'VistorQR.dart';
 
 class AddGuest extends StatefulWidget {
   @override
@@ -37,9 +29,6 @@ class _AddGuestState extends State<AddGuest> {
   ProgressDialog pr;
 
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
-
-  String _dataString = "Hello from this QR";
-  String _inputErrorText;
 
   @override
   void initState() {

@@ -598,6 +598,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     ListTile(
                       title: Text(
+                        'Terms & Conditions',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.exit_to_app,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/TermsAndConditions");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Privacy Policy',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.exit_to_app,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/PrivacyPolicy");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
                         'Logout',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
