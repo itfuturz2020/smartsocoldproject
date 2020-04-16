@@ -15,6 +15,7 @@ import 'package:smart_society_new/screens/Amenities.dart';
 import 'package:smart_society_new/screens/Bills.dart';
 import 'package:smart_society_new/screens/Committees.dart';
 import 'package:smart_society_new/screens/ContactList.dart';
+import 'package:smart_society_new/screens/ContactUs.dart';
 import 'package:smart_society_new/screens/DirectoryScreen.dart';
 import 'package:smart_society_new/screens/DocumentScreen.dart';
 import 'package:smart_society_new/screens/GlobalSearchMembers.dart';
@@ -37,8 +38,8 @@ import 'package:smart_society_new/screens/RegisterScreen.dart';
 import 'package:smart_society_new/screens/MyProfile.dart';
 import 'package:smart_society_new/screens/EmergencyNumber.dart';
 import 'package:smart_society_new/screens/Approval_Pending.dart';
+import 'package:smart_society_new/screens/Statistics.dart';
 import 'package:smart_society_new/screens/TermsAndConditions.dart';
-import 'package:smart_society_new/screens/WinglistScreen.dart';
 import 'package:smart_society_new/screens/GalleryScreen.dart';
 import 'package:smart_society_new/Services/ServicesScreen.dart';
 import 'package:smart_society_new/screens/UpdateProfileScreen.dart';
@@ -151,6 +152,8 @@ class _MyAppState extends State<MyApp> {
         '/Bills': (context) => Bills(),
         '/TermsAndConditions': (context) => TermsAndConditions(),
         '/PrivacyPolicy': (context) => PrivacyPolicy(),
+        '/Statistics': (context) => Statistics(),
+        '/ContactUs': (context) => ContactUs(),
       },
       theme: ThemeData(
         fontFamily: 'OpenSans',

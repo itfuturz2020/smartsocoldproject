@@ -13,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Model/ModelClass.dart';
 import 'package:smart_society_new/common/Services.dart';
@@ -37,12 +38,19 @@ class _HomeScreenState extends State<HomeScreen> {
     audioCache = new AudioCache(fixedPlayer: advancedPlayer);
   }
 
-  // SpeechRecognition _speechRecognition;
-
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   StreamSubscription iosSubscription;
   String fcmToken = "";
   String searchedText = "";
+  String SocietyId,
+      Name,
+      Wing,
+      FlatNo,
+      Profile,
+      ContactNo,
+      Address,
+      ResidenceType,
+      BloodGroup;
 
   final List<Menu> _allMenuList = Menu.allMenuItems();
 
@@ -74,26 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
       saveDeviceToken();
     }
   }
-
-  /*void initSpeechRecognizer() {
-    _speechRecognition = SpeechRecognition();
-    _speechRecognition.setRecognitionResultHandler(
-      (String speech) => setState(() => resultText.text = speech),
-    );
-    _speechRecognition.setRecognitionCompleteHandler(() {
-      print("searched Text->" + resultText.text);
-      if (resultText.text != "") {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GlobalSearchMembers(
-              searchText: resultText.text,
-            ),
-          ),
-        );
-      }
-    });
-  }*/
 
   getAdvertisementData() async {
     try {
@@ -134,42 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-
-/*
-  getProfilePR() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
-          isLoading = true;
-        });
-        Services.GetProfilePer().then((data) async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          if (data.Data != "0") {
-            setState(() {
-              isLoading = false;
-            });
-            await prefs.setString(constant.Session.ProfileUpdateFlag, "false");
-            _showProfileUpdateDailog(data.Data);
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-          }
-        }, onError: (e) {
-          showMsg("$e");
-        });
-      } else {
-        showMsg("No Internet Connection.");
-      }
-    } on SocketException catch (_) {
-      setState(() {
-        isLoading = false;
-      });
-      showMsg("Something Went Wrong");
-    }
-  }
-*/
 
   showMsg(String msg, {String title = 'My JINI'}) {
     showDialog(
@@ -349,8 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushReplacementNamed(context, "/LoginScreen");
   }
 
-  String SocietyId, Name, Wing, FlatNo, Profile;
-
   _getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -360,9 +310,10 @@ class _HomeScreenState extends State<HomeScreen> {
       Wing = prefs.getString(constant.Session.Wing);
       FlatNo = prefs.getString(constant.Session.FlatNo);
       Profile = prefs.getString(constant.Session.Profile);
+      ContactNo = prefs.getString(constant.Session.session_login);
+      Address = prefs.getString(constant.Session.Address);
+      ResidenceType = prefs.getString(constant.Session.ResidenceType);
     });
-    /* if (prefs.getString(constant.Session.ProfileUpdateFlag) == "true")
-      getProfilePR();*/
   }
 
   DateTime currentBackPressTime;
@@ -602,7 +553,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       leading: Icon(
-                        Icons.exit_to_app,
+                        Icons.priority_high,
                         color: constant.appPrimaryMaterialColor,
                       ),
                       onTap: () {
@@ -616,12 +567,42 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       leading: Icon(
-                        Icons.exit_to_app,
+                        Icons.label,
                         color: constant.appPrimaryMaterialColor,
                       ),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.pushNamed(context, "/PrivacyPolicy");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Share My Address',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.add_to_home_screen,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Share.share(
+                            "Hello, My Name is $Name\nI Am $ResidenceType At $FlatNo - $Wing ,$Address\n"
+                            "My Contact Number is $ContactNo , Please Contact Me if You Have Any Query.");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Contact Us',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Icon(
+                        Icons.perm_contact_calendar,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/ContactUs");
                       },
                     ),
                     ListTile(
@@ -974,10 +955,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              Flexible(
+              /*Flexible(
                 child: InkWell(
                   child: Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -994,7 +978,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.pushNamed(context, '/Mall');
                   },
                 ),
-              ),
+              ),*/
               Flexible(
                 child: InkWell(
                   child: Container(
