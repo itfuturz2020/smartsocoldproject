@@ -38,7 +38,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Always and when in use!</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Can I haz location always?</string>
+	<string>Can I has location always?</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Older devices need location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -76,6 +76,8 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>com.apple.security.network.client</key>
+	<true/>
+	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>media</string>
