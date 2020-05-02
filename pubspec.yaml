@@ -43,7 +43,7 @@ dependencies:
   http: ^0.12.0+2
   multiselect_formfield: ^0.1.2
   qr_flutter: ^3.1.0
-  datetime_picker_formfield: ^0.4.3
+  datetime_picker_formfield: ^1.0.0
   firebase_messaging: ^6.0.9
   draggable_fab: ^0.1.1
   flutter_local_notifications: ^0.9.1+1
@@ -55,6 +55,11 @@ dependencies:
   get: ^1.10.5
   flutter_staggered_grid_view: ^0.3.0
   sqflite: ^1.1.6+4
+  barcode_scan: ^1.0.0
+  fl_chart: ^0.4.1
+  flutter_multiple_image_picker: ^0.0.1
+  month_picker_dialog: ^0.3.0
+  file_picker: ^1.4.2
 
 dev_dependencies:
   flutter_test:
@@ -149,7 +154,61 @@ flutter:
     - images/galleryselect.png
     - images/bill.png
     - images/leaveatgate.png
-    - lib/Mall/Images/daawat.png
+    - lib/Member_App/Mall/Images/daawat.png
+    - images/Logo.png
+    - images/notification_icon.png
+    - images/delete_icon.png
+    - images/edit_icon.png
+    - images/no_image.png
+    - images/directory_dashboard.png
+    - images/document_dashboard.png
+    - images/notice_dashboard.png
+    - images/document_icon.png
+    - images/icon_scanner.png
+    - images/visitor_icon.png
+    - images/whatsapp_icon.png
+    - images/rules_icon.png
+    - images/rules_small_icon.png
+    - images/attach_download.png
+    - images/complaint_icon.png
+    - images/complaint_icon_small.png
+    - images/Blood.png
+    - images/gender.png
+    - images/emergency.png
+    - images/event.png
+    - images/income.png
+    - images/expense.png
+    - images/no_image2.png
+    - images/image_loading.gif
+    - images/balance_sheet.png
+    - images/Profile_icon.png
+    - images/give-money.png
+    - images/Building.png
+    - images/money_icon.png
+    - images/reference_icon.png
+    - images/maintenance_icon.png
+    - images/admin_polling.png
+    - images/question.png
+    - images/maintenance_create.png
+    - images/scanner.png
+    - images/deliveryboy.png
+    - images/user.png
+    - images/noimg.png
+    - images/amc_icon.png
+    - images/gini.png
+    - images/myginitext.png
+    - images/background.png
+    - images/Staff.png
+    - images/leaveatgate.png
+    - images/error.png
+    - images/mySociety.png
+    - images/info.png
+    - images/societyRules.png
+    - images/bank.png
+    - images/statistics.png
+    - images/event_society.png
+    - images/gallary_admin.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -5,45 +5,82 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:smart_society_new/Mall/Screens/Cart.dart';
-import 'package:smart_society_new/Mall/Screens/Mall.dart';
-import 'package:smart_society_new/component/NotificationPopup.dart';
-import 'package:smart_society_new/screens/AddFamilyMember.dart';
-import 'package:smart_society_new/screens/AdvertisementCreate.dart';
-import 'package:smart_society_new/screens/AdvertisementManage.dart';
-import 'package:smart_society_new/screens/Amenities.dart';
-import 'package:smart_society_new/screens/Bills.dart';
-import 'package:smart_society_new/screens/Committees.dart';
-import 'package:smart_society_new/screens/ContactList.dart';
-import 'package:smart_society_new/screens/ContactUs.dart';
-import 'package:smart_society_new/screens/DirectoryScreen.dart';
-import 'package:smart_society_new/screens/DocumentScreen.dart';
-import 'package:smart_society_new/screens/GlobalSearchMembers.dart';
-import 'package:smart_society_new/screens/DailyHelp.dart';
-import 'package:smart_society_new/screens/MaintainanceScreen.dart';
-import 'package:smart_society_new/screens/MemberVehicleDetail.dart';
-import 'package:smart_society_new/screens/MyGuestList.dart';
-import 'package:smart_society_new/screens/FamilyMemberDetail.dart';
-import 'package:smart_society_new/screens/PollingScreen.dart';
-import 'package:smart_society_new/screens/PrivacyPolicy.dart';
-import 'package:smart_society_new/screens/Society_Rules.dart';
-import 'package:smart_society_new/screens/Splashscreen.dart';
-import 'package:smart_society_new/screens/LoginScreen.dart';
-import 'package:smart_society_new/screens/HomeScreen.dart';
-import 'package:smart_society_new/screens/ComplaintScreen.dart';
-import 'package:smart_society_new/screens/NoticeScreen.dart';
-import 'package:smart_society_new/common/constant.dart' as constant;
-import 'package:smart_society_new/screens/MyComplaints.dart';
-import 'package:smart_society_new/screens/RegisterScreen.dart';
-import 'package:smart_society_new/screens/MyProfile.dart';
-import 'package:smart_society_new/screens/EmergencyNumber.dart';
-import 'package:smart_society_new/screens/Approval_Pending.dart';
-import 'package:smart_society_new/screens/Statistics.dart';
-import 'package:smart_society_new/screens/TermsAndConditions.dart';
-import 'package:smart_society_new/screens/GalleryScreen.dart';
-import 'package:smart_society_new/Services/ServicesScreen.dart';
-import 'package:smart_society_new/screens/UpdateProfileScreen.dart';
-import 'package:smart_society_new/screens/AddGuest.dart';
+import 'package:smart_society_new/Admin_App/Screens/AddEvent.dart';
+import 'package:smart_society_new/Admin_App/Screens/DirectoryMember.dart';
+import 'package:smart_society_new/Admin_App/Screens/EventsAdmin.dart';
+import 'package:smart_society_new/Admin_App/Screens/RulesAndRegulations.dart';
+import 'package:smart_society_new/Admin_App/Screens/VisitorByWing.dart';
+import 'package:smart_society_new/Member_App/DigitalCard/Screens/RegistrationDC.dart';
+import 'package:smart_society_new/Member_App/Mall/Screens/Cart.dart';
+import 'package:smart_society_new/Member_App/Mall/Screens/Mall.dart';
+import 'package:smart_society_new/Member_App/component/NotificationPopup.dart';
+import 'package:smart_society_new/Member_App/screens/AddFamilyMember.dart';
+import 'package:smart_society_new/Member_App/screens/AdvertisementCreate.dart';
+import 'package:smart_society_new/Member_App/screens/AdvertisementManage.dart';
+import 'package:smart_society_new/Member_App/screens/Amenities.dart';
+import 'package:smart_society_new/Member_App/screens/BankDetails.dart';
+import 'package:smart_society_new/Member_App/screens/Bills.dart';
+import 'package:smart_society_new/Member_App/screens/BuildingInfo.dart';
+import 'package:smart_society_new/Member_App/screens/Committees.dart';
+import 'package:smart_society_new/Member_App/screens/ContactList.dart';
+import 'package:smart_society_new/Member_App/screens/ContactUs.dart';
+import 'package:smart_society_new/Member_App/screens/DirectoryScreen.dart';
+import 'package:smart_society_new/Member_App/screens/DocumentScreen.dart';
+import 'package:smart_society_new/Member_App/screens/EventDetail.dart';
+import 'package:smart_society_new/Member_App/screens/Events.dart';
+import 'package:smart_society_new/Member_App/screens/GlobalSearchMembers.dart';
+import 'package:smart_society_new/Member_App/screens/DailyHelp.dart';
+import 'package:smart_society_new/Member_App/screens/MaintainanceScreen.dart';
+import 'package:smart_society_new/Member_App/screens/MemberVehicleDetail.dart';
+import 'package:smart_society_new/Member_App/screens/MyGuestList.dart';
+import 'package:smart_society_new/Member_App/screens/FamilyMemberDetail.dart';
+import 'package:smart_society_new/Member_App/screens/MySociety.dart';
+import 'package:smart_society_new/Member_App/screens/NoRouteScreen.dart';
+import 'package:smart_society_new/Member_App/screens/PollingScreen.dart';
+import 'package:smart_society_new/Member_App/screens/PrivacyPolicy.dart';
+import 'package:smart_society_new/Member_App/screens/Society_Rules.dart';
+import 'package:smart_society_new/Member_App/screens/Splashscreen.dart';
+import 'package:smart_society_new/Member_App/screens/LoginScreen.dart';
+import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
+import 'package:smart_society_new/Member_App/screens/ComplaintScreen.dart';
+import 'package:smart_society_new/Member_App/screens/NoticeScreen.dart';
+import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Member_App/screens/MyComplaints.dart';
+import 'package:smart_society_new/Member_App/screens/RegisterScreen.dart';
+import 'package:smart_society_new/Member_App/screens/MyProfile.dart';
+import 'package:smart_society_new/Member_App/screens/EmergencyNumber.dart';
+import 'package:smart_society_new/Member_App/screens/Approval_Pending.dart';
+import 'package:smart_society_new/Member_App/screens/Statistics.dart';
+import 'package:smart_society_new/Member_App/screens/TermsAndConditions.dart';
+import 'package:smart_society_new/Member_App/screens/GalleryScreen.dart';
+import 'package:smart_society_new/Member_App/Services/ServicesScreen.dart';
+import 'package:smart_society_new/Member_App/screens/UpdateProfileScreen.dart';
+import 'package:smart_society_new/Member_App/screens/AddGuest.dart';
+
+//admin App screens
+import 'package:smart_society_new/Admin_App/Screens/AddGallary.dart';
+import 'package:smart_society_new/Admin_App/Screens/AddRules.dart';
+import 'package:smart_society_new/Admin_App/Screens/BalanceSheet.dart';
+import 'package:smart_society_new/Admin_App/Screens/Complaints.dart';
+import 'package:smart_society_new/Admin_App/Screens/Document.dart';
+import 'package:smart_society_new/Admin_App/Screens/StaffInOut.dart';
+import 'package:smart_society_new/Admin_App/Screens/Gallary.dart';
+import 'package:smart_society_new/Admin_App/Screens/Expense.dart';
+import 'package:smart_society_new/Admin_App/Screens/ExpenseByMonth.dart';
+import 'package:smart_society_new/Admin_App/Screens/Income.dart';
+import 'package:smart_society_new/Admin_App/Screens/IncomeByMonth.dart';
+import 'package:smart_society_new/Admin_App/Screens/Dashboard.dart';
+import 'package:smart_society_new/Admin_App/Screens/AddNotice.dart';
+import 'package:smart_society_new/Admin_App/Screens/AddDocument.dart';
+import 'package:smart_society_new/Admin_App/Screens/MemberProfile.dart';
+import 'package:smart_society_new/Admin_App/Screens/Notice.dart';
+import 'package:smart_society_new/Admin_App/Screens/Polling.dart';
+import 'Admin_App/Screens/AddAMC.dart';
+import 'Admin_App/Screens/AddExpense.dart';
+import 'Admin_App/Screens/AddIncome.dart';
+import 'Admin_App/Screens/AddPolling.dart';
+import 'Admin_App/Screens/RulesAndRegulations.dart';
+import 'Admin_App/Screens/amcList.dart';
 
 void main() async {
   runApp(MyApp());
@@ -70,8 +107,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     initPlayer();
     _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
       Title = message["notification"]["title"];
@@ -154,7 +189,47 @@ class _MyAppState extends State<MyApp> {
         '/PrivacyPolicy': (context) => PrivacyPolicy(),
         '/Statistics': (context) => Statistics(),
         '/ContactUs': (context) => ContactUs(),
+        '/MySociety': (context) => MySociety(),
+        '/BankDetails': (context) => BankDetails(),
+        '/BuildingInfo': (context) => BuildingInfo(),
+        '/Events': (context) => Events(),
+        '/EventDetail': (context) => EventDetail(),
+        //---------------- Digital Card  -------------------------------
+        '/RegistrationDC': (context) => RegistrationDC(),
+        //----------------  Admin App    -----------------------------
+        '/Dashboard': (context) => Dashboard(),
+        '/AddNotice': (context) => AddNotice(),
+        '/AddDocument': (context) => AddDocument(),
+        '/DirectoryMember': (context) => DirectoryMember(),
+        '/AllNotice': (context) => Notice(),
+        '/Document': (context) => Document(),
+        '/Visitor': (context) => VisitorByWing(),
+        '/Staff': (context) => StaffInOut(),
+        '/RulesAndRegulations': (context) => RulesAndRegulations(),
+        '/AddRules': (context) => AddRules(),
+        '/AllComplaints': (context) => Complaints(),
+        '/MemberProfile': (context) => MemberProfile(),
+        '/Gallary': (context) => Gallary(),
+        '/AddGallary': (context) => AddGallary(),
+        '/Income': (context) => Income(),
+        '/Expense': (context) => Expense(),
+        '/BalanceSheet': (context) => BalanceSheet(),
+        '/ExpenseByMonth': (context) => ExpenseByMonth(),
+        '/IncomeByMonth': (context) => IncomeByMonth(),
+        '/AddIncome': (context) => AddIncome(),
+        '/AddExpense': (context) => AddExpense(),
+        '/AllPolling': (context) => Polling(),
+        '/AddPolling': (context) => AddPolling(),
+        '/amcList': (context) => amcList(),
+        '/AddAMC': (context) => AddAMC(),
+        '/StaffInOut': (context) => StaffInOut(),
+        '/EventsAdmin': (context) => EventsAdmin(),
+        '/AddEvent': (context) => AddEvent(),
       },
+      onUnknownRoute: (settings) => MaterialPageRoute(
+          builder: (context) => NoRouteScreen(
+                routeName: settings.name,
+              )),
       theme: ThemeData(
         fontFamily: 'OpenSans',
         primarySwatch: constant.appPrimaryMaterialColor,
