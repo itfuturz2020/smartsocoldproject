@@ -208,8 +208,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ScaleAnimation(
           child: GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(
-                  context, '/${_allMenuList[index].IconName}');
+              if (_allMenuList[index].IconName == "Bills") {
+                Fluttertoast.showToast(
+                    msg: "Comming Soon!!!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else {
+                Navigator.pushReplacementNamed(
+                    context, '/${_allMenuList[index].IconName}');
+              }
             },
             child: Container(
               decoration: BoxDecoration(

@@ -18,14 +18,73 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _MobileNumber = new TextEditingController();
   bool isLoading = false;
   ProgressDialog pr;
-
+  String sendOTP ;
+  List logindata = [];
   @override
   void initState() {
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
-    pr.style(message: 'Please Wait');
+    pr.style(message: 'Please Wait');getOTPStatus();
+  }
+  getOTPStatus() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.GetOTPStatus();
+        setState(() {
+          isLoading = true;
+        });
+        res.then((data) async {
+          if (data != null && data.length > 0) {
+            setState(() {
+              sendOTP = data;
+              isLoading = false;
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+              sendOTP = data;
+            });
+          }
+          print("data: ${sendOTP}");
+        }, onError: (e) {
+          showMsg("$e");
+          setState(() {
+            isLoading = false;
+          });
+        });
+      } else {
+        showMsg("No Internet Connection.");
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+  showMsg(String msg, {String title = 'My JINI'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  List logindata = [];
 
   localdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -85,16 +144,22 @@ class _LoginScreenState extends State<LoginScreen> {
               setState(() {
                 logindata = data;
               });
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OtpScreen(
-                      data[0]["ContactNo"].toString(), data[0]["Id"].toString(),
-                      () {
-                    localdata();
-                  }),
-                ),
-              );
+              if (sendOTP == "0") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OtpScreen(
+                        data[0]["ContactNo"].toString(),
+                        data[0]["Id"].toString(), () {
+                      localdata();
+                    }),
+                  ),
+                );
+              } else {
+                await localdata();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/HomeScreen', (Route<dynamic> route) => false);
+              }
             } else {
               Fluttertoast.showToast(
                   msg: "Incorrect Mobile Number",
@@ -283,7 +348,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Text("Don't Have an Account?"),
                                 GestureDetector(
                                     onTap: () {
-                                      Navigator.pushReplacementNamed(
+                                      Navigator.pushNamed(
                                           context, '/RegisterScreen');
                                     },
                                     child: Text("Register",

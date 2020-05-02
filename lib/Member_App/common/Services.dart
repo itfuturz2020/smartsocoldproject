@@ -1172,6 +1172,31 @@ class Services {
     }
   }
 
+  static Future<String> GetOTPStatus() async {
+
+    String url = API_URL + 'TempOTP';
+    print("TempOTP Url:" + url);
+
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        String data ="";
+        print("TempOTP Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          data = responseData["Data"].toString();
+        } else {
+          data = "";
+        }
+        return data;
+      } else {
+        throw Exception("No Internet Connection");
+      }
+    } catch (e) {
+      print("Check TempOTP Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
   static Future<List> GetAllAdvertisement() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String societyId = prefs.getString(constant.Session.SocietyId);

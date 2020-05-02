@@ -32,10 +32,10 @@ class _ContactUsState extends State<ContactUs> {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                launch('mailto:Myjini@gmail.com?subject=&body=');
+                launch('mailto:info@myjini.in?subject=&body=');
               },
               child: ListTile(
-                title: Text("Myjini@gmail.com"),
+                title: Text("info@myjini.in"),
                 subtitle: Text("Email"),
                 leading: Icon(
                   Icons.email,
@@ -46,10 +46,10 @@ class _ContactUsState extends State<ContactUs> {
             Divider(),
             GestureDetector(
               onTap: () {
-                launch('tel:9429828152');
+                launch('tel:9023803870');
               },
               child: ListTile(
-                title: Text("9429828152"),
+                title: Text("9023803870"),
                 subtitle: Text("Mobile Number"),
                 leading: Icon(
                   Icons.call,
@@ -60,10 +60,10 @@ class _ContactUsState extends State<ContactUs> {
             Divider(),
             GestureDetector(
               onTap: () {
-                _launchURL("https://www.google.com");
+                _launchURL("https://www.myjini.in");
               },
               child: ListTile(
-                title: Text("Myjini.com"),
+                title: Text("www.myjini.in"),
                 subtitle: Text("Website"),
                 leading: Icon(
                   Icons.web,
