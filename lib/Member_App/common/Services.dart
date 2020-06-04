@@ -1172,14 +1172,13 @@ class Services {
   }
 
   static Future<String> GetOTPStatus() async {
-
     String url = API_URL + 'TempOTP';
     print("TempOTP Url:" + url);
 
     try {
       final response = await dio.get(url);
       if (response.statusCode == 200) {
-        String data ="";
+        String data = "";
         print("TempOTP Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
@@ -1196,6 +1195,7 @@ class Services {
       throw Exception(e);
     }
   }
+
   static Future<List> GetAllAdvertisement() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String societyId = prefs.getString(constant.Session.SocietyId);
