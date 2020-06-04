@@ -25,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   ProgressDialog pr;
 
-  String Gender = "Male";
+  String Gender = "";
 
   TextEditingController CodeControler = new TextEditingController();
   TextEditingController txtname = new TextEditingController();
@@ -130,17 +130,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
         try {
           final result = await InternetAddress.lookup('google.com');
           if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+            String gen = Gender;
+            if (Gender == "") {
+              gen = "Male";
+            }
+
             var data = {
               'Name': txtname.text.trim(),
               'MobileNo': txtmobile.text.trim(),
               'ResidenceType': _residentTypeList[selected_Index],
-              'Gender': Gender,
+              'Gender': gen,
               'SocietyId': SocietyId,
               'WingId': _wingClass.WingId,
               'Wing': _wingClass.WingName,
               'FlatNo': txtFlatNo.text.trim(),
             };
-            pr.show();
+            print("Body: ${data}");
+            /*pr.show();
             Services.Registration(data).then((data) async {
               pr.hide();
               if (data.Data != "0" && data.IsSuccess == true) {
@@ -152,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }, onError: (e) {
               pr.hide();
               showHHMsg("Try Again.", "");
-            });
+            });*/
           }
         } on SocketException catch (_) {
           showHHMsg("No Internet Connection.", "");
@@ -313,7 +319,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 9.0, top: 10),
                         child: Text(
-                          "  Gender *",
+                          "  Gender",
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
