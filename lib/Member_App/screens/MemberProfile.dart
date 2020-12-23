@@ -1,5 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Member_App/common/ExtensionMethods.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart';
+import 'package:smart_society_new/Member_App/screens/DirectoryProfileFamily.dart';
+import 'package:smart_society_new/Member_App/screens/DirectoryProfileVehicle.dart';
+import 'package:smart_society_new/Member_App/common/Services.dart';
+import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+
 
 class MemberProfile extends StatefulWidget {
   var MemberData;
@@ -35,6 +44,135 @@ class _MemberProfileState extends State<MemberProfile> {
     return final_date;
   }
 
+  List VehicleData = new List();
+  List FmemberData = new List();
+  bool isLoading = false;
+  String SocietyId, MemberId, ParentId;
+  String SocietyIdF, MemberIdF, ParentIdF;
+
+  @override
+  void initState() {
+    GetMyvehicleData();
+    _getLocaldata();
+    GetFamilyDetail();
+    _getLocaldata1();
+  }
+
+  _getLocaldata() async {
+    print(widget.MemberData["Id"].toString());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SocietyId = widget.MemberData["SocietyId"].toString();
+    setState(() {
+      MemberId = widget.MemberData["Id"].toString();
+    });
+  }
+  GetMyvehicleData() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Services.GetVehicleData(MemberId).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              VehicleData = data;
+              print("======================================");
+              print(VehicleData.length.toString());
+            });
+          } else {
+            setState(() {
+              VehicleData = data;
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+  showHHMsg(String title, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  _getLocaldata1() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      SocietyIdF =widget.MemberData["SocietyId"].toString();
+      MemberIdF = widget.MemberData["Id"].toString();
+    });
+
+    if (widget.MemberData["ParentId"].toString() == "null" ||
+        widget.MemberData["ParentId"].toString() == "")
+
+      setState(() {
+        ParentIdF = "0";
+      });
+    else
+      setState(() {
+        ParentIdF =widget.MemberData["ParentId"].toString();
+      });
+  }
+
+  GetFamilyDetail() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Services.GetFamilyMember(ParentIdF, MemberIdF).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              FmemberData = data;
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +185,75 @@ class _MemberProfileState extends State<MemberProfile> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(10),
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+              border:
+                  Border(top: BorderSide(color: Colors.grey[300], width: 1))),
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      // AddVehicale();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DirectoryProfileVehicle(
+                                    vehicleData:
+                                        widget.MemberData["Id"].toString(),
+                                  )));
+                      // Navigator.pushNamed(context, "/DirectoryProfileVehicle");
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.all(Radius.circular(6.0))),
+                      child: SizedBox(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        child: Center(
+                            child: Text("Vehicles :  "+VehicleData.length.toString(),
+                                style: TextStyle(color: Colors.white))),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      // Navigator.pushNamed(context, "/AddFamily");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DirectoryProfileFamily(
+                                    familyData: widget.MemberData,
+                                  )));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: constant.appPrimaryMaterialColor,
+                          borderRadius: BorderRadius.all(Radius.circular(6.0))),
+                      child: SizedBox(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        child: Center(
+                            child: Text("Members :  "+FmemberData.length.toString(),
+                                style: TextStyle(color: Colors.white))),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -210,7 +417,8 @@ class _MemberProfileState extends State<MemberProfile> {
                 leading: Icon(Icons.business_center,
                     color: Colors.grey[500], size: 22),
                 subtitle: Text("Business / Job"),
-                title: Text('${widget.MemberData["Designation"]}'),
+                title:
+                    Text('${widget.MemberData["Designation"]}'.checkForNull()),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30.0),
@@ -224,7 +432,8 @@ class _MemberProfileState extends State<MemberProfile> {
                 leading:
                     Icon(Icons.description, color: Colors.grey[500], size: 22),
                 subtitle: Text("Business / Job Description"),
-                title: Text('${widget.MemberData["BusinessDescription"]}'),
+                title: Text('${widget.MemberData["BusinessDescription"]}'
+                    .checkForNull()),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30.0),
@@ -240,7 +449,8 @@ class _MemberProfileState extends State<MemberProfile> {
                   color: Colors.grey[500],
                   size: 22,
                 ),
-                title: Text('${widget.MemberData["CompanyName"]}'),
+                title:
+                    Text('${widget.MemberData["CompanyName"]}'.checkForNull()),
                 subtitle: Text("Company Name"),
               ),
               Padding(
@@ -254,7 +464,8 @@ class _MemberProfileState extends State<MemberProfile> {
               ListTile(
                 leading: Image.asset('images/Blood.png',
                     width: 22, height: 22, color: Colors.grey[500]),
-                title: Text('${widget.MemberData["BloodGroup"]}'),
+                title:
+                    Text('${widget.MemberData["BloodGroup"]}'.checkForNull()),
                 subtitle: Text("Blood Group"),
               ),
               Padding(
@@ -268,7 +479,7 @@ class _MemberProfileState extends State<MemberProfile> {
               ListTile(
                 leading: Image.asset('images/gender.png',
                     width: 22, height: 22, color: Colors.grey[500]),
-                title: Text('${widget.MemberData["Gender"]}'),
+                title: Text('${widget.MemberData["Gender"]}'.checkForNull()),
                 subtitle: Text("Gender"),
               ),
               Padding(
@@ -282,7 +493,7 @@ class _MemberProfileState extends State<MemberProfile> {
               ListTile(
                 leading:
                     Icon(Icons.location_on, size: 22, color: Colors.grey[500]),
-                title: Text('${widget.MemberData["Address"]}'),
+                title: Text('${widget.MemberData["Address"]}'.checkForNull()),
                 subtitle: Text("Address"),
               ),
               Padding(
