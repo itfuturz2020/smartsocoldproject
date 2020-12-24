@@ -13,10 +13,10 @@ import 'package:smart_society_new/Member_App/common/constant.dart' as cnst;
 import 'Member_App/common/Services.dart';
 
 class VisitorOtpScreen extends StatefulWidget {
-  String Name, MobileNo, VehicleNumber, WingId, FlatNo,societyId;
+  String Name, MobileNo, VehicleNumber, WingId, FlatNo, societyId;
 
-  VisitorOtpScreen(
-      this.Name, this.MobileNo, this.VehicleNumber, this.FlatNo, this.WingId,this.societyId);
+  VisitorOtpScreen(this.Name, this.MobileNo, this.VehicleNumber, this.FlatNo,
+      this.WingId, this.societyId);
 
   @override
   _VisitorOtpScreenState createState() => _VisitorOtpScreenState();
@@ -62,7 +62,7 @@ class _VisitorOtpScreenState extends State<VisitorOtpScreen> {
         print("Add Scanned Data = ${data}");
         Services.AddVisitorEntry(data).then((data) async {
           if (data.Data != "0" && data.IsSuccess == true) {
-          /*  Fluttertoast.showToast(
+            /*  Fluttertoast.showToast(
                 msg: "Visitor Added Successfully",
                 textColor: Colors.black,
                 gravity: ToastGravity.TOP,
