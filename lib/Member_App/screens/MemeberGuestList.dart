@@ -151,6 +151,9 @@ class _MemberGuestListState extends State<MemberGuestList> {
                     child: IconButton(
                         icon: Icon(Icons.share, color: Colors.grey),
                         onPressed: () {
+                          // Share.share(_GuestList[index]["ContactNo"],
+                          //     subject: '',
+                          // sharePositionOrigin:_GuestList[index]["ContactNo"] );
                           Share.share(
                               'http://mywatcher.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}&type=Visitor');
                         }),

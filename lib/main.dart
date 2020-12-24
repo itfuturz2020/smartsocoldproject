@@ -96,6 +96,8 @@ import 'Admin_App/Screens/AddPolling.dart';
 import 'Admin_App/Screens/RulesAndRegulations.dart';
 import 'Admin_App/Screens/amcList.dart';
 import 'VisitorOtpScreen.dart';
+import 'Member_App/screens/DirectoryProfileFamily.dart';
+import 'Member_App/screens/DirectoryProfileVehicle.dart';
 
 void main() async {
   runApp(MyApp());
@@ -209,6 +211,8 @@ class _MyAppState extends State<MyApp> {
         '/FamilyMemberDetail': (context) => FamilyMemberDetail(),
         '/AddFamily': (context) => AddFamilyMember(),
         '/GetMyVehicle': (context) => GetMyvehicle(),
+        '/DirectoryProfileVehicle': (context) => DirectoryProfileVehicle(),
+        '/DirectoryProfileFamily': (context) => DirectoryProfileFamily(),
         '/Polling': (context) => PollingScreen(),
         '/Maintainence': (context) => Maintainance(),
         '/GlobalSearch': (context) => GlobalSearchMembers(),

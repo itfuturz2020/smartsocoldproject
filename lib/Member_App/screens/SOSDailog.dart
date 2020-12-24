@@ -5,6 +5,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:url_launcher/url_launcher.dart';
 
 class SOSDailog extends StatefulWidget {
   @override
@@ -13,16 +14,88 @@ class SOSDailog extends StatefulWidget {
 
 class _SOSDailogState extends State<SOSDailog> {
   String _selected = "Watchman";
+  String phoneNumber1;
 
   TextEditingController txtMsg = new TextEditingController();
   ProgressDialog pr;
+  List FmemberData = new List();
+  bool isLoading = false;
+  String SocietyId, MemberId, ParentId;
+
 
   @override
   void initState() {
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(message: 'Please Wait');
+    GetFamilyDetail();
+    _getLocaldata();
   }
 
+
+  _getLocaldata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SocietyId = prefs.getString(constant.Session.SocietyId);
+    MemberId = prefs.getString(constant.Session.Member_Id);
+    if (prefs.getString(constant.Session.ParentId) == "null" ||
+        prefs.getString(constant.Session.ParentId) == "")
+      ParentId = "0";
+    else
+      ParentId = prefs.getString(constant.Session.ParentId);
+  }
+
+  GetFamilyDetail() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Services.GetFamilyMember(ParentId, MemberId).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              FmemberData = data;
+              //phoneNumber1 = data[0]["ContactNo"];
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
+  showHHMsg(String title, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   _addSOS() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -71,7 +144,38 @@ class _SOSDailogState extends State<SOSDailog> {
       },
     );
   }
-
+  Widget _FamilyMember(BuildContext context, int index) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "${FmemberData[index]["Name"]}",
+                style: TextStyle(
+                    fontSize: 13,
+                    color: constant.appPrimaryMaterialColor,
+                    fontWeight: FontWeight.w600),
+              ),
+              Text(
+                "${FmemberData[index]["ContactNo"]}",
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+            icon: Icon(
+              Icons.call,
+              color: Colors.green[700],
+            ),
+            onPressed: () {
+              launch(('tel:// ${FmemberData[index]["ContactNo"]}'));
+            })
+      ],
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -127,36 +231,51 @@ class _SOSDailogState extends State<SOSDailog> {
               ),
             ],
           ),
-          for (int i = 0; i < 3; i++) ...[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Chirag Mevada",
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: constant.appPrimaryMaterialColor,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        "7874319343",
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                    icon: Icon(
-                      Icons.call,
-                      color: Colors.green[700],
-                    ),
-                    onPressed: () {})
-              ],
-            )
-          ],
+
+          // for (int i = 0; i < 3; i++) ...[
+          //   Row(
+          //     children: <Widget>[
+          //       Expanded(
+          //         child: Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: <Widget>[
+          //             Text(
+          //               "Chirag Mevada",
+          //               style: TextStyle(
+          //                   fontSize: 13,
+          //                   color: constant.appPrimaryMaterialColor,
+          //                   fontWeight: FontWeight.w600),
+          //             ),
+          //             Text(
+          //               "7874319343",
+          //               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       IconButton(
+          //           icon: Icon(
+          //             Icons.call,
+          //             color: Colors.green[700],
+          //           ),
+          //           onPressed: () {})
+          //     ],
+          //   )
+          // ],
+          isLoading
+              ? Container(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+              : FmemberData.length > 0
+              ? ListView.builder(
+              itemBuilder: _FamilyMember,
+              itemCount: FmemberData.length,
+              shrinkWrap: true)
+              : Container(
+            child: Center(child: Text("No FamilyMember Added")),
+          ),
           SizedBox(
             height: 50,
             child: Padding(

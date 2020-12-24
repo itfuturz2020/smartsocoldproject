@@ -528,15 +528,14 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               if (_allMenuList[index].IconName == "Bills") {
                 Fluttertoast.showToast(
-                    msg: "Comming Soon!!!",
+                    msg: "Coming Soon!!!",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     backgroundColor: Colors.red,
                     textColor: Colors.white,
                     fontSize: 16.0);
               } else {
-                Navigator.pushReplacementNamed(
-                    context, '/${_allMenuList[index].IconName}');
+                Navigator.pushReplacementNamed(context, '/${_allMenuList[index].IconName}');
               }
             },
             child: Container(
@@ -563,7 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: Text(
-                          _allMenuList[index].IconName,
+                          _allMenuList[index].IconLabel,
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 11, color: Colors.black),
                         ),
@@ -1297,27 +1296,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              Flexible(
-                child: InkWell(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.shopping_cart, size: 22),
-                        Text("Mall",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 11))
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/Mall');
-                  },
-                ),
-              ),
+              // Flexible(
+              //   child: InkWell(
+              //     child: Container(
+              //       width: MediaQuery.of(context).size.width,
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: <Widget>[
+              //           Icon(Icons.shopping_cart, size: 22),
+              //           Text("Mall",
+              //               textAlign: TextAlign.center,
+              //               style: TextStyle(
+              //                   fontWeight: FontWeight.bold, fontSize: 11))
+              //         ],
+              //       ),
+              //     ),
+              //     onTap: () {
+              //       Navigator.pushNamed(context, '/Mall');
+              //     },
+              //   ),
+              // ),
               Flexible(
                 child: InkWell(
                   child: Container(
