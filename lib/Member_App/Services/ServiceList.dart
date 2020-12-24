@@ -1,31 +1,39 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:smart_society_new/Member_App/Services/GetAMC.dart';
 import 'package:smart_society_new/Member_App/Services/ServiceDetailScreen.dart';
+import 'package:smart_society_new/Member_App/Services/ServiceRequest.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as cnst;
 
 class ServiceList extends StatefulWidget {
-  var ServiceData;
+  var ServiceData, ServiceId,servicetitle;
 
-  ServiceList(this.ServiceData);
+  ServiceList(this.ServiceData, this.ServiceId,this.servicetitle);
 
   @override
   _ServiceListState createState() => _ServiceListState();
 }
 
-class _ServiceListState extends State<ServiceList> {
+class _ServiceListState extends State<ServiceList>  {
   bool isLoading = true;
-  List _serviceListData = [];
+
+  //List _serviceListData = [];
   List _vendorData = [];
+  List PackageList = [];
 
   @override
   void initState() {
-    print("Service Id" + widget.ServiceData["Id"].toString());
-    _getServiceData();
+    print("Service Id: " + widget.ServiceId);
+    //print("Service Id: " + widget.ServiceData["Id"].toString());
+    print("Service title: " + widget.servicetitle);
+    // _getServiceData();
+    _getServicePackage();
     _getVendorData();
+    print("MMMM => " + widget.ServiceData.toString());
   }
 
   _openWhatsapp(mobile) {
@@ -35,7 +43,66 @@ class _ServiceListState extends State<ServiceList> {
     launch(urlwithmsg);
   }
 
-  _getServiceData() async {
+  _getServicePackage() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        String id = widget.ServiceData["Id"].toString();
+        Future res = Services.GetServicePackage(id);
+        setState(() {
+          isLoading = true;
+        });
+
+        res.then((data) async {
+          if (data != null && data.length > 0) {
+            setState(() {
+              PackageList = data;
+              isLoading = false;
+            });
+            print("HelloWorld => " + PackageList.toString());
+            print("HelloWorld => " + PackageList.length.toString());
+          } else {
+            setState(() {
+              PackageList = [];
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          print("Error : on NewLead Data Call $e");
+          showMsg("$e");
+        });
+      } else {
+        showMsg("Something went Wrong!");
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  showMsg(String msg, {String title = 'My Jini'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+/*  _getServiceData() async {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -66,7 +133,7 @@ class _ServiceListState extends State<ServiceList> {
     } on SocketException catch (_) {
       showHHMsg("No Internet Connection.", "");
     }
-  }
+  }*/
 
   _getVendorData() async {
     try {
@@ -76,8 +143,7 @@ class _ServiceListState extends State<ServiceList> {
           isLoading = true;
         });
 
-        Services.GetVendorData(widget.ServiceData["Id"].toString()).then(
-            (Data) async {
+        Services.GetVendorData(widget.ServiceId.toString()).then((Data) async {
           setState(() {
             isLoading = false;
           });
@@ -85,6 +151,8 @@ class _ServiceListState extends State<ServiceList> {
             setState(() {
               _vendorData = Data;
             });
+            print("hhhh => " + _vendorData.toString());
+            print("hhhh => " + _vendorData.length.toString());
           } else {
             setState(() {
               isLoading = false;
@@ -123,183 +191,251 @@ class _ServiceListState extends State<ServiceList> {
   }
 
   Widget _serviceWidget(BuildContext context, int index) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ServiceDetail(_serviceListData[index]),
-          ),
-        );
-      },
-      child: Padding(
-          padding: const EdgeInsets.only(bottom: 1.0),
-          child: Card(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: 120,
-                  height: 120,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: "images/placeholder.png",
-                      image: Image_Url + '${_serviceListData[index]["Image"]}',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              /*  Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ServiceDetail(PackageList[index]),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(7.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('${_serviceListData[index]["Title"]}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 16)),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 6.0),
-                          child: Container(
-                            height: 1,
-                            color: Colors.grey[200],
-                            width: MediaQuery.of(context).size.width,
+              );*/
+            },
+            child: ListView.builder(
+                // physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: PackageList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                      padding: const EdgeInsets.only(bottom: 1.0),
+                      child: Card(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            /*   Container(
+                          width: 120,
+                          height: 120,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: FadeInImage.assetNetwork(
+                              placeholder: "images/placeholder.png",
+                              image: Image_Url + '${PackageList[index]["Image"]}',
+                              fit: BoxFit.cover,
+                            ),
                           ),
+                        ),*/
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text('${PackageList[index]["Title"]}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16)),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 6.0),
+                                      child: Container(
+                                        height: 1,
+                                        color: Colors.grey[200],
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                      ),
+                                    ),
+                                    /*      PackageList[index]["ServicePackagePrice"].length >
+                                        0
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                            "₹" +
+                                                " " +
+                                                '${_serviceListData[index]["ServicePackagePrice"][0]["Price"]}',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.green)),
+                                      )
+                                    : Container()*/
+
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                          "₹" +
+                                              " " +
+                                              '${PackageList[index]["Price"]}',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.green)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                        _serviceListData[index]["ServicePackagePrice"].length >
-                                0
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                    "₹" +
-                                        " " +
-                                        '${_serviceListData[index]["ServicePackagePrice"][0]["Price"]}',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.green)),
-                              )
-                            : Container()
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )),
+                      ));
+                }),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _vendorWidget(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        /* Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ServiceDetail(_serviceListData[index]),
+            builder: (context) => ServiceDetail(PackageList[index]),
           ),
-        );
+        );*/
       },
       child: Padding(
           padding: const EdgeInsets.only(bottom: 1.0),
           child: Card(
             child: Container(
               padding: EdgeInsets.all(8),
-              child: Row(
+              child: Column(
                 children: <Widget>[
-                  Stack(
+                  Row(
                     children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100)),
-                            border: Border.all(color: Colors.grey, width: 0.4)),
-                        width: 76,
-                        height: 76,
-                      ),
-                      ClipOval(
-                        child: _vendorData[index]["Image"] != "null" &&
-                                _vendorData[index]["Image"] != ""
-                            ? FadeInImage.assetNetwork(
-                                placeholder: "images/image_loading.gif",
-                                image: Image_Url +
-                                    '${_vendorData[index]["Image"]}',
-                                width: 70,
-                                height: 70,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset(
-                                "images/man.png",
-                                width: 70,
-                                height: 70,
-                              ),
-                      ),
-                    ],
-                    alignment: Alignment.center,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Stack(
                         children: <Widget>[
-                          Text('${_vendorData[index]["Name"]}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 17)),
-                          Text('${_vendorData[index]["ContactNo"]}',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              )),
-                          Row(
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 0.4)),
+                            width: 76,
+                            height: 76,
+                          ),
+                          ClipOval(
+                            child: _vendorData[index]["Image"] != "null" &&
+                                    _vendorData[index]["Image"] != ""
+                                ? FadeInImage.assetNetwork(
+                                    placeholder: "images/image_loading.gif",
+                                    image: Image_Url +
+                                        '${_vendorData[index]["Image"]}',
+                                    width: 70,
+                                    height: 70,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    "images/man.png",
+                                    width: 70,
+                                    height: 70,
+                                  ),
+                          ),
+                        ],
+                        alignment: Alignment.center,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Icon(
-                                Icons.home,
-                                color: Colors.grey,
-                                size: 15,
-                              ),
-                              Padding(padding: EdgeInsets.only(left: 4)),
-                              Text('${_vendorData[index]["Address"]}',
+                              Text('${_vendorData[index]["Name"]}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17)),
+                              Text('${_vendorData[index]["ContactNo"]}',
                                   style: TextStyle(
                                     color: Colors.grey,
                                   )),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.home,
+                                    color: Colors.grey,
+                                    size: 15,
+                                  ),
+                                  Padding(padding: EdgeInsets.only(left: 4)),
+                                  Expanded(
+                                    child: Text('${_vendorData[index]["Address"]}',
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                        )),
+                                  ),
+                                ],
+                              ),
+                              /*Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.comment,
+                                    color: Colors.grey,
+                                    size: 15,
+                                  ),
+                                  Padding(padding: EdgeInsets.only(left: 4)),
+                                  Flexible(
+                                    child:
+                                        Text('${_vendorData[index]["About"]}',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            )),
+                                  ),
+                                ],
+                              ),*/
                             ],
                           ),
-                          Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.comment,
-                                color: Colors.grey,
-                                size: 15,
-                              ),
-                              Padding(padding: EdgeInsets.only(left: 4)),
-                              Flexible(
-                                child: Text('${_vendorData[index]["About"]}',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        launch("tel:${_vendorData[index]["ContactNo"]}");
-                      },
-                      child: Icon(Icons.call, color: Colors.green[700])),
-                  SizedBox(
-                    width: 10,
+                      GestureDetector(
+                          onTap: () {
+                            launch("tel:${_vendorData[index]["ContactNo"]}");
+                          },
+                          child: Icon(Icons.call, color: Colors.green[700])),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _openWhatsapp(_vendorData[index]["ContactNo"]);
+                        },
+                        child: Image.asset("images/whatsapp.png",
+                            width: 35, height: 35),
+                      ),
+                    ],
                   ),
                   GestureDetector(
                     onTap: () {
-                      _openWhatsapp(_vendorData[index]["ContactNo"]);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ServiceRequest(
+                              _vendorData[index],
+                              widget.ServiceData,
+                              widget.servicetitle,
+                            widget.ServiceId
+                          ),
+
+                        ),
+                      );
                     },
-                    child: Image.asset("images/whatsapp.png",
-                        width: 35, height: 35),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "HIRE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 17),
+                          )
+                        ],
+                      ),
+                      color: Colors.green[300],
+                      height: 35,
+                      width: MediaQuery.of(context).size.width / 1.8,
+                    ),
                   ),
                 ],
               ),
@@ -370,14 +506,133 @@ class _ServiceListState extends State<ServiceList> {
                   )
                 : TabBarView(
                     children: <Widget>[
-                      _serviceListData.length > 0
+                      PackageList.length > 0
                           ? ListView.builder(
-                              itemBuilder: _serviceWidget,
-                              itemCount: _serviceListData.length,
-                            )
-                          : Container(
-                              child: Center(child: Text("No Data Found")),
+                              // physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: PackageList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Column(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        /*  Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ServiceDetail(PackageList[index]),
+                                          ),
+                                        );*/
+                                      },
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 1.0),
+                                          child: Card(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                /*   Container(
+                          width: 120,
+                          height: 120,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: FadeInImage.assetNetwork(
+                              placeholder: "images/placeholder.png",
+                              image: Image_Url + '${PackageList[index]["Image"]}',
+                              fit: BoxFit.cover,
                             ),
+                          ),
+                        ),*/
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            7.0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                            '${PackageList[index]["Title"]}',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize: 16)),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 6.0),
+                                                          child: Container(
+                                                            height: 1,
+                                                            color: Colors
+                                                                .grey[200],
+                                                            width:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                          ),
+                                                        ),
+                                                        /*      PackageList[index]["ServicePackagePrice"].length >
+                                              0
+                                          ? Padding(
+                                              padding: const EdgeInsets.only(top: 8.0),
+                                              child: Text(
+                                                  "₹" +
+                                                      " " +
+                                                      '${_serviceListData[index]["ServicePackagePrice"][0]["Price"]}',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.green)),
+                                            )
+                                          : Container()*/
+
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 8.0),
+                                                          child: Text(
+                                                              "₹" +
+                                                                  " " +
+                                                                  '${PackageList[index]["Price"]}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Colors
+                                                                      .green)),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    ),
+                                  ],
+                                );
+                              })
+                          : Center(
+                              child: Text(
+                              "No Data Found",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18),
+                            )),
+
+                      /*ListView.builder(
+                              itemBuilder: _serviceWidget,
+                              itemCount: PackageList.length,
+                            )*/
+
                       _vendorData.length > 0
                           ? ListView.builder(
                               itemBuilder: _vendorWidget,
@@ -391,7 +646,14 @@ class _ServiceListState extends State<ServiceList> {
           ),
         ),
         bottomNavigationBar: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GetAMC(widget.ServiceData),
+              ),
+            );
+          },
           child: Container(
             height: 55,
             width: MediaQuery.of(context).size.width,
@@ -412,7 +674,9 @@ class _ServiceListState extends State<ServiceList> {
               ],
             ),
           ),
-        ));
+        )
+
+    );
   }
 }
 

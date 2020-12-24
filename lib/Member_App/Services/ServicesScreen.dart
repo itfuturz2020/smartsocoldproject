@@ -4,22 +4,92 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart';
 import 'package:smart_society_new/Member_App/Services/ServiceList.dart';
+import 'package:smart_society_new/Member_App/Services/SubServicesScreen.dart';
+import 'package:smart_society_new/Member_App/common/constant.dart' as cnst;
+import 'package:smart_society_new/Member_App/component/MyServiceRequestComponent.dart';
 
 class ServicesScreen extends StatefulWidget {
   @override
   _ServicesScreenState createState() => _ServicesScreenState();
 }
 
-class _ServicesScreenState extends State<ServicesScreen> {
+class _ServicesScreenState extends State<ServicesScreen>  with TickerProviderStateMixin {
   bool isLoading = false;
   List ServiceData = new List();
+  TabController _tabController;
+  List NewList = [];
+  ProgressDialog pr;
 
   @override
   void initState() {
     _ServiceData();
+    _getMyLeadsList();
+    _tabController = new TabController(vsync: this, length: 2);
+
+  }
+
+  _getMyLeadsList() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        String MemberId = await preferences.getString(cnst.Session.Member_Id);
+        Future res = Services.GetLeadsByMember(MemberId);
+        setState(() {
+          isLoading = true;
+        });
+
+        res.then((data) async {
+          if (data != null && data.length > 0) {
+            setState(() {
+              NewList = data;
+              isLoading = false;
+            });
+            print("New123=> " + NewList.toString());
+          } else {
+            setState(() {
+              NewList = [];
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          print("Error : on NewLead Data Call $e");
+          showMsg("$e");
+        });
+      } else {
+        showMsg("Something went Wrong!");
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  showMsg(String msg, {String title = 'My Jini'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   _ServiceData() async {
@@ -86,11 +156,21 @@ class _ServicesScreenState extends State<ServicesScreen> {
         child: ScaleAnimation(
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
+              /*Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ServiceList(
                     ServiceData[index],
+                  ),
+                ),
+              );*/
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SubServicesScreen(
+                    ServiceData[index]["Title"].toString(),
+                    ServiceData[index]["Id"].toString(),
+
                   ),
                 ),
               );
@@ -169,57 +249,123 @@ class _ServicesScreenState extends State<ServicesScreen> {
           color: Colors.grey[100],
           child: Column(
             children: <Widget>[
-              Container(
-                  child: CarouselSlider(
-                height: 115,
-                // aspectRatio: 16/5,
-                viewportFraction: 0.8,
-                initialPage: 0,
-                // enlargeCenterPage: true,
-                reverse: false,
-                autoPlayCurve: Curves.fastOutSlowIn,
-                autoPlay: true,
-                items: _imageUrls.map((i) {
-                  return Builder(builder: (BuildContext context) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10.0, left: 4.0, right: 4.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: FadeInImage.assetNetwork(
-                          placeholder: "images/placeholder.png",
-                          image: '$i',
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    );
-                  });
-                }).toList(),
-              )),
+              TabBar(
+                unselectedLabelColor: Colors.grey[500],
+                indicatorColor: Colors.black,
+                labelColor: Colors.black,
+                controller: _tabController,
+                tabs: [
+                  Tab(
+                    child: Text(
+                      "Services",
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Service History",
+                    ),
+                  ),
+                ],
+              ),
+
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Container(
-                      child: isLoading
-                          ? Container(
-                              child: Center(child: CircularProgressIndicator()),
-                            )
-                          : ServiceData.length > 0
-                              ? GridView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: ServiceData.length,
-                                  itemBuilder: _getServiceMenu,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Container(
+                            child: CarouselSlider(
+                              height: 115,
+                              // aspectRatio: 16/5,
+                              viewportFraction: 0.8,
+                              initialPage: 0,
+                              // enlargeCenterPage: true,
+                              reverse: false,
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              autoPlay: true,
+                              items: _imageUrls.map((i) {
+                                return Builder(builder: (BuildContext context) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10.0, left: 4.0, right: 4.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: FadeInImage.assetNetwork(
+                                        placeholder: "images/placeholder.png",
+                                        image: '$i',
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  );
+                                });
+                              }).toList(),
+                            )),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Container(
+                                child: isLoading
+                                    ? Container(
+                                  child: Center(child: CircularProgressIndicator()),
+                                )
+                                    : ServiceData.length > 0
+                                    ? GridView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: ServiceData.length,
+                                    itemBuilder: _getServiceMenu,
+                                    gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
 //                                childAspectRatio: MediaQuery.of(context)
 //                                        .size
 //                                        .width /
 //                                    (MediaQuery.of(context).size.height /1.8),
-                                  ))
-                              : Container()),
+                                    ))
+                                    : Center(
+                                    child: Text(
+                                      "No Data Founddddd",
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18),
+                                    ))),
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : NewList.length > 0
+                            ? Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListView.builder(
+                                itemCount: NewList.length,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return SingleChildScrollView(
+                                      child: MyServiceRequestComponent(NewList[index]));
+                                }),
+                          ),
+                        )
+                            : Center(
+                            child: Text(
+                              "No Data Found",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18),
+                            ))
+                      ],
+                    ),
+                  ],
                 ),
-              )
+              ),
+
+
             ],
           ),
         ),

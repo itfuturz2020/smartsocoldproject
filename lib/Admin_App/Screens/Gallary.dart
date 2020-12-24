@@ -218,7 +218,7 @@ class _GallaryState extends State<Gallary> {
                                                 child: FadeInImage.assetNetwork(
                                                   placeholder: "",
                                                   image:
-                                                      "http://smartsociety.itfuturz.com/" +
+                                                      "http://mywatcher.itfuturz.com/" +
                                                           _eventData[index]
                                                               ["Image"],
                                                   width: MediaQuery.of(context)

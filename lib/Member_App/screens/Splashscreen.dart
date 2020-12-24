@@ -20,7 +20,8 @@ class _SplashscreenState extends State<Splashscreen> {
       if (MemberId != null && MemberId != "")
         Navigator.pushReplacementNamed(context, '/HomeScreen');
       else {
-        Navigator.pushReplacementNamed(context, '/LoginScreen');
+       Navigator.pushReplacementNamed(context, '/IntroScreen');
+       // Navigator.pushReplacementNamed(context, '/LoginScreen');
       }
     });
 

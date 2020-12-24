@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,9 +11,12 @@ import 'package:smart_society_new/Admin_App/Screens/DirectoryMember.dart';
 import 'package:smart_society_new/Admin_App/Screens/EventsAdmin.dart';
 import 'package:smart_society_new/Admin_App/Screens/RulesAndRegulations.dart';
 import 'package:smart_society_new/Admin_App/Screens/VisitorByWing.dart';
+import 'package:smart_society_new/IntroScreen.dart';
 import 'package:smart_society_new/Member_App/DigitalCard/Screens/RegistrationDC.dart';
 import 'package:smart_society_new/Member_App/Mall/Screens/Cart.dart';
 import 'package:smart_society_new/Member_App/Mall/Screens/Mall.dart';
+import 'package:smart_society_new/Member_App/Services/AdvertisementList.dart';
+import 'package:smart_society_new/Member_App/Services/MyServiceRequests.dart';
 import 'package:smart_society_new/Member_App/component/NotificationPopup.dart';
 import 'package:smart_society_new/Member_App/screens/AddFamilyMember.dart';
 import 'package:smart_society_new/Member_App/screens/AdvertisementCreate.dart';
@@ -24,6 +28,7 @@ import 'package:smart_society_new/Member_App/screens/BuildingInfo.dart';
 import 'package:smart_society_new/Member_App/screens/Committees.dart';
 import 'package:smart_society_new/Member_App/screens/ContactList.dart';
 import 'package:smart_society_new/Member_App/screens/ContactUs.dart';
+import 'package:smart_society_new/Member_App/screens/CreateSociety.dart';
 import 'package:smart_society_new/Member_App/screens/DirectoryScreen.dart';
 import 'package:smart_society_new/Member_App/screens/DocumentScreen.dart';
 import 'package:smart_society_new/Member_App/screens/EventDetail.dart';
@@ -35,9 +40,11 @@ import 'package:smart_society_new/Member_App/screens/MemberVehicleDetail.dart';
 import 'package:smart_society_new/Member_App/screens/MyGuestList.dart';
 import 'package:smart_society_new/Member_App/screens/FamilyMemberDetail.dart';
 import 'package:smart_society_new/Member_App/screens/MySociety.dart';
+import 'package:smart_society_new/Member_App/screens/MyWishList.dart';
 import 'package:smart_society_new/Member_App/screens/NoRouteScreen.dart';
 import 'package:smart_society_new/Member_App/screens/PollingScreen.dart';
 import 'package:smart_society_new/Member_App/screens/PrivacyPolicy.dart';
+import 'package:smart_society_new/Member_App/screens/SetupWings.dart';
 import 'package:smart_society_new/Member_App/screens/Society_Rules.dart';
 import 'package:smart_society_new/Member_App/screens/Splashscreen.dart';
 import 'package:smart_society_new/Member_App/screens/LoginScreen.dart';
@@ -54,8 +61,10 @@ import 'package:smart_society_new/Member_App/screens/Statistics.dart';
 import 'package:smart_society_new/Member_App/screens/TermsAndConditions.dart';
 import 'package:smart_society_new/Member_App/screens/GalleryScreen.dart';
 import 'package:smart_society_new/Member_App/Services/ServicesScreen.dart';
+import 'package:smart_society_new/Member_App/Services/SubServicesScreen.dart';
 import 'package:smart_society_new/Member_App/screens/UpdateProfileScreen.dart';
 import 'package:smart_society_new/Member_App/screens/AddGuest.dart';
+import 'package:smart_society_new/Member_App/Services/ServiceDetailScreen.dart';
 
 //admin App screens
 import 'package:smart_society_new/Admin_App/Screens/AddGallary.dart';
@@ -75,12 +84,18 @@ import 'package:smart_society_new/Admin_App/Screens/AddDocument.dart';
 import 'package:smart_society_new/Admin_App/Screens/MemberProfile.dart';
 import 'package:smart_society_new/Admin_App/Screens/Notice.dart';
 import 'package:smart_society_new/Admin_App/Screens/Polling.dart';
+import 'package:smart_society_new/Member_App/screens/ViewProducts.dart';
+import 'package:smart_society_new/Member_App/screens/VisitorSuccess.dart';
+import 'package:smart_society_new/Member_App/screens/WingDetail.dart';
+import 'package:smart_society_new/Member_App/screens/WingFlat.dart';
+import 'package:smart_society_new/VisitorRegister.dart';
 import 'Admin_App/Screens/AddAMC.dart';
 import 'Admin_App/Screens/AddExpense.dart';
 import 'Admin_App/Screens/AddIncome.dart';
 import 'Admin_App/Screens/AddPolling.dart';
 import 'Admin_App/Screens/RulesAndRegulations.dart';
 import 'Admin_App/Screens/amcList.dart';
+import 'VisitorOtpScreen.dart';
 
 void main() async {
   runApp(MyApp());
@@ -94,6 +109,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
@@ -107,26 +123,37 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    initPlayer();
-    _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
-      Title = message["notification"]["title"];
-      bodymessage = message["notification"]["body"];
-      //Get.to(OverlayScreen(message))
-      print("onMessage  $message");
-      if (message["data"]["Type"] == 'Visitor') {
-        Get.to(NotificationPopup(message));
-        audioCache.play('Sound.mp3');
-      } else {
-        showNotification('$Title', '$bodymessage');
-        audioCache.play('Sound.mp3');
-      }
-    }, onResume: (Map<String, dynamic> message) {
-      print("onResume");
-      print(message);
-    }, onLaunch: (Map<String, dynamic> message) {
-      print("onLaunch");
-      print(message);
-    });
+    // this.initState();
+    // initPlayer();
+    setNotification();
+  }
+
+  void setNotification() async {
+    //_messaging.getToken().then((token) {});
+
+    _firebaseMessaging.configure(
+      //when app is open
+      onMessage: (Map<String, dynamic> message) async {
+        if (message["data"]["Type"] == 'Visitor') {
+          Get.to(NotificationPopup(message));
+          audioCache.play('Sound.mp3');
+        } else {
+          showNotification('$Title', '$bodymessage');
+          audioCache.play('Sound.mp3');
+        }
+      },
+      //when app is closed and user click on notification
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        _navigateToItemDetail(message);
+      },
+      //when app is in background and user click on notification
+      onResume: (Map<String, dynamic> message) async {
+        print(
+            "onResume:------------------- $message  --------------------------------");
+        _navigateToItemDetail(message);
+      },
+    );
 
     //For Ios Notification
     _firebaseMessaging.requestNotificationPermissions(
@@ -144,10 +171,20 @@ class _MyAppState extends State<MyApp> {
     flutterLocalNotificationsPlugin.initialize(initSetttings);
   }
 
+  void _navigateToItemDetail(dynamic message) async {
+    if (message["data"]["Type"] == 'Visitor') {
+      Get.to(NotificationPopup(message));
+    } else {
+      showNotification('$Title', '$bodymessage');
+      audioCache.play('Sound.mp3');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: Get.key,
+      // navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: "My JINI",
       initialRoute: '/',
@@ -177,6 +214,16 @@ class _MyAppState extends State<MyApp> {
         '/GlobalSearch': (context) => GlobalSearchMembers(),
         '/AdvertisementCreate': (context) => AdvertisementCreate(),
         '/Vendors': (context) => ServicesScreen(),
+        '/MyServiceRequests': (context) => MyServiceRequests(),
+        '/AdvertisementList': (context) => AdvertisementList(),
+        '/MyWishList': (context) => MyWishList(),
+        '/IntroScreen': (context) => IntroScreen(),
+        '/VisitorSuccess': (context) => VisitorSuccess(),
+        '/CreateSociety': (context) => CreateSociety(),
+        '/SetupWings': (context) => SetupWings(),
+        '/WingDetail': (context) => WingDetail(),
+        '/WingFlat': (context) => WingFlat(),
+
         '/AdvertisementManage': (context) => AdvertisementManage(),
         '/ContactList': (context) => ContactList(),
         '/Committee': (context) => Committees(),

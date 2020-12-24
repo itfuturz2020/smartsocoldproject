@@ -173,7 +173,7 @@ class _DocumentComponentState extends State<DocumentComponent> {
                   Padding(padding: EdgeInsets.only(top: 10)),
                   GestureDetector(
                       onTap: () {
-                        _launchURL("http://smartsociety.itfuturz.com/" +
+                        _launchURL("http://mywatcher.itfuturz.com/" +
                             "${widget.documentData["File"]}");
                       },
                       child: widget.documentData["File"]
@@ -187,7 +187,7 @@ class _DocumentComponentState extends State<DocumentComponent> {
                                   .contains(".jpeg")
                           ? FadeInImage.assetNetwork(
                               placeholder: '',
-                              image: "http://smartsociety.itfuturz.com/" +
+                              image: "http://mywatcher.itfuturz.com/" +
                                   "${widget.documentData["File"]}",
                               width: 200,
                               height: 300,

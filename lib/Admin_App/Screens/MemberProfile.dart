@@ -202,7 +202,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     ? FadeInImage.assetNetwork(
                                         placeholder: '',
                                         image:
-                                            "http://smartsociety.itfuturz.com/" +
+                                            "http://mywatcher.itfuturz.com/" +
                                                 "${_visitorData[index]["Image"]}",
                                         width: 50,
                                         height: 50,
@@ -391,7 +391,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                                   ""
                                           ? FadeInImage.assetNetwork(
                                               placeholder: '',
-                                              image: "http://smartsociety.itfuturz.com/" +
+                                              image: "http://mywatcher.itfuturz.com/" +
                                                   "${_familyMemberData[index]["Image"]}",
                                               width: 50,
                                               height: 50,
@@ -557,7 +557,7 @@ class _MemberProfileState extends State<MemberProfile> {
                                     widget.memberData["Image"] != null
                                 ? FadeInImage.assetNetwork(
                                     placeholder: '',
-                                    image: "http://smartsociety.itfuturz.com/" +
+                                    image: "http://mywatcher.itfuturz.com/" +
                                         "${widget.memberData["Image"]}",
                                     width: 90,
                                     height: 90,

@@ -53,7 +53,7 @@ class _VisitorComponentState extends State<VisitorComponent> {
                               widget._visitorData["Image"] != ""
                           ? FadeInImage.assetNetwork(
                               placeholder: '',
-                              image: "http://smartsociety.itfuturz.com/" +
+                              image: "http://mywatcher.itfuturz.com/" +
                                   "${widget._visitorData["Image"]}",
                               width: 50,
                               height: 50,

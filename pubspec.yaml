@@ -30,8 +30,8 @@ dependencies:
   progress_dialog: ^1.2.0
   shared_preferences: ^0.5.3+4
   xml2json: ^4.0.0
-  share: ^0.6.2+4
-  flutter_cupertino_date_picker: ^1.0.12
+  share: ^0.6.4+3
+  flutter_cupertino_date_picker: ^1.0.26
   flutter_native_image: ^0.0.4
   url_launcher: ^5.2.5
   esys_flutter_share: ^1.0.2
@@ -60,6 +60,14 @@ dependencies:
   flutter_multiple_image_picker: ^0.0.1
   month_picker_dialog: ^0.3.0
   file_picker: ^1.4.2
+  flutter_svg: ^0.17.3+1
+  flutter_share_me: ^0.9.1
+  social_share: ^2.0.5
+  flutter_share: ^1.0.2+1
+  flutter_rating_bar: ^3.0.1+1
+  flutter_custom_clippers: ^1.1.1
+  agora_rtc_engine: ^1.0.13
+  agora_rtm: ^0.9.11
 
 dev_dependencies:
   flutter_test:
@@ -208,6 +216,21 @@ flutter:
     - images/statistics.png
     - images/event_society.png
     - images/gallary_admin.png
+    - images/phone1.png
+    - images/Ad1.jpg
+    - images/youtube.png
+    - images/whatsapplogo1.png
+    - images/gmail.png
+    - images/telephone.png
+    - images/sale.png
+    - images/close.png
+    - images/wishlist.png
+    - images/StarRating.jpg
+    - images/amcimage.jpg
+    - images/society1.jpg
+    - images/thankyou.png
+    - images/correctsign.png
+    - images/video_call.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

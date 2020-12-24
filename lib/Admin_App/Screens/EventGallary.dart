@@ -190,7 +190,7 @@ class _EventGallaryState extends State<EventGallary> {
                                           FadeInImage.assetNetwork(
                                               placeholder:
                                                   'images/image_loading.gif',
-                                              image: "http://smartsociety.itfuturz.com/" +
+                                              image: "http://mywatcher.itfuturz.com/" +
                                                   "${_eventGallaryData[index]["Image"]}",
                                               fit: BoxFit.fill),
                                           Align(

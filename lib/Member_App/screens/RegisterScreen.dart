@@ -612,7 +612,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                   ),
-                  Padding(
+                 /* Padding(
                     padding: const EdgeInsets.only(
                         top: 18.0, left: 8, right: 8, bottom: 8.0),
                     child: SizedBox(
@@ -621,10 +621,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        color: constant.appPrimaryMaterialColor[500],
+                        color: constant.appPrimaryMaterialColor[700],
                         textColor: Colors.white,
                         splashColor: Colors.white,
-                        child: Text("Register",
+                        child: Text("Join Your Society",
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600)),
                         onPressed: valid
@@ -634,6 +634,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 _Registration();
                               }
                             : null,
+                      ),
+                    ),
+                  ),*/
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 18.0, left: 8, right: 8),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 45,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(5)),
+                        color:
+                        constant.appPrimaryMaterialColor[500],
+                        textColor: Colors.white,
+                        splashColor: Colors.white,
+                        child: Text("Join Your Society",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600)),
+                        onPressed:  valid
+                            ? () {
+//                                Navigator.pushReplacementNamed(
+//                                    context, '/LoginScreen');
+                          _Registration();
+                        }
+                            : null,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 18.0, left: 8, right: 8),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 45,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(5)),
+                        color:
+                        constant.appPrimaryMaterialColor[500],
+                        textColor: Colors.white,
+                        splashColor: Colors.white,
+                        child: Text("Create Your Society",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600)),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, '/CreateSociety');
+                        },
                       ),
                     ),
                   ),

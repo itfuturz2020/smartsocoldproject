@@ -45,7 +45,7 @@ class _NoticeDetailState extends State<NoticeDetail> {
                         widget.noticeData["Image"] != null
                     ? FadeInImage.assetNetwork(
                         placeholder: '',
-                        image: "http://smartsociety.itfuturz.com/" +
+                        image: "http://mywatcher.itfuturz.com/" +
                             widget.noticeData["Image"],
                         height: MediaQuery.of(context).size.height / 3,
                         width: MediaQuery.of(context).size.width - 20,

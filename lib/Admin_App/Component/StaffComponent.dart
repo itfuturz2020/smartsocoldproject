@@ -33,7 +33,7 @@ class _StaffComponentState extends State<StaffComponent> {
                           widget.staffData["Image"] != null
                       ? FadeInImage.assetNetwork(
                           placeholder: '',
-                          image: "http://smartsociety.itfuturz.com/" +
+                          image: "http://mywatcher.itfuturz.com/" +
                               "${widget.staffData["Image"]}",
                           width: 60,
                           height: 60,

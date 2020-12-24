@@ -5,6 +5,7 @@ class Menu {
   Menu({this.Icon, this.IconName});
 
   static List<Menu> allMenuItems() {
+
     var listofmenus = new List<Menu>();
 
     listofmenus.add(new Menu(Icon: "DailyHelp.png", IconName: "DailyHelp"));
@@ -20,6 +21,7 @@ class Menu {
     listofmenus.add(new Menu(Icon: "bill.png", IconName: "Bills"));
     listofmenus.add(new Menu(Icon: "Utilities.png", IconName: "Amenities"));
     listofmenus.add(new Menu(Icon: "event_society.png", IconName: "Events"));
+    listofmenus.add(new Menu(Icon: "Vendors.png", IconName: "Vendors"));
 
     return listofmenus;
   }

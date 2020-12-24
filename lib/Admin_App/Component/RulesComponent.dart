@@ -181,7 +181,7 @@ class _RulesComponentState extends State<RulesComponent> {
                           widget.rulesData["File"] != null
                       ? GestureDetector(
                           onTap: () {
-                            _launchURL("http://smartsociety.itfuturz.com/" +
+                            _launchURL("http://mywatcher.itfuturz.com/" +
                                 "${widget.rulesData["File"]}");
                           },
                           child: Padding(

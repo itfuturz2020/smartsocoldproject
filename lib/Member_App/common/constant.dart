@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-const String API_URL = "http://smartsociety.itfuturz.com/api/AppAPI/";
-const String Image_Url = "http://smartsociety.itfuturz.com/";
+// const String API_URL = "http://smartsociety.itfuturz.com/api/AppAPI/";
+// const String Image_Url = "http://mywatcher.itfuturz.com/";
+// const String Image_Url1 = "http://smartsociety.itfuturz.com";
+
+const String API_URL = "http://mywatcher.itfuturz.com/api/AppAPI/";
+const String Image_Url = "http://mywatcher.itfuturz.com/";
+const String Image_Url1 = "http://mywatcher.itfuturz.com";
 const Inr_Rupee = "₹";
 
-const String whatsAppLink = "https://wa.me/#mobile?text=#msg";
+//const String whatsAppLink = "https://wa.me/#mobile?text=#msg";
+const String whatsAppLink =
+    "https://api.whatsapp.com/send?phone=#mobile&text=#msg";
 
 class Session {
   static const String session_login = "Login_data";

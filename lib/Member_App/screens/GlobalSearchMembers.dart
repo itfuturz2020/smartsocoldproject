@@ -216,7 +216,7 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => ServiceList(
-                                                serviceData[index],
+                                                serviceData[index],"",""
                                               ),
                                             ),
                                           );

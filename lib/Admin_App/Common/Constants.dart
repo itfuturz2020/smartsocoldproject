@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const String API_URL = "http://smartsociety.itfuturz.com/api/AppAPI/";
-const String IMG_URL = "http://smartsociety.itfuturz.com";
+const String API_URL = "http://mywatcher.itfuturz.com/api/AppAPI/";
+const String IMG_URL = "http://mywatcher.itfuturz.com";
 const Inr_Rupee = "₹";
 const Color appcolor = Color.fromRGBO(0, 171, 199, 1);
 const Color secondaryColor = Color.fromRGBO(85, 96, 128, 1);
@@ -9,20 +9,20 @@ const Color secondaryColor = Color.fromRGBO(85, 96, 128, 1);
 const String whatsAppLink = "https://wa.me/#mobile?text=#msg";
 
 Map<int, Color> appprimarycolors = {
-  50: Color.fromRGBO(114,34, 169, .1),
-  100: Color.fromRGBO(114,34, 169, .2),
-  200: Color.fromRGBO(114,34, 169, .3),
-  300: Color.fromRGBO(114,34, 169, .4),
-  400: Color.fromRGBO(114,34, 169, .5),
-  500: Color.fromRGBO(114,34, 169, .6),
-  600: Color.fromRGBO(114,34, 169, .7),
-  700: Color.fromRGBO(114,34, 169, .8),
-  800: Color.fromRGBO(114,34, 169, .9),
-  900: Color.fromRGBO(114,34, 169, 1)
+  50: Color.fromRGBO(114, 34, 169, .1),
+  100: Color.fromRGBO(114, 34, 169, .2),
+  200: Color.fromRGBO(114, 34, 169, .3),
+  300: Color.fromRGBO(114, 34, 169, .4),
+  400: Color.fromRGBO(114, 34, 169, .5),
+  500: Color.fromRGBO(114, 34, 169, .6),
+  600: Color.fromRGBO(114, 34, 169, .7),
+  700: Color.fromRGBO(114, 34, 169, .8),
+  800: Color.fromRGBO(114, 34, 169, .9),
+  900: Color.fromRGBO(114, 34, 169, 1)
 };
 
 MaterialColor appPrimaryMaterialColor =
-MaterialColor(0xFF7222A9, appprimarycolors);
+    MaterialColor(0xFF7222A9, appprimarycolors);
 
 class MESSAGES {
   static const String INTERNET_ERROR = "No Internet Connection";

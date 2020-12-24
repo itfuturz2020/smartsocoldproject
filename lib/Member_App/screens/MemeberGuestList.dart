@@ -152,7 +152,7 @@ class _MemberGuestListState extends State<MemberGuestList> {
                         icon: Icon(Icons.share, color: Colors.grey),
                         onPressed: () {
                           Share.share(
-                              'http://smartsociety.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}&type=Visitor');
+                              'http://mywatcher.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}&type=Visitor');
                         }),
                   )
                 ],

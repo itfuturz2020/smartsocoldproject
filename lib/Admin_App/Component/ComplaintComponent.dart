@@ -203,7 +203,7 @@ class _ComplaintComponentState extends State<ComplaintComponent> {
                                   widget.complaintData["MemberImage"] != ""
                               ? FadeInImage.assetNetwork(
                                   placeholder: '',
-                                  image: "http://smartsociety.itfuturz.com/" +
+                                  image: "http://mywatcher.itfuturz.com/" +
                                       "${widget.complaintData["MemberImage"]}",
                                   width: 40,
                                   height: 40,
@@ -294,7 +294,7 @@ class _ComplaintComponentState extends State<ComplaintComponent> {
                                     .contains(".jpeg")
                             ? FadeInImage.assetNetwork(
                                 placeholder: '',
-                                image: "http://smartsociety.itfuturz.com/" +
+                                image: "http://mywatcher.itfuturz.com/" +
                                     "${widget.complaintData["Image"]}",
                                 //width: 200,
                                 height: 250,
@@ -302,7 +302,7 @@ class _ComplaintComponentState extends State<ComplaintComponent> {
                             : Padding(
                                 padding: EdgeInsets.all(10),
                                 child: Text(
-                                  "http://smartsociety.itfuturz.com/" +
+                                  "http://mywatcher.itfuturz.com/" +
                                       "${widget.complaintData["Image"]}",
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,

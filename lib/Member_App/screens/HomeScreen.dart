@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -13,12 +13,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/Model/ModelClass.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/constant.dart';
+import 'package:smart_society_new/Member_App/screens/AdDetailPage.dart';
 import 'package:smart_society_new/Member_App/screens/SOSDailog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -52,6 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ResidenceType,
       BloodGroup;
 
+  String serviceReqId;
+
+  List ReviewList = [];
+
   final List<Menu> _allMenuList = Menu.allMenuItems();
 
   bool dialVisible = true;
@@ -59,16 +65,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List _advertisementData = [];
   bool isLoading = true;
+  List _addData = [];
+  ProgressDialog pr;
+
+  double serviceRating;
 
   TextEditingController resultText = new TextEditingController();
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
+  TextEditingController txtdescription = new TextEditingController();
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
   @override
   void initState() {
+    //_getIsReviewed();
+    //_showDialog();
+
+    /*if (ReviewList.length > 0) {
+      return _showDialog();
+    }*/
+
     initPlayer();
     _getLocaldata();
     getAdvertisementData();
+    getAds();
     // initSpeechRecognizer();
     if (Platform.isIOS) {
       iosSubscription =
@@ -81,6 +102,270 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       saveDeviceToken();
     }
+  }
+
+  _addServiceReview() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        //pr.show();
+        setState(() {
+          isLoading=true;
+        });
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var data = {
+          "Id": serviceReqId,
+          "Rating": serviceRating,
+          "ServiceReview": txtdescription.text,
+        };
+
+        print("Save Vendor Data = ${data}");
+        Services.AddServiceReview(data).then((data) async {
+          //pr.hide();
+          setState(() {
+            isLoading=false;
+          });
+
+          if (data.Data != "0" && data.IsSuccess == true) {
+            /*Fluttertoast.showToast(
+                msg: "AMC Paid Successfully !",
+                textColor: Colors.black,
+                toastLength: Toast.LENGTH_LONG);*/
+
+            showDialog(context: context, child: Continue());
+
+            /*  Navigator.pushNamedAndRemoveUntil(
+                context, "/HomeScreen", (Route<dynamic> route) => false);*/
+          } else {
+            showMsg(data.Message, title: "Error");
+          }
+        }, onError: (e) {
+          //pr.hide();
+          setState(() {
+            isLoading=false;
+          });
+          showMsg("Try Again.");
+        });
+      } else
+        showMsg("No Internet Connection.");
+    } on SocketException catch (_) {
+      //pr.hide();
+      setState(() {
+        isLoading=false;
+      });
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  String setDate(String date) {
+    String final_date = "";
+    var tempDate;
+    if (date != "" || date != null) {
+      tempDate = date.toString().split("-");
+      if (tempDate[2].toString().length == 1) {
+        tempDate[2] = "0" + tempDate[2].toString();
+      }
+      if (tempDate[1].toString().length == 1) {
+        tempDate[1] = "0" + tempDate[1].toString();
+      }
+      final_date = "${tempDate[2].toString().substring(0, 2)}-"
+              "${tempDate[1].toString().substring(0, 2)}-${tempDate[0].toString()}"
+          .toString();
+    }
+    return final_date;
+  }
+
+  _getIsReviewed() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String id = prefs.getString(constant.Session.Member_Id);
+        Future res = Services.GetIsReviewed(id);
+        setState(() {
+          isLoading = true;
+        });
+        res.then((data) async {
+          if (data != null && data.length > 0) {
+            setState(() {
+              ReviewList = data;
+              serviceReqId = ReviewList[0]["Id"].toString();
+              isLoading = false;
+            });
+            if (ReviewList.length > 0) {
+              _showDialog();
+            }
+            print("gg=> " + ReviewList.toString());
+            print("gg=> " + ReviewList.length.toString());
+          } else {
+            setState(() {
+              ReviewList = [];
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          print("Error : on GetAd Data Call $e");
+          showMsg("$e");
+        });
+      } else {
+        showMsg("Something went Wrong!");
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  _showDialog() async {
+    await Future.delayed(Duration(milliseconds: 50));
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            // height: MediaQuery.of(context).size.height/1.5,
+            child: AlertDialog(
+                content: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: ReviewList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Icon(Icons.close))
+                            ],
+                          ),
+                          Center(
+                            child: Padding(
+                              child: Text(
+                                "${ReviewList[index]["VendorName"]}",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8.0, bottom: 8.0),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: Padding(
+                                  child: Text(
+                                    "${ReviewList[index]["ServiceName"]}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w500),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                ),
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    constant.Inr_Rupee +
+                                        " ${ReviewList[index]["ReceivedAmount"]}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.green,
+                                        fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            child: Text(
+                              "Date - ${setDate(ReviewList[index]["Date"])}",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RatingBar(
+                              initialRating: 3.0,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemSize: 30,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 2.0),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                setState(() {
+                                  serviceRating = rating;
+                                });
+                                print("hellorating=> " + rating.toString());
+                              },
+                            ),
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value.trim() == "") {
+                                return "Please insert valid reason";
+                              }
+                            },
+                            controller: txtdescription,
+                            textInputAction: TextInputAction.next,
+                            maxLines: 4,
+                            decoration: InputDecoration(
+                                border: new OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(5.0),
+                                  borderSide: new BorderSide(),
+                                ),
+                                labelText: "Describe your experience",
+                                hintStyle: TextStyle(fontSize: 13)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  color: constant.appPrimaryMaterialColor,
+                                  textColor: Colors.white,
+                                  splashColor: Colors.white,
+                                  child: Text("SUBMIT",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600)),
+                                  onPressed: () {
+                                    _addServiceReview();
+
+                                    /* if (_formkey.currentState.validate()) {
+                                      // Registration();
+                                      showDialog(
+                                          context: context, child: Continue());
+                                      Fluttertoast.showToast(
+                                          msg: "Review Submitted !!",
+                                          textColor: Colors.black,
+                                          backgroundColor: Colors.red,
+                                          toastLength: Toast.LENGTH_LONG);
+                                      Navigator.pop(context);
+                                    }*/
+
+                                    //Navigator.pop(context);
+                                  }),
+                            ),
+                          ),
+                        ],
+                      );
+                    })),
+          );
+        });
   }
 
   getAdvertisementData() async {
@@ -101,6 +386,39 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               isLoading = false;
               _advertisementData = data;
+            });
+          }
+        }, onError: (e) {
+          showMsg("Something Went Wrong.\nPlease Try Again");
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  getAds() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.GetAds();
+        setState(() {
+          isLoading = true;
+        });
+        res.then((data) async {
+          if (data != null && data.length > 0) {
+            setState(() {
+              _addData = data;
+              isLoading = false;
+            });
+            print("Meherzan : " + _addData.toString());
+          } else {
+            setState(() {
+              isLoading = false;
+              _addData = data;
             });
           }
         }, onError: (e) {
@@ -300,7 +618,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.pushReplacementNamed(context, "/LoginScreen");
+    Navigator.pushReplacementNamed(context, "/IntroScreen");
   }
 
   _getLocaldata() async {
@@ -558,6 +876,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     ListTile(
                       title: Text(
+                        'My WishList',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      leading: Image.asset(
+                        "images/wishlist.png",
+                        width: 20,
+                        height: 20,
+                        color: constant.appPrimaryMaterialColor,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/MyWishList");
+                      },
+                    ),
+                    ListTile(
+                      title: Text(
                         'Terms & Conditions',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
@@ -752,8 +1086,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              AdvertisemnetDetail(
+                                          builder: (context) => AdDetailPage(
                                             i,
                                           ),
                                         ),
@@ -826,10 +1159,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   alignment: Alignment.bottomCenter,
                                   children: <Widget>[
                                     CarouselSlider(
-                                      height: 140,
+                                      height: 180,
                                       viewportFraction: 1.0,
                                       autoPlayAnimationDuration:
-                                          Duration(milliseconds: 1500),
+                                          Duration(milliseconds: 1000),
                                       reverse: false,
                                       autoPlayCurve: Curves.fastOutSlowIn,
                                       autoPlay: true,
@@ -847,7 +1180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      AdvertisemnetDetail(
+                                                      AdDetailPage(
                                                     i,
                                                   ),
                                                 ),
@@ -1036,6 +1369,66 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Continue extends StatefulWidget {
+  @override
+  _ContinueState createState() => _ContinueState();
+}
+
+class _ContinueState extends State<Continue> {
+  ProgressDialog pr;
+  bool isLoading = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: SingleChildScrollView(
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Center(
+            child: Image.asset(
+              "images/StarRating.jpg",
+              width: MediaQuery.of(context).size.width,
+              height: 90,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  child: Text(
+                    "Thank you for sharing your valuable feedback!",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                ),
+              ),
+            ],
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/HomeScreen", (Route<dynamic> route) => false);
+             // Navigator.pop(context);
+            },
+            child: Center(
+              child: Padding(
+                child: Text(
+                  "Done",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.justify,
+                ),
+                padding: const EdgeInsets.all(8.0),
+              ),
+            ),
+          ),
+        ],
+      )),
     );
   }
 }

@@ -129,7 +129,25 @@ class _DashboardState extends State<Dashboard> {
       "count": "0",
       "title": "AMCs",
       "screen": "amcList"
-    }
+    },
+    /*  {
+      "image": "images/Vendors.png",
+      "count": "0",
+      "title": "Vendors",
+      "screen": "Vendors"
+    },
+    {
+      "image": "images/Vendors.png",
+      "count": "0",
+      "title": "Service Requests",
+      "screen": "MyServiceRequests"
+    },*/
+    /*  {
+      "image": "images/Vendors.png",
+      "count": "0",
+      "title": "Advertisement",
+      "screen": "AdvertisementList"
+    }*/
   ];
 
   @override
@@ -442,7 +460,8 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (_isSearching)
+        Navigator.pop(context);
+        /*   if (_isSearching)
           _handleSearchEnd();
         else {
           DateTime now = DateTime.now();
@@ -453,7 +472,7 @@ class _DashboardState extends State<Dashboard> {
             return Future.value(false);
           }
           return Future.value(true);
-        }
+        }*/
         //return Future.value(true);
       },
       child: Scaffold(
@@ -476,7 +495,7 @@ class _DashboardState extends State<Dashboard> {
                                         searchMemberData[index]["Image"] != null
                                     ? FadeInImage.assetNetwork(
                                         placeholder: '',
-                                        image: "http://smartsociety.itfuturz.com/" +
+                                        image: "http://mywatcher.itfuturz.com/" +
                                             "${searchMemberData[index]["Image"]}",
                                         width: 60,
                                         height: 60,
@@ -628,13 +647,16 @@ class _DashboardState extends State<Dashboard> {
                                                           fontSize: 15,
                                                           fontWeight:
                                                               FontWeight.w600)),
-                                                  Text(
-                                                    "${_AdminMenuList[index]["title"]}",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        color:
-                                                            Colors.grey[600]),
+                                                  Expanded(
+                                                    child: Text(
+                                                      "${_AdminMenuList[index]["title"]}",
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          color:
+                                                              Colors.grey[600]),
+                                                    ),
                                                   ),
                                                 ],
                                               ),

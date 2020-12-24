@@ -44,7 +44,7 @@ class _DirectoryMemberComponentState extends State<DirectoryMemberComponent> {
                                 widget.memberData["Image"] != null
                             ? FadeInImage.assetNetwork(
                                 placeholder: '',
-                                image: "http://smartsociety.itfuturz.com/" +
+                                image: "http://mywatcher.itfuturz.com/" +
                                     "${widget.memberData["Image"]}",
                                 width: 50,
                                 height: 50,
