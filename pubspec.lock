@@ -180,7 +180,7 @@ packages:
       name: flutter_cupertino_date_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.26"
+    version: "1.0.26+2"
   flutter_cupertino_localizations:
     dependency: transitive
     description:
@@ -321,7 +321,7 @@ packages:
       name: get
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.10.5"
+    version: "3.24.0"
   google_api_availability:
     dependency: transitive
     description:
@@ -699,5 +699,5 @@ packages:
     source: hosted
     version: "6.0.3+2"
 sdks:
-  dart: ">=2.10.0-110 <2.11.0"
+  dart: ">=2.10.0 <2.11.0"
   flutter: ">=1.12.13+hotfix.6 <2.0.0"
