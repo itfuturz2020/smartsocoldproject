@@ -136,6 +136,7 @@ class _MyAppState extends State<MyApp> {
     _firebaseMessaging.configure(
       //when app is open
       onMessage: (Map<String, dynamic> message) async {
+        Get.to(NotificationPopup(message));
         if (message["data"]["Type"] == 'Visitor') {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
@@ -147,13 +148,15 @@ class _MyAppState extends State<MyApp> {
       //when app is closed and user click on notification
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-        _navigateToItemDetail(message);
+        // _navigateToItemDetail(message);
+        Get.to(NotificationPopup(message));
       },
       //when app is in background and user click on notification
       onResume: (Map<String, dynamic> message) async {
         print(
             "onResume:------------------- $message  --------------------------------");
-        _navigateToItemDetail(message);
+        // _navigateToItemDetail(message);
+        Get.to(NotificationPopup(message));
       },
     );
 

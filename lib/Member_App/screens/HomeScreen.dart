@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:audioplayers/audio_cache.dart';
@@ -656,7 +657,7 @@ class _HomeScreenState extends State<HomeScreen> {
         fcmToken = token;
         sendFCMTokan(token);
       });
-      print("FCM Token : $fcmToken");
+      log(fcmToken);
     });
   }
 
