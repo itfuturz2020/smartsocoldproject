@@ -6,11 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:smart_society_new/Admin_App/Screens/AddAmenitiesScreen.dart';
 import 'package:smart_society_new/Admin_App/Screens/AddEvent.dart';
 import 'package:smart_society_new/Admin_App/Screens/DirectoryMember.dart';
 import 'package:smart_society_new/Admin_App/Screens/EventsAdmin.dart';
 import 'package:smart_society_new/Admin_App/Screens/RulesAndRegulations.dart';
 import 'package:smart_society_new/Admin_App/Screens/VisitorByWing.dart';
+import 'package:smart_society_new/Admin_App/Screens/getAmenitiesScreen.dart';
 import 'package:smart_society_new/IntroScreen.dart';
 import 'package:smart_society_new/Member_App/DigitalCard/Screens/RegistrationDC.dart';
 import 'package:smart_society_new/Member_App/Mall/Screens/Cart.dart';
@@ -51,6 +53,10 @@ import 'package:smart_society_new/Member_App/screens/LoginScreen.dart';
 import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
 import 'package:smart_society_new/Member_App/screens/ComplaintScreen.dart';
 import 'package:smart_society_new/Member_App/screens/NoticeScreen.dart';
+import 'package:smart_society_new/Member_App/screens/JoinCreateBuildingScreen.dart';
+import 'package:smart_society_new/Member_App/screens/CreateBuildingScreen.dart';
+import 'package:smart_society_new/Member_App/screens/SetupWingScreen.dart';
+import 'package:smart_society_new/Member_App/screens/CreateBuildingSlider.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/screens/MyComplaints.dart';
 import 'package:smart_society_new/Member_App/screens/RegisterScreen.dart';
@@ -279,6 +285,12 @@ class _MyAppState extends State<MyApp> {
         '/StaffInOut': (context) => StaffInOut(),
         '/EventsAdmin': (context) => EventsAdmin(),
         '/AddEvent': (context) => AddEvent(),
+        '/AddAmenitiesScreen': (context) => AddAmenitiesScreen(),
+        '/getAmenitiesScreen': (context) => getAmenitiesScreen(),
+        '/JoinCreateBuildingScreen': (context) => JoinCreateBuildingScreen(),
+        '/CreateBuildingScreen': (context) => CreateBuildingScreen(),
+        '/CreateBuildingSlider': (context) => CreateBuildingSlider(),
+        '/SetupWingScreen': (context) => SetupWingScreen(),
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => NoRouteScreen(

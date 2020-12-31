@@ -962,6 +962,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         _showConfirmDialog();
                       },
                     ),
+
+                    //========by rinki
+                    // ListTile(
+                    //   title: Text(
+                    //     'Building Maintenance',
+                    //     style: TextStyle(fontWeight: FontWeight.w600),
+                    //   ),
+                    //   leading: Icon(
+                    //     Icons.exit_to_app,
+                    //     color: constant.appPrimaryMaterialColor,
+                    //   ),
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //     Navigator.pushNamed(context, "/JoinCreateBuildingScreen");
+                    //   },
+                    // ),
                   ],
                 ),
               ),

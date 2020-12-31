@@ -64,8 +64,10 @@ class _OtherHelpComponentState extends State<OtherHelpComponent> {
                             Icons.arrow_downward,
                             color: Colors.green,
                           ),
-                          Text(
-                              "${setTime(widget.data["lastentry"][0]["InTime"])}"),
+                          Flexible(
+                            child: Text(
+                                "${setTime(widget.data["lastentry"][0]["InTime"])}"),
+                          ),
                           widget.data["lastentry"][0]["OutTime"] == null ||
                                   widget.data["lastentry"][0]["OutTime"] == ""
                               ? Container()
@@ -76,8 +78,10 @@ class _OtherHelpComponentState extends State<OtherHelpComponent> {
                           widget.data["lastentry"][0]["OutTime"] == null ||
                                   widget.data["lastentry"][0]["OutTime"] == ""
                               ? Container()
-                              : Text(
-                                  "${setTime(widget.data["lastentry"][0]["OutTime"])}"),
+                              : Flexible(
+                                child: Text(
+                                    "${setTime(widget.data["lastentry"][0]["OutTime"])}"),
+                              ),
                         ],
                       )
                     : Container(),

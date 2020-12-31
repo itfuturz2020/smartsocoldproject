@@ -144,7 +144,7 @@ class _NoticeComponentState extends State<NoticeComponent> {
               child: Padding(
                 padding: const EdgeInsets.all(6),
                 child: Container(
-                  height: 100,
+                  height: 110,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -184,12 +184,14 @@ class _NoticeComponentState extends State<NoticeComponent> {
                               Divider(
                                 endIndent: 20,
                               ),
-                              Text("${widget.noticeData["Description"]}",
-                                  maxLines: 3,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.grey[900])),
+                              Flexible(
+                                child: Text("${widget.noticeData["Description"]}",
+                                    maxLines: 3,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.grey[900])),
+                              ),
                             ],
                           ),
                         ),

@@ -130,6 +130,13 @@ class _DashboardState extends State<Dashboard> {
       "title": "AMCs",
       "screen": "amcList"
     },
+
+    {
+      "image": "images/event_society.png",
+      "count": "0",
+      "title": "Amenities",
+      "screen": "getAmenitiesScreen"
+    },
     /*  {
       "image": "images/Vendors.png",
       "count": "0",

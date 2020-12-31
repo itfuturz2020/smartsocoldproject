@@ -5,6 +5,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Member_App/screens/SetupWings.dart';
 
 class CreateSociety extends StatefulWidget {
   @override
@@ -312,7 +313,7 @@ class _CreateSocietyState extends State<CreateSociety> {
                     },
                     maxLength: 10,
                     keyboardType: TextInputType.number,
-                    controller: txtmobile,
+                    controller: txtwings,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                         counterText: "",
@@ -330,7 +331,7 @@ class _CreateSocietyState extends State<CreateSociety> {
                             borderSide:
                             BorderSide(width: 0, color: Colors.black)),
                         hintText: 'Enter Mobile No',
-                        labelText: "Mobile",
+                        labelText: "Wings",
                         hintStyle:
                         TextStyle(color: Colors.grey, fontSize: 14)),
                   ),
@@ -458,7 +459,11 @@ class _CreateSocietyState extends State<CreateSociety> {
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w600)),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/SetupWings');
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) => SetupWings(
+                            wingData: txtwings.text,
+                          )));
+                      //Navigator.pushNamed(context, '/SetupWings');
                     },
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:url_launcher/url_launcher.dart';
 
 class MemberGuestList extends StatefulWidget {
   @override
@@ -29,6 +30,25 @@ class _MemberGuestListState extends State<MemberGuestList> {
     setState(() {
       Address = prefs.getString(constant.Session.Address);
     });
+  }
+//==============by rinki
+  void launchwhatsapp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
   }
 
   _GetVisitorData() async {
@@ -146,18 +166,29 @@ class _MemberGuestListState extends State<MemberGuestList> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: IconButton(
-                        icon: Icon(Icons.share, color: Colors.grey),
-                        onPressed: () {
-                          // Share.share(_GuestList[index]["ContactNo"],
-                          //     subject: '',
-                          // sharePositionOrigin:_GuestList[index]["ContactNo"] );
-                          Share.share(
-                              'http://mywatcher.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}&type=Visitor');
-                        }),
-                  )
+
+
+                  GestureDetector(
+                    onTap: (){
+                      launchwhatsapp(phone: "+91" + " ${_GuestList[index]["ContactNo"]}", message: "");
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12.0,right: 10),
+                      child: Image.asset("images/whatsapp.png",height: 35,width: 35,),
+                    ),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 8.0),
+                  //   child: IconButton(
+                  //       icon: Icon(Icons.share, color: Colors.grey),
+                  //       onPressed: () {
+                  //         // Share.share(_GuestList[index]["ContactNo"],
+                  //         //     subject: '',
+                  //         // sharePositionOrigin:_GuestList[index]["ContactNo"] );
+                  //         Share.share(
+                  //             'http://smartsociety.itfuturz.com/QRCode.aspx?id=${_GuestList[index]["Id"]}&type=Visitor');
+                  //       }),
+                  // )
                 ],
               ),
             ],

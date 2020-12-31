@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_society_new/Admin_App/Common/Constants.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 
 class EventDetail extends StatefulWidget {
@@ -7,6 +8,8 @@ class EventDetail extends StatefulWidget {
 }
 
 class _EventDetailState extends State<EventDetail> {
+  String dropdownValue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +67,62 @@ class _EventDetailState extends State<EventDetail> {
               Icons.info,
               size: 20,
               color: Colors.grey,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left:15.0,right: 15,top: 10,bottom: 5),
+            child: Text(
+              "Number Of Member attaining the event:",
+              style: TextStyle(
+                color: appPrimaryMaterialColor,
+                fontSize: 15
+                  ,fontWeight: FontWeight.w500
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left:15.0,right: 15),
+            child: Container(
+              height: 38,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: appPrimaryMaterialColor)),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  hint: dropdownValue == null
+                      ? Text(
+                          "Select Number of Member",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        )
+                      : Text(dropdownValue),
+                  dropdownColor: Colors.white,
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    size: 40,
+                    color: appPrimaryMaterialColor,
+                  ),
+                  isExpanded: true,
+                  value: dropdownValue,
+                  items: ["1", "2", "3", "4","5","6","7","8","9","10"]
+
+                      .map((value) {
+                    return DropdownMenuItem<String>(
+                        value: value, child: Padding(
+                          padding: const EdgeInsets.only(left:8.0),
+                          child: Text( value),
+                        ));
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      dropdownValue = value;
+                    });
+                  },
+                ),
+              ),
             ),
           ),
           SizedBox(

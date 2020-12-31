@@ -6,8 +6,13 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Admin_App/Common/Constants.dart' as cnst;
+import 'package:smart_society_new/Member_App/screens/WingDetail.dart';
+
 
 class SetupWings extends StatefulWidget {
+  var wingData;
+  SetupWings({this.wingData});
   @override
   _SetupWingsState createState() => _SetupWingsState();
 }
@@ -29,6 +34,7 @@ class _SetupWingsState extends State<SetupWings> {
   TextEditingController txtname = new TextEditingController();
   TextEditingController txtmobile = new TextEditingController();
   TextEditingController txtwings = new TextEditingController();
+  List<String> alphabets = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
   @override
   void initState() {
@@ -150,17 +156,26 @@ class _SetupWingsState extends State<SetupWings> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Setup all your wings and you will be on dashboard screen.",style: TextStyle(color:cnst.appPrimaryMaterialColor),),
+              ),
               StaggeredGridView.countBuilder(
                   physics: ScrollPhysics(),
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   crossAxisCount: 4,
-                  itemCount: 10,
+                  //itemCount: int.parse(widget.wingData),
+                  itemCount: int.parse(widget.wingData),
                   staggeredTileBuilder: (_) => StaggeredTile.fit(2),
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: (){
-                        Navigator.pushNamed(context, "/WingDetail");
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => WingDetail(
+                              wingName:  "${alphabets[index].toString()}",
+                            )));
+                       // Navigator.pushNamed(context, "/WingDetail");
                       },
                       child: SizedBox(
                         height: 100,
@@ -172,7 +187,7 @@ class _SetupWingsState extends State<SetupWings> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               Text(
-                                "A",
+                                "${alphabets[index]}",
                                 style: TextStyle(
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.w500,

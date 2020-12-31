@@ -146,20 +146,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'FlatNo': txtFlatNo.text.trim(),
             };
             print("Body: ${data}");
-            /*pr.show();
-            Services.Registration(data).then((data) async {
-              pr.hide();
-              if (data.Data != "0" && data.IsSuccess == true) {
-                showHHMsg("Registration Successfully", "");
-              } else {
-                showHHMsg("Mobile Number Already Exist !", "");
-                pr.hide();
-              }
-            }, onError: (e) {
-              pr.hide();
-              showHHMsg("Try Again.", "");
-            });*/
+            //==============================
+            pr.show();
+            // Services.Registration(data).then((data) async {
+            //   pr.hide();
+            //   if (data.Data != "0" && data.IsSuccess == true) {
+            //     showHHMsg("Registration Successfully", "");
+            //     Navigator.pushNamedAndRemoveUntil(
+            //         context, '/LoginScreen', (route) => false);
+            //   } else {
+            //
+            //    showHHMsg("Mobile Number Already Exist !", "");
+            //     pr.hide();
+            //   }
+            // }, onError: (e) {
+            //   pr.hide();
+            //   showHHMsg("Try Again.", "");
+            // });
           }
+          //===========================
         } on SocketException catch (_) {
           showHHMsg("No Internet Connection.", "");
         }
