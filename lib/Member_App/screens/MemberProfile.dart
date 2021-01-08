@@ -9,7 +9,6 @@ import 'package:smart_society_new/Member_App/screens/DirectoryProfileVehicle.dar
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 
-
 class MemberProfile extends StatefulWidget {
   var MemberData;
 
@@ -66,6 +65,7 @@ class _MemberProfileState extends State<MemberProfile> {
       MemberId = widget.MemberData["Id"].toString();
     });
   }
+
   GetMyvehicleData() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -101,6 +101,7 @@ class _MemberProfileState extends State<MemberProfile> {
       showHHMsg("No Internet Connection.", "");
     }
   }
+
   showHHMsg(String title, String msg) {
     showDialog(
       context: context,
@@ -120,23 +121,23 @@ class _MemberProfileState extends State<MemberProfile> {
       },
     );
   }
+
   _getLocaldata1() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      SocietyIdF =widget.MemberData["SocietyId"].toString();
+      SocietyIdF = widget.MemberData["SocietyId"].toString();
       MemberIdF = widget.MemberData["Id"].toString();
     });
 
     if (widget.MemberData["ParentId"].toString() == "null" ||
         widget.MemberData["ParentId"].toString() == "")
-
       setState(() {
         ParentIdF = "0";
       });
     else
       setState(() {
-        ParentIdF =widget.MemberData["ParentId"].toString();
+        ParentIdF = widget.MemberData["ParentId"].toString();
       });
   }
 
@@ -218,7 +219,8 @@ class _MemberProfileState extends State<MemberProfile> {
                         height: 40,
                         width: MediaQuery.of(context).size.width,
                         child: Center(
-                            child: Text("Vehicles :  "+VehicleData.length.toString(),
+                            child: Text(
+                                "Vehicles :  " + VehicleData.length.toString(),
                                 style: TextStyle(color: Colors.white))),
                       ),
                     ),
@@ -246,7 +248,8 @@ class _MemberProfileState extends State<MemberProfile> {
                         height: 40,
                         width: MediaQuery.of(context).size.width,
                         child: Center(
-                            child: Text("Members :  "+FmemberData.length.toString(),
+                            child: Text(
+                                "Members :  " + FmemberData.length.toString(),
                                 style: TextStyle(color: Colors.white))),
                       ),
                     ),

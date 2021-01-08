@@ -313,7 +313,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, "/RegistrationDC");
+                  // Navigator.pushNamed(context, "/RegistrationDC");
+                  Navigator.pushNamed(context, "/DashBoard1");
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 15, right: 15),

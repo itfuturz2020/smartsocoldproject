@@ -35,7 +35,10 @@ class Session {
   static const String ProfileUpdateFlag = "ProfileUpdateFlag";
 
   static const String EventId = "EventId";
+  static const String digital_Id = "digital_Id";
   static const String IsVerified = "is_verified";
+  static const String forFirstTime = "forFirstTime";
+
 }
 
 Map<int, Color> appprimarycolors = {

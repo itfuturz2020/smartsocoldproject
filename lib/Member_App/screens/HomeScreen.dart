@@ -22,6 +22,7 @@ import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/constant.dart';
 import 'package:smart_society_new/Member_App/screens/AdDetailPage.dart';
+import 'package:smart_society_new/Member_App/screens/BannerScreen.dart';
 import 'package:smart_society_new/Member_App/screens/SOSDailog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         //pr.show();
         setState(() {
-          isLoading=true;
+          isLoading = true;
         });
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var data = {
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Services.AddServiceReview(data).then((data) async {
           //pr.hide();
           setState(() {
-            isLoading=false;
+            isLoading = false;
           });
 
           if (data.Data != "0" && data.IsSuccess == true) {
@@ -143,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }, onError: (e) {
           //pr.hide();
           setState(() {
-            isLoading=false;
+            isLoading = false;
           });
           showMsg("Try Again.");
         });
@@ -152,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } on SocketException catch (_) {
       //pr.hide();
       setState(() {
-        isLoading=false;
+        isLoading = false;
       });
       showMsg("No Internet Connection.");
     }
@@ -536,7 +537,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     textColor: Colors.white,
                     fontSize: 16.0);
               } else {
-                Navigator.pushReplacementNamed(context, '/${_allMenuList[index].IconName}');
+                Navigator.pushReplacementNamed(
+                    context, '/${_allMenuList[index].IconName}');
               }
             },
             child: Container(
@@ -1079,66 +1081,79 @@ class _HomeScreenState extends State<HomeScreen> {
             : Column(
                 children: <Widget>[
                   _advertisementData.length > 0
-                      ? Stack(
-                          alignment: Alignment.bottomCenter,
-                          children: <Widget>[
-                            CarouselSlider(
-                              height: 180,
-                              viewportFraction: 1.0,
-                              autoPlayAnimationDuration:
-                                  Duration(milliseconds: 1000),
-                              reverse: false,
-                              autoPlayCurve: Curves.fastOutSlowIn,
-                              autoPlay: true,
-                              onPageChanged: (index) {
-                                setState(() {
-                                  _current = index;
-                                });
-                              },
-                              items: _advertisementData.map((i) {
-                                return Builder(builder: (BuildContext context) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AdDetailPage(
-                                            i,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: Image.network(
-                                            Image_Url + i["Image"],
-                                            fit: BoxFit.fill)),
-                                  );
-                                });
-                              }).toList(),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: map<Widget>(
-                                _advertisementData,
-                                (index, url) {
-                                  return Container(
-                                    width: 7.0,
-                                    height: 7.0,
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 2.0),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5)),
-                                        color: _current == index
-                                            ? Colors.white
-                                            : Colors.grey),
-                                  );
-                                },
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BannerScreen(
+                                  bannerData: _advertisementData,
+                                ),
                               ),
-                            ),
-                          ],
+                            );
+                          },
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: <Widget>[
+                              CarouselSlider(
+                                height: 180,
+                                viewportFraction: 1.0,
+                                autoPlayAnimationDuration:
+                                    Duration(milliseconds: 1000),
+                                reverse: false,
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                autoPlay: true,
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    _current = index;
+                                  });
+                                },
+                                items: _advertisementData.map((i) {
+                                  return Builder(
+                                      builder: (BuildContext context) {
+                                    return GestureDetector(
+                                      // onTap: () {
+                                      //   Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //       builder: (context) => AdDetailPage(
+                                      //         i,
+                                      //       ),
+                                      //     ),
+                                      //   );
+                                      // },
+                                      child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: Image.network(
+                                              Image_Url + i["Image"],
+                                              fit: BoxFit.fill)),
+                                    );
+                                  });
+                                }).toList(),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: map<Widget>(
+                                  _advertisementData,
+                                  (index, url) {
+                                    return Container(
+                                      width: 7.0,
+                                      height: 7.0,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 2.0),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5)),
+                                          color: _current == index
+                                              ? Colors.white
+                                              : Colors.grey),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         )
                       : Container(),
                   Padding(padding: EdgeInsets.all(4.0)),
@@ -1171,71 +1186,84 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Padding(padding: EdgeInsets.all(8.0)),
                           _advertisementData.length > 0
-                              ? Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: <Widget>[
-                                    CarouselSlider(
-                                      height: 180,
-                                      viewportFraction: 1.0,
-                                      autoPlayAnimationDuration:
-                                          Duration(milliseconds: 1000),
-                                      reverse: false,
-                                      autoPlayCurve: Curves.fastOutSlowIn,
-                                      autoPlay: true,
-                                      onPageChanged: (index) {
-                                        setState(() {
-                                          _current = index;
-                                        });
-                                      },
-                                      items: _advertisementData.map((i) {
-                                        return Builder(
-                                            builder: (BuildContext context) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AdDetailPage(
-                                                    i,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Image.network(
-                                                    Image_Url + i["Image"],
-                                                    fit: BoxFit.fill)),
-                                          );
-                                        });
-                                      }).toList(),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: map<Widget>(
-                                        _advertisementData,
-                                        (index, url) {
-                                          return Container(
-                                            width: 7.0,
-                                            height: 7.0,
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 10.0,
-                                                horizontal: 2.0),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5)),
-                                                color: _current == index
-                                                    ? Colors.white
-                                                    : Colors.grey),
-                                          );
-                                        },
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BannerScreen(
+                                          bannerData: _advertisementData,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    );
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: <Widget>[
+                                      CarouselSlider(
+                                        height: 180,
+                                        viewportFraction: 1.0,
+                                        autoPlayAnimationDuration:
+                                            Duration(milliseconds: 1000),
+                                        reverse: false,
+                                        autoPlayCurve: Curves.fastOutSlowIn,
+                                        autoPlay: true,
+                                        onPageChanged: (index) {
+                                          setState(() {
+                                            _current = index;
+                                          });
+                                        },
+                                        items: _advertisementData.map((i) {
+                                          return Builder(
+                                              builder: (BuildContext context) {
+                                            return GestureDetector(
+                                              // onTap: () {
+                                              //   Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           AdDetailPage(
+                                              //         i,
+                                              //       ),
+                                              //     ),
+                                              //   );
+                                              // },
+                                              child: Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child: Image.network(
+                                                      Image_Url + i["Image"],
+                                                      fit: BoxFit.fill)),
+                                            );
+                                          });
+                                        }).toList(),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: map<Widget>(
+                                          _advertisementData,
+                                          (index, url) {
+                                            return Container(
+                                              width: 7.0,
+                                              height: 7.0,
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: 10.0,
+                                                  horizontal: 2.0),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  color: _current == index
+                                                      ? Colors.white
+                                                      : Colors.grey),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 )
                               : Container(),
                         ],
@@ -1430,7 +1458,7 @@ class _ContinueState extends State<Continue> {
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(
                   context, "/HomeScreen", (Route<dynamic> route) => false);
-             // Navigator.pop(context);
+              // Navigator.pop(context);
             },
             child: Center(
               child: Padding(

@@ -418,8 +418,9 @@ class _AdDetailPageState extends State<AdDetailPage> {
                         ),*/
                         GestureDetector(
                           onTap: () {
-                            Share.share(
-                                'Check out this exclusive AD \n'+"${cnst.Image_Url}" + widget.data["Image"]);
+                            Share.share('Check out this exclusive AD \n' +
+                                "${cnst.Image_Url}" +
+                                widget.data["Image"]);
                           },
                           child: Icon(
                             Icons.share,
@@ -584,8 +585,9 @@ class _AdDetailPageState extends State<AdDetailPage> {
                               onTap: () {
                                 /* String withappurl = withrefercode.replaceAll("#appurl", cnst.playstoreUrl);
                                 Share.share(withappurl);*/
-                                Share.share(
-                                    'Check out this exclusive AD \n'+"${cnst.Image_Url}" + widget.data["Image"]);
+                                Share.share('Check out this exclusive AD \n' +
+                                    "${cnst.Image_Url}" +
+                                    widget.data["Image"]);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -664,11 +666,11 @@ class _AdDetailPageState extends State<AdDetailPage> {
                               widget.data["AdvertiserAddress"] == null ||
                                       widget.data["AdvertiserAddress"] == ""
                                   ? Text(
-                                    " ",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                  )
+                                      " ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    )
                                   : Expanded(
                                       child: Text(
                                         "${widget.data["AdvertiserAddress"]}",
