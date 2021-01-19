@@ -44,20 +44,20 @@ class _AddNoticeState extends State<AddNotice> {
     super.initState();
     getLocalData();
     setData();
-    pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
-    pr.style(
-        message: "Please Wait",
-        borderRadius: 10.0,
-        progressWidget: Container(
-          padding: EdgeInsets.all(15),
-          child: CircularProgressIndicator(
-              //backgroundColor: cnst.appPrimaryMaterialColor,
-              ),
-        ),
-        elevation: 10.0,
-        insetAnimCurve: Curves.easeInOut,
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 17.0, fontWeight: FontWeight.w600));
+      pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
+      pr.style(
+          message: "Please Wait",
+          borderRadius: 10.0,
+          progressWidget: Container(
+            padding: EdgeInsets.all(15),
+            child: CircularProgressIndicator(
+                //backgroundColor: cnst.appPrimaryMaterialColor,
+                ),
+          ),
+          elevation: 10.0,
+          insetAnimCurve: Curves.easeInOut,
+          messageTextStyle: TextStyle(
+              color: Colors.black, fontSize: 17.0, fontWeight: FontWeight.w600));
     _dateTime = DateTime.now();
   }
 

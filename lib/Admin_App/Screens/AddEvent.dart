@@ -1,7 +1,15 @@
+import 'dart:io';
+
+import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
-import 'package:smart_society_new/Admin_App/Common/Constants.dart' as cnst;
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Admin_App/Common/Constants.dart';
+import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Admin_App/Common/Services.dart';
 
 class AddEvent extends StatefulWidget {
   @override
@@ -11,12 +19,36 @@ class AddEvent extends StatefulWidget {
 class _AddEventState extends State<AddEvent> {
   TextEditingController txtTitle = TextEditingController();
   TextEditingController txtDesc = TextEditingController();
+  TextEditingController txtAmount = TextEditingController();
+
+
   DateTime _dateTime = DateTime.now();
+  bool isLoading = false;
+  String SocietyId, MemberId, ParentId;
+  ProgressDialog pr;
 
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
   String _format = 'yyyy-MMMM-dd';
 
   List selectedWing = [];
+
+  @override
+  void initState() {
+    pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
+    pr.style(message: 'Please Wait');
+    _getLocaldata();
+  }
+
+  _getLocaldata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SocietyId = prefs.getString(constant.Session.SocietyId);
+    MemberId = prefs.getString(constant.Session.Member_Id);
+    if (prefs.getString(constant.Session.ParentId) == "null" ||
+        prefs.getString(constant.Session.ParentId) == "")
+      ParentId = "0";
+    else
+      ParentId = prefs.getString(constant.Session.ParentId);
+  }
 
   void _showDatePicker() {
     DatePicker.showDatePicker(
@@ -36,6 +68,93 @@ class _AddEventState extends State<AddEvent> {
       },
     );
   }
+
+  showMsg(String title, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String wings = "";
+
+  AddEventDetails() async {
+    try {
+      for(int i=0;i<selectedWing.length;i++){
+        if(i == selectedWing.length-1){
+          wings +=selectedWing[i];
+        }
+        else{
+        wings += selectedWing[i] + ",";
+      }}
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+        var data = {
+          "SocietyId" : SocietyId,
+          "Image": "",
+          "Title" : txtTitle.text,
+          "Date" : _dateTime,
+          "Wings" : wings,
+          "EventType" :options[tag],
+          "Amount" : txtAmount.text,
+        };
+        Services.AddEventDetails(data).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data.IsSuccess) {
+            setState(() {
+              Fluttertoast.showToast(
+                  msg: "${data.Message}",
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.TOP,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white);
+              Navigator.pushReplacementNamed(context, '/EventsAdmin');
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+            Fluttertoast.showToast(
+                msg: "${data.Message}",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.TOP,
+                backgroundColor: Colors.red,
+                textColor: Colors.white);
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.", "");
+    }
+  }
+
+  int tag = -1;
+  List<String> options = [
+    'Free', 'Paid',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -151,11 +270,62 @@ class _AddEventState extends State<AddEvent> {
                     ),
                   ),
                 ),
+                ChipsChoice<int>.single(
+                  value: tag,
+                  onChanged: (val) {
+                    setState(() => tag = val);
+                    print(tag);
+                  },
+                  choiceItems: C2Choice.listFrom<int, String>(
+                    source: options,
+                    value: (i, v) => i,
+                    label: (i, v) => v,
+                  ),
+                ),
+                tag == 1 ?
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: TextFormField(
+                    controller: txtAmount,
+                    scrollPadding: EdgeInsets.all(0),
+                    decoration: InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.black),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10))),
+                        prefixIcon: Icon(
+                          Icons.description,
+                        ),
+                        hintText: "Enter Amount"),
+                    keyboardType: TextInputType.number,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ) : Container(),
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: RaisedButton(
-                    onPressed: () {},
-                    color: cnst.appPrimaryMaterialColor[700],
+                    onPressed: () {
+                      if(tag==-1){
+                        Fluttertoast.showToast(
+                            msg: "Please select event type",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.TOP,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white);
+                      }
+                      else if(txtTitle =="" || txtAmount == "" || selectedWing.length == 0){
+                        Fluttertoast.showToast(
+                            msg: "Please Fill All the Details",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.TOP,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white);
+                      }
+                      else{
+                        AddEventDetails();
+                      }
+                    },
+                    color: appPrimaryMaterialColor[700],
                     textColor: Colors.white,
                     shape: StadiumBorder(),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
