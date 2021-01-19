@@ -1,14 +1,102 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Admin_App/Common/Constants.dart';
+import 'package:smart_society_new/Admin_App/Common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 
 class EventDetail extends StatefulWidget {
+  Map EventsData={};
+  EventDetail({this.EventsData});
   @override
   _EventDetailState createState() => _EventDetailState();
 }
 
 class _EventDetailState extends State<EventDetail> {
-  String dropdownValue;
+  String dropdownValue,MemberId="";
+  ProgressDialog pr;
+
+  @override
+  void initState() {
+    _getLocaldata();
+    pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
+    pr.style(
+        message: "Please Wait",
+        borderRadius: 10.0,
+        progressWidget: Container(
+          padding: EdgeInsets.all(15),
+          child: CircularProgressIndicator(
+            //backgroundColor: cnst.appPrimaryMaterialColor,
+          ),
+        ),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 17.0, fontWeight: FontWeight.w600));
+    super.initState();
+  }
+
+  _getLocaldata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    MemberId = prefs.getString(constant.Session.Member_Id);
+  }
+
+  showHHMsg(String title, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _RegisterForEvent() async {
+    print(dropdownValue);
+        try {
+          final result = await InternetAddress.lookup('google.com');
+          if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+            pr.show();
+            Services.EventRegistration(MemberId,dropdownValue,widget.EventsData["Id"].toString()).then((data) async {
+              pr.hide();
+              if (data.Data != "0" && data.IsSuccess == true) {
+                Fluttertoast.showToast(
+                    msg: "${data.Message}",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.TOP,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white);
+                Navigator.pushReplacementNamed(context, "/Events");
+              } else {
+                showHHMsg("${data.Message}", "");
+                pr.hide();
+              }
+            }, onError: (e) {
+              pr.hide();
+              showHHMsg("Try Again.", "");
+            });
+          } else {
+            pr.hide();
+            showHHMsg("No Internet Connection.", "");
+          }
+        } on SocketException catch (_) {
+          showHHMsg("No Internet Connection.", "");
+        }
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +118,7 @@ class _EventDetailState extends State<EventDetail> {
         children: <Widget>[
           ListTile(
             title: Text(
-              "Annual Party In Society",
+              "${widget.EventsData["Title"]}",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
@@ -45,7 +133,7 @@ class _EventDetailState extends State<EventDetail> {
           ),
           ListTile(
             title: Text(
-              "19-02-2020",
+              "${widget.EventsData["Date"]}".split("T")[0],
               style: TextStyle(
                 fontWeight: FontWeight.w600,
               ),
@@ -58,7 +146,7 @@ class _EventDetailState extends State<EventDetail> {
           ),
           ListTile(
             title: Text(
-              "Dec-2020 Annual Party In Society\nAll are Requested To Give Confirmation For Comming OR Not",
+              "All are Requested To Give Confirmation For Coming OR Not",
               style: TextStyle(
                 color: Colors.grey[700],
               ),
@@ -155,7 +243,19 @@ class _EventDetailState extends State<EventDetail> {
                         ),
                         padding: EdgeInsets.only(
                             left: 8, right: 8, top: 5, bottom: 5),
-                        onPressed: () {},
+                        onPressed: () {
+                          if(dropdownValue==null){
+                            Fluttertoast.showToast(
+                                msg: "Please select number of member",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.TOP,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white);
+                          }
+                          else{
+                            _RegisterForEvent();
+                          }
+                        },
                       ),
                       SizedBox(
                         width: 20,
@@ -168,7 +268,10 @@ class _EventDetailState extends State<EventDetail> {
                         ),
                         padding: EdgeInsets.only(
                             left: 8, right: 8, top: 5, bottom: 5),
-                        onPressed: () {},
+                        onPressed: () {
+                          dropdownValue = "0";
+                          _RegisterForEvent();
+                        },
                       )
                     ],
                   ),

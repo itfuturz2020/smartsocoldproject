@@ -3,6 +3,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:smart_society_new/Admin_App/Common/Constants.dart' as cnst;
 
 class EventDetailAdmin extends StatefulWidget {
+  Map EventsData = {};
+  EventDetailAdmin({this.EventsData});
   @override
   _EventDetailAdminState createState() => _EventDetailAdminState();
 }

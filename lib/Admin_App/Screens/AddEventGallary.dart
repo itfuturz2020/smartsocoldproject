@@ -96,7 +96,6 @@ class _AddEventGallaryState extends State<AddEventGallary> {
           print("final Data" + data.toString());
 
           formData = new FormData.fromMap(data);
-
           Services.AddEventGallary(formData).then((data) async {
             if (data.Data != "0" && data.IsSuccess == true) {
               setState(() {
