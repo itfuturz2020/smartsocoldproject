@@ -158,6 +158,7 @@ class _MyAppState extends State<MyApp> {
       //when app is open
       onMessage: (Map<String, dynamic> message) async {
         Get.to(NotificationPopup(message));
+        print("----");
         if (message["data"]["Type"] == 'Visitor') {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
