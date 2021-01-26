@@ -32,7 +32,7 @@ dependencies:
   progress_dialog: ^1.2.0
   shared_preferences: ^0.5.3+4
   xml2json: ^4.0.0
-  share: ^0.6.4+3
+#  share: ^0.6.4+3
   flutter_native_image: ^0.0.4
   url_launcher: ^5.2.5
   esys_flutter_share: ^1.0.2
@@ -73,6 +73,17 @@ dependencies:
   image_picker: ^0.6.7+2
   intro_slider: ^2.3.3
   bidirectional_scroll_view: ^0.1.1
+  multi_image_picker: ^4.7.14
+  share: ^0.6.5+4
+  geocoder: ^0.2.1
+  flutter_slidable: ^0.5.4
+  simple_animations: ^1.2.0
+#  permission_handler: ^5.0.1+1
+  path_provider: ^1.2.0
+
+
+
+
 
 
 dev_dependencies:
@@ -237,6 +248,7 @@ flutter:
     - images/thankyou.png
     - images/correctsign.png
     - images/video_call.png
+    - images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

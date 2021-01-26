@@ -235,6 +235,7 @@ class _SocietyRulesState extends State<SocietyRules> {
                 GestureDetector(
                   onTap: () {
                     var array = RulesData[index]["File"].split(".");
+                    print("=============");
                     print(array[1].toString());
                     shareFile("${RulesData[index]["File"]}", array[1]);
                   },

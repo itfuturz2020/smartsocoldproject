@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:smart_society_new/Admin_App/Common/Constants.dart' as cnst;
 
 class AddAmenitiesScreen extends StatefulWidget {
@@ -14,7 +15,87 @@ class _AddAmenitiesScreenState extends State<AddAmenitiesScreen> {
   TextEditingController txtDesc = TextEditingController();
   TextEditingController txtTime1 = TextEditingController();
   TextEditingController txtTime2 = TextEditingController();
+  TextEditingController freePaid = TextEditingController();
+  TextEditingController amount = TextEditingController();
   File _Image;
+  List<Asset> images = List<Asset>();
+
+  String _error = 'No Error Dectected';
+
+  Widget buildGridView() {
+    return Container(
+      height: 200,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: cnst.appPrimaryMaterialColor[400], width: 1),
+        borderRadius: BorderRadius.all(Radius.circular(0.0)),
+        // boxShadow: [
+        //   BoxShadow(
+        //       color: cnst.appPrimaryMaterialColor.withOpacity(0.2),
+        //       blurRadius: 2.0,
+        //       spreadRadius: 2.0,
+        //       offset: Offset(3.0, 5.0))
+        // ]
+      ),
+      child: images.length == 0
+          ? Center(
+              child: Text(
+                "Select Images",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            )
+          : ListView(
+              scrollDirection: Axis.horizontal,
+              children: List.generate(images.length, (index) {
+                Asset asset = images[index];
+                return AssetThumb(
+                  asset: asset,
+                  width: 300,
+                  height: 300,
+                );
+              }),
+            ),
+    );
+  }
+
+  @override
+  void initState() {
+    print("=============");
+    print(images);
+  }
+
+  Future<void> loadAssets() async {
+    List<Asset> resultList = List<Asset>();
+    String error = 'No Error Dectected';
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 300,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      _error = error;
+    });
+  }
 
   Future getFromCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -144,9 +225,9 @@ class _AddAmenitiesScreenState extends State<AddAmenitiesScreen> {
                 Navigator.pushReplacementNamed(context, "/getAmenitiesScreen");
               }),
         ),
-        body: Container(
-          padding: EdgeInsets.only(left: 15, right: 15, top: 20),
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(left: 15, right: 15, top: 20),
             child: Column(
               children: <Widget>[
                 Container(
@@ -189,6 +270,42 @@ class _AddAmenitiesScreenState extends State<AddAmenitiesScreen> {
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
+                    controller: freePaid,
+                    scrollPadding: EdgeInsets.all(0),
+                    decoration: InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.black),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        prefixIcon: Icon(
+                          Icons.data_usage,
+                        ),
+                        hintText: "Free or Paid"),
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: TextFormField(
+                    controller: amount,
+                    scrollPadding: EdgeInsets.all(0),
+                    decoration: InputDecoration(
+                        border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.black),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        prefixIcon: Icon(
+                          Icons.money,
+                        ),
+                        hintText: "Amount"),
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: TextFormField(
                     controller: txtTime1,
                     scrollPadding: EdgeInsets.all(0),
                     decoration: InputDecoration(
@@ -217,36 +334,36 @@ class _AddAmenitiesScreenState extends State<AddAmenitiesScreen> {
                         prefixIcon: Icon(
                           Icons.timer_sharp,
                         ),
-                        hintText: "To time - To time"),
+                        hintText: "From time - To time"),
                     keyboardType: TextInputType.text,
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
 
-                Padding(
-                  padding: const EdgeInsets.only(top: 25.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.17,
-                    width: MediaQuery.of(context).size.height * 0.17,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: cnst.appPrimaryMaterialColor[400], width: 1),
-                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                        boxShadow: [
-                          BoxShadow(
-                              color:
-                                  cnst.appPrimaryMaterialColor.withOpacity(0.2),
-                              blurRadius: 2.0,
-                              spreadRadius: 2.0,
-                              offset: Offset(3.0, 5.0))
-                        ]),
-                    child:
-                    _Image != null
-                        ? Image.file(_Image)
-                        : Center(child: Text("Select Image")),
-                  ),
-                ),
-
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 25.0),
+                //   child: Container(
+                //     height: MediaQuery.of(context).size.height * 0.17,
+                //     width: MediaQuery.of(context).size.height * 0.17,
+                //     decoration: BoxDecoration(
+                //         color: Colors.white,
+                //         border: Border.all(
+                //             color: cnst.appPrimaryMaterialColor[400], width: 1),
+                //         borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                //         boxShadow: [
+                //           BoxShadow(
+                //               color:
+                //                   cnst.appPrimaryMaterialColor.withOpacity(0.2),
+                //               blurRadius: 2.0,
+                //               spreadRadius: 2.0,
+                //               offset: Offset(3.0, 5.0))
+                //         ]),
+                //     child: _Image != null
+                //         ? Image.file(_Image)
+                //         : Center(child: Text("Select Image")),
+                //   ),
+                // ),
+                buildGridView(),
                 SizedBox(
                   height: MediaQuery.of(context).padding.top + 5,
                 ),
@@ -274,9 +391,9 @@ class _AddAmenitiesScreenState extends State<AddAmenitiesScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: RaisedButton(
-                    onPressed: () {
-                      _settingModalBottomSheet();
-                    },
+                    onPressed:
+                        // _settingModalBottomSheet();
+                        loadAssets,
                     color: cnst.appPrimaryMaterialColor[700],
                     textColor: Colors.white,
                     shape: StadiumBorder(),
@@ -302,8 +419,9 @@ class _AddAmenitiesScreenState extends State<AddAmenitiesScreen> {
                     ),
                   ),
                 ),
+
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
                   child: RaisedButton(
                     onPressed: () {},
                     color: cnst.appPrimaryMaterialColor[700],

@@ -13,6 +13,20 @@ import 'package:smart_society_new/Admin_App/Screens/EventsAdmin.dart';
 import 'package:smart_society_new/Admin_App/Screens/RulesAndRegulations.dart';
 import 'package:smart_society_new/Admin_App/Screens/VisitorByWing.dart';
 import 'package:smart_society_new/Admin_App/Screens/getAmenitiesScreen.dart';
+import 'package:smart_society_new/DigitalScreens/AddCard.dart';
+import 'package:smart_society_new/DigitalScreens/AddOffer.dart';
+import 'package:smart_society_new/DigitalScreens/AddService.dart';
+import 'package:smart_society_new/DigitalScreens/ChangeTheme.dart';
+import 'package:smart_society_new/DigitalScreens/DashBoard.dart';
+import 'package:smart_society_new/DigitalScreens/EditOffer.dart';
+import 'package:smart_society_new/DigitalScreens/EditService.dart';
+import 'package:smart_society_new/DigitalScreens/Home.dart';
+import 'package:smart_society_new/DigitalScreens/More.dart';
+import 'package:smart_society_new/DigitalScreens/OfferDetail.dart';
+import 'package:smart_society_new/DigitalScreens/Offers.dart';
+import 'package:smart_society_new/DigitalScreens/ProfileDetail.dart';
+import 'package:smart_society_new/DigitalScreens/Services.dart';
+import 'package:smart_society_new/DigitalScreens/ShareHistory.dart';
 import 'package:smart_society_new/IntroScreen.dart';
 import 'package:smart_society_new/Member_App/DigitalCard/Screens/RegistrationDC.dart';
 import 'package:smart_society_new/Member_App/Mall/Screens/Cart.dart';
@@ -25,6 +39,7 @@ import 'package:smart_society_new/Member_App/screens/AdvertisementCreate.dart';
 import 'package:smart_society_new/Member_App/screens/AdvertisementManage.dart';
 import 'package:smart_society_new/Member_App/screens/Amenities.dart';
 import 'package:smart_society_new/Member_App/screens/BankDetails.dart';
+import 'package:smart_society_new/Member_App/screens/BannerScreen.dart';
 import 'package:smart_society_new/Member_App/screens/Bills.dart';
 import 'package:smart_society_new/Member_App/screens/BuildingInfo.dart';
 import 'package:smart_society_new/Member_App/screens/Committees.dart';
@@ -144,6 +159,7 @@ class _MyAppState extends State<MyApp> {
       //when app is open
       onMessage: (Map<String, dynamic> message) async {
         Get.to(NotificationPopup(message));
+        print("----");
         if (message["data"]["Type"] == 'Visitor') {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
@@ -258,6 +274,7 @@ class _MyAppState extends State<MyApp> {
         '/EventDetail': (context) => EventDetail(),
         //---------------- Digital Card  -------------------------------
         '/RegistrationDC': (context) => RegistrationDC(),
+
         //----------------  Admin App    -----------------------------
         '/Dashboard': (context) => Dashboard(),
         '/AddNotice': (context) => AddNotice(),
@@ -293,6 +310,22 @@ class _MyAppState extends State<MyApp> {
         '/CreateBuildingScreen': (context) => CreateBuildingScreen(),
         '/CreateBuildingSlider': (context) => CreateBuildingSlider(),
         '/SetupWingScreen': (context) => SetupWingScreen(),
+        '/BannerScreen': (context) => BannerScreen(),
+        //===============digital card screen=============
+        '/AddCard': (context) => AddCard(),
+        '/ChangeTheme': (context) => ChangeTheme(),
+        '/DashBoard1': (context) => DashBoard1(),
+        '/EditOffer': (context) => EditOffer(),
+        '/EditService': (context) => EditService(),
+        '/Home': (context) => Home(),
+        '/More': (context) => More(),
+        '/OfferDetail': (context) => OfferDetail(),
+        '/Offers': (context) => Offers(),
+        '/MemberServices': (context) => MemberServices(),
+        '/ShareHistory': (context) => ShareHistory(),
+        '/ProfileDetail': (context) => ProfileDetail(),
+        '/AddService': (context) => AddService(),
+        '/AddOffer': (context) => AddOffer(),
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => NoRouteScreen(
