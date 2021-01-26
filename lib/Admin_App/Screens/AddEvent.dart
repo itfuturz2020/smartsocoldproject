@@ -21,7 +21,6 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController txtDesc = TextEditingController();
   TextEditingController txtAmount = TextEditingController();
 
-
   DateTime _dateTime = DateTime.now();
   bool isLoading = false;
   String SocietyId, MemberId, ParentId;
@@ -93,26 +92,26 @@ class _AddEventState extends State<AddEvent> {
 
   AddEventDetails() async {
     try {
-      for(int i=0;i<selectedWing.length;i++){
-        if(i == selectedWing.length-1){
-          wings +=selectedWing[i];
+      for (int i = 0; i < selectedWing.length; i++) {
+        if (i == selectedWing.length - 1) {
+          wings += selectedWing[i];
+        } else {
+          wings += selectedWing[i] + ",";
         }
-        else{
-        wings += selectedWing[i] + ",";
-      }}
+      }
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
           isLoading = true;
         });
         var data = {
-          "SocietyId" : SocietyId,
+          "SocietyId": SocietyId,
           "Image": "",
-          "Title" : txtTitle.text,
-          "Date" : _dateTime,
-          "Wings" : wings,
-          "EventType" :options[tag],
-          "Amount" : txtAmount.text,
+          "Title": txtTitle.text,
+          "Date": _dateTime,
+          "Wings": wings,
+          "EventType": options[tag],
+          "Amount": txtAmount.text,
         };
         Services.AddEventDetails(data).then((data) async {
           setState(() {
@@ -153,7 +152,8 @@ class _AddEventState extends State<AddEvent> {
 
   int tag = -1;
   List<String> options = [
-    'Free', 'Paid',
+    'Free',
+    'Paid',
   ];
 
   @override
@@ -270,58 +270,60 @@ class _AddEventState extends State<AddEvent> {
                     ),
                   ),
                 ),
-                ChipsChoice<int>.single(
-                  value: tag,
-                  onChanged: (val) {
-                    setState(() => tag = val);
-                    print(tag);
-                  },
-                  choiceItems: C2Choice.listFrom<int, String>(
-                    source: options,
-                    value: (i, v) => i,
-                    label: (i, v) => v,
-                  ),
-                ),
-                tag == 1 ?
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  child: TextFormField(
-                    controller: txtAmount,
-                    scrollPadding: EdgeInsets.all(0),
-                    decoration: InputDecoration(
-                        border: new OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.black),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10))),
-                        prefixIcon: Icon(
-                          Icons.description,
+                // ChipsChoice<int>.single(
+                //   value: tag,
+                //   onChanged: (val) {
+                //     setState(() => tag = val);
+                //     print(tag);
+                //   },
+                //   choiceItems: C2Choice.listFrom<int, String>(
+                //     source: options,
+                //     value: (i, v) => i,
+                //     label: (i, v) => v,
+                //   ),
+                // ),
+                tag == 1
+                    ? Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: TextFormField(
+                          controller: txtAmount,
+                          scrollPadding: EdgeInsets.all(0),
+                          decoration: InputDecoration(
+                              border: new OutlineInputBorder(
+                                  borderSide:
+                                      new BorderSide(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              prefixIcon: Icon(
+                                Icons.description,
+                              ),
+                              hintText: "Enter Amount"),
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: Colors.black),
                         ),
-                        hintText: "Enter Amount"),
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ) : Container(),
+                      )
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: RaisedButton(
                     onPressed: () {
-                      if(tag==-1){
+                      if (tag == -1) {
                         Fluttertoast.showToast(
                             msg: "Please select event type",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.TOP,
                             backgroundColor: Colors.red,
                             textColor: Colors.white);
-                      }
-                      else if(txtTitle =="" || txtAmount == "" || selectedWing.length == 0){
+                      } else if (txtTitle == "" ||
+                          txtAmount == "" ||
+                          selectedWing.length == 0) {
                         Fluttertoast.showToast(
                             msg: "Please Fill All the Details",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.TOP,
                             backgroundColor: Colors.red,
                             textColor: Colors.white);
-                      }
-                      else{
+                      } else {
                         AddEventDetails();
                       }
                     },
