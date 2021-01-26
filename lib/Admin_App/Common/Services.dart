@@ -133,6 +133,31 @@ class Services {
     }
   }
 
+  static Future<List> getEventsData(String societyid) async {
+    String url = API_URL + 'GetEventDetails?societyid=$societyid';
+    print("getEventsData URL: " + url);
+    try {
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        List list = [];
+        print("getEventsData Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("getEventsData Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
   static Future<SaveDataClass> DeleteNotice(String noticeID) async {
     String url = API_URL + 'DeleteNotice?id=$noticeID';
     print("DeleteNotice URL: " + url);
@@ -154,6 +179,31 @@ class Services {
       }
     } catch (e) {
       print("DeleteNotice Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
+  static Future<SaveDataClass> EventRegistration(String memberId,String noofpersons,String eventid) async {
+    String url = API_URL + 'RegisterForEvent?memberId=$memberId&noofPerson=$noofpersons&eventid=$eventid';
+    print("EventRegistration URL: " + url);
+    try {
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        SaveDataClass saveData = new SaveDataClass(
+            Message: 'No Data', IsSuccess: false, IsRecord: false, Data: "");
+        print("EventRegistration Response: " + response.data.toString());
+        var responseData = response.data;
+        saveData.Message = responseData["Message"];
+        saveData.IsSuccess = responseData["IsSuccess"];
+        saveData.Data = responseData["Data"].toString();
+
+        return saveData;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("EventRegistration Erorr : " + e.toString());
       throw Exception(e);
     }
   }
@@ -693,6 +743,33 @@ class Services {
       } else {
         print("Server Error");
         throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("AddEvent Error ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<SaveDataClass> AddEventDetails(body) async {
+    print(body.toString());
+    String url = API_URL + 'AddEventDetails';
+    print("AddEventDetails : " + url);
+    dio.options.contentType = Headers.formUrlEncodedContentType;
+    dio.options.responseType = ResponseType.json;
+    try {
+      final response = await dio.post(url, data: body);
+      if (response.statusCode == 200) {
+        SaveDataClass saveData = new SaveDataClass(
+            Message: 'No Data', IsSuccess: false, IsRecord: false, Data: "");
+        print("DeleteNotice Response: " + response.data.toString());
+        var responseData = response.data;
+        saveData.Message = responseData["Message"];
+        saveData.IsSuccess = responseData["IsSuccess"];
+        saveData.Data = responseData["Data"].toString();
+
+        return saveData;
+      } else {
+        throw Exception("Something Went Wrong");
       }
     } catch (e) {
       print("AddEvent Error ${e.toString()}");

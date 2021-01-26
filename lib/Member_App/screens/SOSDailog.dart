@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:circular_check_box/circular_check_box.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
@@ -13,18 +16,24 @@ class SOSDailog extends StatefulWidget {
 }
 
 class _SOSDailogState extends State<SOSDailog> {
-  String _selected = "Watchman";
+  String _selected = "Member";
   String phoneNumber1;
 
   TextEditingController txtMsg = new TextEditingController();
-  ProgressDialog pr;
   List FmemberData = new List();
+  List WatchmenData = new List();
   bool isLoading = false;
   String SocietyId, MemberId, ParentId;
+  ProgressDialog pr;
+  FormData formData;
 
 
   @override
   void initState() {
+    isSelectedWatchmen.clear();
+    WatchmenData.clear();
+    FmemberData.clear();
+    isSelectedFamilyMember.clear();
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(message: 'Please Wait');
     GetFamilyDetail();
@@ -76,6 +85,155 @@ class _SOSDailogState extends State<SOSDailog> {
       showHHMsg("No Internet Connection.", "");
     }
   }
+
+  GetWatchmenDetail() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+        Services.GetWatchmen(SocietyId, "2").then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              WatchmenData = data;
+              //phoneNumber1 = data[0]["ContactNo"];
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
+  SendsosData(String type) async {
+    try {
+      String fcmtoken = "",titles="";
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        if(type == "Staff"){
+          for(int i=0;i<WatchmenData.length;i++){
+            if(i==WatchmenData.length-1 && isSelectedWatchmen[i]){
+              fcmtoken +=WatchmenData[i]["DeviceToken"];
+            }
+            else if(isSelectedWatchmen[i] && i!=WatchmenData.length-1){
+              fcmtoken+=WatchmenData[i]["DeviceToken"] + ",";
+            }
+          }
+          if(!isSelectedWatchmen.contains(true)){
+            Fluttertoast.showToast(
+              msg: "Please select atleast one field",
+              backgroundColor: Colors.green,
+              gravity: ToastGravity.TOP,
+            );
+          }
+          else{
+            setState(() {
+              isLoading = true;
+            });
+            print("WatchmenData");
+            print(WatchmenData);
+            for(int i=0;i<WatchmenData.length;i++){
+              if(isSelectedWatchmen[i] && i!=WatchmenData.length-1){
+                titles +=WatchmenData[i]["Name"] + ",";
+              }
+              else if(isSelectedWatchmen[i] && i == WatchmenData.length-1){
+                titles +=WatchmenData[i]["Name"];
+              }
+            }
+          }
+        }
+        else{
+          print("isSelectedFamilyMember");
+          print(isSelectedFamilyMember);
+          for(int i=0;i<FmemberData.length;i++){
+            if(i!=FmemberData.length-1 && isSelectedFamilyMember[i]){
+              fcmtoken +=FmemberData[i]["FcmToken"] + ",";
+            }
+            else if(isSelectedFamilyMember[i] && i == FmemberData.length-1){
+              fcmtoken +=FmemberData[i]["FcmToken"];
+            }
+          }
+          if(!isSelectedFamilyMember.contains(true)){
+            Fluttertoast.showToast(
+              msg: "Please select atleast one field",
+              backgroundColor: Colors.green,
+              gravity: ToastGravity.TOP,
+            );
+          }
+          else{
+            setState(() {
+              isLoading = true;
+            });
+            for(int i=0;i<isSelectedFamilyMember.length;i++){
+              if(isSelectedFamilyMember[i] && i!=isSelectedFamilyMember.length-1){
+                titles +=FmemberData[i]["Name"] + ",";
+              }
+              else if(isSelectedFamilyMember[i] && i == isSelectedFamilyMember.length-1){
+                titles +=FmemberData[i]["Name"];
+              }
+            }
+          }
+        }
+        var data = {
+          "FcmToken" :fcmtoken,
+          "message" : txtMsg.text,
+          "Type" : type,
+          "titles" :titles
+        };
+        formData = new FormData.fromMap(data);
+        print("data");
+        print(data);
+        print("titles");
+        print(titles);
+        if(isSelectedFamilyMember.contains(true) || isSelectedWatchmen.contains(true)){
+          Services.SendNotification(formData).then((data) async {
+            setState(() {
+              isLoading = false;
+            });
+            print("data");
+            print(data["IsSuccess"]);
+            if (data["IsSuccess"] == "true") {
+              print("success");
+              setState(() {
+                Fluttertoast.showToast(
+                  msg: "Notification sent successfully!!!",
+                  backgroundColor: Colors.green,
+                  gravity: ToastGravity.TOP,
+                );
+                Navigator.pushReplacementNamed(context, "/HomeScreen");
+              });
+            } else {
+              setState(() {
+                isLoading = false;
+              });
+            }
+          }, onError: (e) {
+            setState(() {
+              isLoading = false;
+            });
+            showHHMsg("Try Again.", "");
+          });
+        }
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
 
   showHHMsg(String title, String msg) {
     showDialog(
@@ -144,8 +302,15 @@ class _SOSDailogState extends State<SOSDailog> {
       },
     );
   }
+
+  List<bool> isSelectedFamilyMember = [];
+
   Widget _FamilyMember(BuildContext context, int index) {
+    for(int i=0;i<FmemberData.length;i++){
+      isSelectedFamilyMember.add(false);
+    }
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
           child: Column(
@@ -172,10 +337,71 @@ class _SOSDailogState extends State<SOSDailog> {
             ),
             onPressed: () {
               launch(('tel:// ${FmemberData[index]["ContactNo"]}'));
-            })
+            }),
+        CircularCheckBox(
+          value: isSelectedFamilyMember[index],
+          checkColor: Colors.white  ,
+          activeColor: Colors.green,
+          inactiveColor: Colors.purple,
+          disabledColor: Colors.grey ,
+          onChanged: (val) => this.setState(() {
+            isSelectedFamilyMember[index] = val;
+          }) ,
+        ),
       ],
     );
   }
+
+  List<bool> isSelectedWatchmen = [];
+
+  Widget _Watchmen(BuildContext context, int index) {
+    print(WatchmenData.length);
+    for(int i=0;i<WatchmenData.length;i++){
+      isSelectedWatchmen.add(false);
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "${WatchmenData[index]["Name"]}",
+                style: TextStyle(
+                    fontSize: 13,
+                    color: constant.appPrimaryMaterialColor,
+                    fontWeight: FontWeight.w600),
+              ),
+              Text(
+                "${WatchmenData[index]["MobileNo"]}",
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+            icon: Icon(
+              Icons.call,
+              color: Colors.green[700],
+            ),
+            onPressed: () {
+              launch(('tel:// ${WatchmenData[index]["MobileNo"]}'));
+            }),
+        CircularCheckBox(
+            value: isSelectedWatchmen[index],
+            checkColor: Colors.white  ,
+            activeColor: Colors.green,
+            inactiveColor: Colors.purple,
+            disabledColor: Colors.grey ,
+            onChanged: (val) => this.setState(() {
+              isSelectedWatchmen[index] = val;
+            }) ,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -203,6 +429,11 @@ class _SOSDailogState extends State<SOSDailog> {
                 value: 'Watchman',
                 groupValue: _selected,
                 onChanged: (value) {
+                  FmemberData.clear();
+                  txtMsg.clear();
+                  isSelectedFamilyMember.clear();
+                  isSelectedWatchmen.clear();
+                  GetWatchmenDetail();
                   setState(() {
                     _selected = value;
                   });
@@ -218,6 +449,11 @@ class _SOSDailogState extends State<SOSDailog> {
                 value: 'Member',
                 groupValue: _selected,
                 onChanged: (value) {
+                  txtMsg.clear();
+                  WatchmenData.clear();
+                  isSelectedFamilyMember.clear();
+                  isSelectedWatchmen.clear();
+                  GetFamilyDetail();
                   setState(() {
                     _selected = value;
                   });
@@ -269,11 +505,22 @@ class _SOSDailogState extends State<SOSDailog> {
             ),
           )
               : FmemberData.length > 0
-              ? ListView.builder(
-              itemBuilder: _FamilyMember,
-              itemCount: FmemberData.length,
-              shrinkWrap: true)
-              : Container(
+              ? Container(
+            width: MediaQuery.of(context).size.width*0.4,
+                height: 50*double.parse(FmemberData.length.toString()),
+                child: ListView.builder(
+                itemBuilder: _FamilyMember,
+                itemCount: FmemberData.length,
+                shrinkWrap: true,),
+              )
+              : WatchmenData.length > 0 ? Container(
+            width: MediaQuery.of(context).size.width*0.4,
+            height: 52*double.parse(WatchmenData.length.toString()),
+            child: ListView.builder(
+              itemBuilder: _Watchmen,
+              itemCount: WatchmenData.length,
+              shrinkWrap: true,),
+          ):Container(
             child: Center(child: Text("No FamilyMember Added")),
           ),
           SizedBox(
@@ -310,12 +557,29 @@ class _SOSDailogState extends State<SOSDailog> {
                 child: Text("Send",
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                onPressed: () {},
+                onPressed: () {
+                  if(txtMsg.text == ""){
+                    Fluttertoast.showToast(
+                      msg: "Please enter message",
+                      backgroundColor: Colors.green,
+                      gravity: ToastGravity.TOP,
+                    );
+                  }
+                  else{
+                    if(WatchmenData.isNotEmpty){
+                      SendsosData("Staff");
+                    }
+                    else{
+                      SendsosData("Family");
+                    }
+                  }
+                },
               ),
             ),
           ),
         ],
       ),
+
     );
   }
 }

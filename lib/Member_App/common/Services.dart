@@ -938,6 +938,62 @@ class Services {
     }
   }
 
+  static Future<List> GetWatchmen(String societyId, String roleId) async {
+    String url =
+        API_URL + 'GetStaffRolewiseDetails?societyid=$societyId&roleId=$roleId';
+    print("GetWatchmenData url : " + url);
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetWatchmenData Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        print("Error GetWatchmenData");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error GetWatchmenData   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<SaveDataClass> AddVisitorEntry(body) async {
+    print(body.toString());
+    String url = constant.API_URL + 'AddVisitorEntry';
+    print("AddVisitorEntry : " + url);
+
+    try {
+      final response = await dio.post(url, data: body);
+      if (response.statusCode == 200) {
+        SaveDataClass saveData =
+        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+
+        var responseData = response.data;
+
+        print("AddVisitorEntry Response: " + responseData.toString());
+
+        saveData.Message = responseData["Message"].toString();
+        saveData.IsSuccess = responseData["IsSuccess"];
+        saveData.Data = responseData["Data"].toString();
+
+        return saveData;
+      } else {
+        print("Server Error");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("App Error ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
   static Future<SaveDataClass> UpdateFamilyMember(body) async {
     print(body.toString());
     String url = API_URL + 'UpdateFamilyMamber';
@@ -962,6 +1018,32 @@ class Services {
       }
     } catch (e) {
       print("Error UpdateFamilyMember : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<Map> SendNotification(body) async {
+    print(body.toString());
+    String url = API_URL + 'SendNotification';
+    print("SendNotification url : " + url);
+    try {
+      final response = await dio.post(url, data: body);
+      if (response.statusCode == 200) {
+        print("SendNotification Response: " + response.data.toString());
+        var memberDataClass = response.data;
+        xml2json.parse(memberDataClass.toString());
+        var jsonData = xml2json.toParker();
+        var responseData = json.decode(jsonData);
+
+        print("responseData");
+        print(responseData);
+        return responseData["ResultData"];
+      } else {
+        print("Error SendNotification");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error SendNotification : ${e.toString()}");
       throw Exception(e.toString());
     }
   }
@@ -1577,10 +1659,10 @@ class Services {
     }
   }
 
-  static Future<SaveDataClass> AddVisitorEntry(body) async {
+  static Future<SaveDataClass> AddEvent(body) async {
     print(body.toString());
-    String url = constant.API_URL + 'AddVisitorEntry';
-    print("AddVisitorEntry : " + url);
+    String url = constant.API_URL + 'AddEventDetails';
+    print("AddEvent : " + url);
 
     try {
       final response = await dio.post(url, data: body);
@@ -1590,7 +1672,7 @@ class Services {
 
         var responseData = response.data;
 
-        print("AddVisitorEntry Response: " + responseData.toString());
+        print("AddEvent Response: " + responseData.toString());
 
         saveData.Message = responseData["Message"].toString();
         saveData.IsSuccess = responseData["IsSuccess"];
@@ -1602,7 +1684,7 @@ class Services {
         throw Exception(response.data.toString());
       }
     } catch (e) {
-      print("App Error ${e.toString()}");
+      print("AddEvent Error ${e.toString()}");
       throw Exception(e.toString());
     }
   }

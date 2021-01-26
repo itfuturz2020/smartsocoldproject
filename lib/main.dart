@@ -101,6 +101,7 @@ import 'Admin_App/Screens/AddIncome.dart';
 import 'Admin_App/Screens/AddPolling.dart';
 import 'Admin_App/Screens/RulesAndRegulations.dart';
 import 'Admin_App/Screens/amcList.dart';
+import 'AllAdvertisementData.dart';
 import 'VisitorOtpScreen.dart';
 import 'Member_App/screens/DirectoryProfileFamily.dart';
 import 'Member_App/screens/DirectoryProfileVehicle.dart';
@@ -206,6 +207,7 @@ class _MyAppState extends State<MyApp> {
         '/Notice': (context) => NoticeScreen(),
         '/WaitingScreen': (context) => Approval_admin(),
         '/Complaints': (context) => MyComplaints(),
+        '/AllAdvertisements': (context) => AllAdvertisementData(),
         '/AddComplaints': (context) => ComplaintScreen(),
         '/Directory': (context) => DirecotryScreen(),
         '/RegisterScreen': (context) => RegisterScreen(),

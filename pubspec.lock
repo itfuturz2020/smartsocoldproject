@@ -78,6 +78,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0-nullsafety.1"
+  chips_choice:
+    dependency: "direct main"
+    description:
+      name: chips_choice
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
+  circular_check_box:
+    dependency: "direct main"
+    description:
+      name: circular_check_box
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   clock:
     dependency: transitive
     description:
@@ -721,4 +735,4 @@ packages:
     version: "6.0.3+2"
 sdks:
   dart: ">=2.10.0 <2.11.0"
-  flutter: ">=1.12.13+hotfix.6 <2.0.0"
+  flutter: ">=1.20.0 <2.0.0"

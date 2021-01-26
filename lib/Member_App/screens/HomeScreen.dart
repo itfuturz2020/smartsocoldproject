@@ -25,6 +25,7 @@ import 'package:smart_society_new/Member_App/screens/AdDetailPage.dart';
 import 'package:smart_society_new/Member_App/screens/SOSDailog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../AllAdvertisementData.dart';
 import 'AdvertismentDetailPage.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -1102,9 +1103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => AdDetailPage(
-                                            i,
-                                          ),
+                                          builder: (context) => AllAdvertisementData(advertisementData : _advertisementData),
                                         ),
                                       );
                                     },
@@ -1190,26 +1189,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       items: _advertisementData.map((i) {
                                         return Builder(
                                             builder: (BuildContext context) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AdDetailPage(
-                                                    i,
-                                                  ),
-                                                ),
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => AllAdvertisementData(advertisementData : _advertisementData),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Container(
+                                                    width:
+                                                    MediaQuery.of(context).size.width,
+                                                    child: Image.network(
+                                                        Image_Url + i["Image"],
+                                                        fit: BoxFit.fill)),
                                               );
-                                            },
-                                            child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Image.network(
-                                                    Image_Url + i["Image"],
-                                                    fit: BoxFit.fill)),
-                                          );
                                         });
                                       }).toList(),
                                     ),
@@ -1364,7 +1359,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: FloatingActionButton(
               onPressed: () {
                 //Get.to(OverlayScreen({}));
-                showDialog(context: context, child: SOSDailog());
+                showDialog(context: context, child: SOSDailog(),
+                );
               },
               backgroundColor: Colors.red[200],
               child: Container(
