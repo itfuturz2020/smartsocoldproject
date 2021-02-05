@@ -14,12 +14,10 @@ class EventsAdmin extends StatefulWidget {
 }
 
 class _EventsAdminState extends State<EventsAdmin> {
-
   List EventsData = new List();
   bool isLoading = false;
   String SocietyId, MemberId, ParentId;
   ProgressDialog pr;
-
 
   @override
   void initState() {
@@ -28,7 +26,6 @@ class _EventsAdminState extends State<EventsAdmin> {
     GetEventDetails();
     _getLocaldata();
   }
-
 
   _getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -119,7 +116,8 @@ class _EventsAdminState extends State<EventsAdmin> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EventDetail(EventsData : EventsData[index]),
+                    builder: (context) =>
+                        EventDetail(EventsData: EventsData[index]),
                   ),
                 );
               },

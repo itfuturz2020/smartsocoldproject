@@ -8,8 +8,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Member_App/screens/CustomerProfile.dart';
 
 class UpdateProfile extends StatefulWidget {
   @override
@@ -28,7 +30,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
     "AB-"
   ];
 
-  final List<String> _residentTypeList = ["Rented", "Owner", "Owned"];
+  //final List<String> _residentTypeList = ["Rented", "Owner", "Owned"];
+  final List<String> _residentTypeList = ["Rented", "Owned"];
 
   int selected_Index;
 
@@ -337,7 +340,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
             new FlatButton(
               child: new Text("OK"),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, "/MyProfile");
+                Navigator.pushReplacement(
+                    context, SlideLeftRoute(page: CustomerProfile()));
+                //Navigator.pushReplacementNamed(context, "/MyProfile");
               },
             ),
           ],
@@ -370,14 +375,23 @@ class _UpdateProfileState extends State<UpdateProfile> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, "/MyProfile");
+        Navigator.pushReplacement(
+            context, SlideLeftRoute(page: CustomerProfile()));
+        // Navigator.pushAndRemoveUntil(
+        //     context, SlideLeftRoute(page: CustomerProfile()), (route) => false);
+        //Navigator.pushReplacementNamed(context, "/MyProfile");
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, "/MyProfile");
+                // Navigator.pushAndRemoveUntil(context,
+                //     SlideLeftRoute(page: CustomerProfile()), (route) => false);
+
+                Navigator.pushReplacement(
+                    context, SlideLeftRoute(page: CustomerProfile()));
+                //Navigator.pushReplacementNamed(context, "/MyProfile");
               }),
           centerTitle: true,
           title: Text(

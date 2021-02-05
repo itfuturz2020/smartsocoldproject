@@ -246,7 +246,7 @@ class _FamilyMemberDetailState extends State<FamilyMemberDetail> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        updateFamilyMemberForm(FmemberData[index]),
+                        updateFamilyMemberForm( FmemberData:  FmemberData[index],),
                   ),
                 );
               },

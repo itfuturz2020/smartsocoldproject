@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Member_App/screens/CustomerProfile.dart';
 
 class updateFamilyMemberForm extends StatefulWidget {
   var FmemberData;
 
-  updateFamilyMemberForm(this.FmemberData);
+  Function onUpdate;
+
+  updateFamilyMemberForm({this.FmemberData, this.onUpdate});
 
   @override
   updateFamilyMemberFormState createState() => updateFamilyMemberFormState();
@@ -61,6 +65,7 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
               pr.hide();
               if (data.Data != "0" && data.IsSuccess == true) {
                 showHHMsg("Update Successfully", "");
+                widget.onUpdate();
               } else {
                 showHHMsg("Try Again", "");
               }
@@ -96,7 +101,14 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
             new FlatButton(
               child: new Text("Done"),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
+                //  Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
+
+                Navigator.pop(context);
+                Navigator.pop(context);
+                widget.onUpdate();
+
+                // Navigator.pushReplacement(
+                //     context, SlideLeftRoute(page: CustomerProfile()));
               },
             ),
           ],
@@ -109,14 +121,20 @@ class updateFamilyMemberFormState extends State<updateFamilyMemberForm> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
+        // Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
+        // Navigator.pushReplacement(
+        //     context, SlideLeftRoute(page: CustomerProfile()));
+        Navigator.pop(context);
       },
       child: Scaffold(
         appBar: new AppBar(
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
+                //  Navigator.pushReplacementNamed(context, '/FamilyMemberDetail');
+                // Navigator.pushReplacement(
+                //     context, SlideLeftRoute(page: CustomerProfile()));
+                Navigator.pop(context);
               }),
           centerTitle: true,
           title: new Text(

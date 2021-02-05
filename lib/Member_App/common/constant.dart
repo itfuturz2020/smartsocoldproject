@@ -24,6 +24,7 @@ class Session {
   static const String BusinessDescription = "Description";
   static const String BloodGroup = "Bloodgroup";
   static const String Gender = "Gender";
+  static const String Email = "Email";
   static const String DOB = "Dob";
   static const String ResidenceType = "ResidenceType";
   static const String FlatNo = "FlatNo";

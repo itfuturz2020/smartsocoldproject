@@ -1,11 +1,17 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+
+import 'package:smart_society_new/Mall_App/Common/services.dart' as serv;
+import 'package:smart_society_new/Mall_App/Common/Constant.dart' as cnst;
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -36,11 +42,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FocusNode _Mobile = FocusNode();
 
   String codeValue = "";
+  bool isFCMtokenLoading = false;
+  String fcmToken;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(message: 'Please Wait');
+    _firebaseMessaging.getToken().then((token) {
+      setState(() {
+        fcmToken = token;
+        print('----------->' + '${token}');
+      });
+    });
   }
 
   _CodeVerification() async {
@@ -148,21 +163,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
             print("Body: ${data}");
             //==============================
             pr.show();
-            // Services.Registration(data).then((data) async {
-            //   pr.hide();
-            //   if (data.Data != "0" && data.IsSuccess == true) {
-            //     showHHMsg("Registration Successfully", "");
-            //     Navigator.pushNamedAndRemoveUntil(
-            //         context, '/LoginScreen', (route) => false);
-            //   } else {
-            //
-            //    showHHMsg("Mobile Number Already Exist !", "");
-            //     pr.hide();
-            //   }
-            // }, onError: (e) {
-            //   pr.hide();
-            //   showHHMsg("Try Again.", "");
-            // });
+
+            Services.Registration(data).then((data) async {
+              pr.hide();
+              if (data.Data != "0" && data.IsSuccess == true) {
+                showHHMsg("Registration Successfully", "");
+                _Mallregistration();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/LoginScreen', (route) => false);
+              } else {
+                showHHMsg("Mobile Number Already Exist !", "");
+                pr.hide();
+              }
+            }, onError: (e) {
+              pr.hide();
+              showHHMsg("Try Again.", "");
+            });
           }
           //===========================
         } on SocketException catch (_) {
@@ -175,6 +191,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } else {
       Fluttertoast.showToast(
           msg: "Please fill all Fields", toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
+  //by rinki for registration for mall app
+
+  saveDataToSession(var data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        cnst.Session.customerId, data["CustomerId"].toString());
+    await prefs.setString(cnst.Session.CustomerName, data["CustomerName"]);
+    await prefs.setString(
+        cnst.Session.CustomerEmailId, data["CustomerEmailId"]);
+    await prefs.setString(
+        cnst.Session.CustomerPhoneNo, data["CustomerPhoneNo"]);
+  }
+
+  _Mallregistration() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+        FormData body = FormData.fromMap({
+          "CustomerName": txtname.text,
+          "CustomerEmailId": "",
+          "CustomerPhoneNo": txtmobile.text.toString(),
+          "CutomerFCMToken": "${fcmToken}"
+        });
+        serv.Services.postforlist(apiname: 'addCustomer', body: body).then(
+            (responselist) async {
+          if (responselist.length > 0) {
+            saveDataToSession(responselist[0]);
+          } else {
+            Fluttertoast.showToast(msg: " Registration fail");
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          print("error on call -> ${e.message}");
+          Fluttertoast.showToast(msg: "something went wrong");
+        });
+      }
+    } on SocketException catch (_) {
+      Fluttertoast.showToast(msg: "No Internet Connection");
     }
   }
 
@@ -617,7 +679,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ],
                     ),
                   ),
-                 /* Padding(
+                  /* Padding(
                     padding: const EdgeInsets.only(
                         top: 18.0, left: 8, right: 8, bottom: 8.0),
                     child: SizedBox(
@@ -643,54 +705,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),*/
                   Padding(
-                    padding: const EdgeInsets.only(
-                        top: 18.0, left: 8, right: 8),
+                    padding:
+                        const EdgeInsets.only(top: 18.0, left: 8, right: 8),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 45,
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(5)),
-                        color:
-                        constant.appPrimaryMaterialColor[500],
+                            borderRadius: BorderRadius.circular(5)),
+                        color: constant.appPrimaryMaterialColor[500],
                         textColor: Colors.white,
                         splashColor: Colors.white,
                         child: Text("Join Your Society",
                             style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600)),
-                        onPressed:  valid
+                                fontSize: 18, fontWeight: FontWeight.w600)),
+                        onPressed: valid
                             ? () {
 //                                Navigator.pushReplacementNamed(
 //                                    context, '/LoginScreen');
-                          _Registration();
-                        }
+                                _Registration();
+                              }
                             : null,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        top: 18.0, left: 8, right: 8),
+                    padding:
+                        const EdgeInsets.only(top: 18.0, left: 8, right: 8),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 45,
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(5)),
-                        color:
-                        constant.appPrimaryMaterialColor[500],
+                            borderRadius: BorderRadius.circular(5)),
+                        color: constant.appPrimaryMaterialColor[500],
                         textColor: Colors.white,
                         splashColor: Colors.white,
                         child: Text("Create Your Society",
                             style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600)),
+                                fontSize: 18, fontWeight: FontWeight.w600)),
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, '/CreateSociety');
+                          Navigator.pushNamed(context, '/CreateSociety');
                         },
                       ),
                     ),

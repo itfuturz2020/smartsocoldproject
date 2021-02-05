@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Member_App/screens/CustomerProfile.dart';
 
 class AddFamilyMember extends StatefulWidget {
+  Function onAddFamily;
+  AddFamilyMember({this.onAddFamily});
   @override
   AddFamilyMemberState createState() => AddFamilyMemberState();
 }
@@ -104,7 +108,13 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
+                Navigator.pop(context);
+                widget.onAddFamily();
+                widget.onAddFamily();
+
+                // Navigator.pushReplacement(
+                //     context, SlideLeftRoute(page: CustomerProfile()));
               },
             ),
           ],
@@ -115,208 +125,213 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        centerTitle: true,
-        title: new Text(
-          "Add Family Member",
-          style: TextStyle(fontSize: 17),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pop();
+      },
+      child: Scaffold(
+        appBar: new AppBar(
+          centerTitle: true,
+          title: new Text(
+            "Add Family Member",
+            style: TextStyle(fontSize: 17),
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(100.0))),
-                      width: 80,
-                      height: 80,
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Image.asset("images/family.png",
-                            width: 40, color: Colors.grey[400]),
-                      )),
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 10),
-                  child: Text(
-                    "  Name *",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black54),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 1.0),
-              child: Column(
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: TextFormField(
-                      controller: txtname,
-                      decoration: InputDecoration(
-                          counter: Text(""),
-                          hintText: "Enter Your Member Name",
-                          hintStyle: TextStyle(fontSize: 13)),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100.0))),
+                        width: 80,
+                        height: 80,
+                        child: Padding(
+                          padding: const EdgeInsets.all(25.0),
+                          child: Image.asset("images/family.png",
+                              width: 40, color: Colors.grey[400]),
+                        )),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 9.0, top: 10),
+                    child: Text(
+                      "  Name *",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54),
                     ),
                   ),
                 ],
               ),
-            ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 9.0, top: 1),
-                  child: Text(
-                    "  Mobile Number",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black54),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 1.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: TextFormField(
+                        controller: txtname,
+                        decoration: InputDecoration(
+                            counter: Text(""),
+                            hintText: "Enter Your Member Name",
+                            hintStyle: TextStyle(fontSize: 13)),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 1.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              Row(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: TextFormField(
-                      maxLength: 10,
-                      controller: txtmobile,
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                          counter: Text(""),
-                          hintText: " Your Mobile Number",
-                          hintStyle: TextStyle(fontSize: 13)),
+                    padding: const EdgeInsets.only(left: 9.0, top: 1),
+                    child: Text(
+                      "  Mobile Number",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black54),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 11.0),
-                        child: Text(
-                          "Gender",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black54),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 1.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: TextFormField(
+                        maxLength: 10,
+                        controller: txtmobile,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                            counter: Text(""),
+                            hintText: " Your Mobile Number",
+                            hintStyle: TextStyle(fontSize: 13)),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 11.0),
+                          child: Text(
+                            "Gender",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black54),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio(
+                            value: 'Male',
+                            groupValue: Gender,
+                            onChanged: (value) {
+                              setState(() {
+                                Gender = value;
+                                print(Gender);
+                              });
+                            }),
+                        Text("Male", style: TextStyle(fontSize: 13)),
+                        Radio(
+                            value: 'Female',
+                            groupValue: Gender,
+                            onChanged: (value) {
+                              setState(() {
+                                Gender = value;
+                                print(Gender);
+                              });
+                            }),
+                        Text("Female", style: TextStyle(fontSize: 13)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 1,
+                        child: DropdownButton<String>(
+                          value: Relation,
+                          isExpanded: true,
+                          iconSize: 24,
+                          hint: Text("- -Select Relation- -"),
+                          style: TextStyle(color: Colors.black54, fontSize: 15),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              Relation = newValue;
+                              print(Relation);
+                            });
+                          },
+                          items: <String>[
+                            'Daughter',
+                            'Son',
+                            'Wife',
+                            'Brother',
+                            'Sister',
+                            'Father',
+                            'Mother',
+                            'Husband',
+                            'Grand Father',
+                            'Grandson',
+                            'Uncle',
+                            'Nephew',
+                            'Cousin',
+                            'Niece',
+                            'Aunt',
+                            'Grand Daughter',
+                            'Grand Mother',
+                            'Wife'
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Radio(
-                          value: 'Male',
-                          groupValue: Gender,
-                          onChanged: (value) {
-                            setState(() {
-                              Gender = value;
-                              print(Gender);
-                            });
-                          }),
-                      Text("Male", style: TextStyle(fontSize: 13)),
-                      Radio(
-                          value: 'Female',
-                          groupValue: Gender,
-                          onChanged: (value) {
-                            setState(() {
-                              Gender = value;
-                              print(Gender);
-                            });
-                          }),
-                      Text("Female", style: TextStyle(fontSize: 13)),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 1,
-                      child: DropdownButton<String>(
-                        value: Relation,
-                        isExpanded: true,
-                        iconSize: 24,
-                        hint: Text("- -Select Relation- -"),
-                        style: TextStyle(color: Colors.black54, fontSize: 15),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            Relation = newValue;
-                            print(Relation);
-                          });
-                        },
-                        items: <String>[
-                          'Daughter',
-                          'Son',
-                          'Wife',
-                          'Brother',
-                          'Sister',
-                          'Father',
-                          'Mother',
-                          'Husband',
-                          'Grand Father',
-                          'Grandson',
-                          'Uncle',
-                          'Nephew',
-                          'Cousin',
-                          'Niece',
-                          'Aunt',
-                          'Grand Daughter',
-                          'Grand Mother',
-                          'Wife'
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 18.0, left: 8, right: 8, bottom: 18.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 45,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  color: constant.appPrimaryMaterialColor[500],
-                  textColor: Colors.white,
-                  splashColor: Colors.white,
-                  child: Text("Save",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                  onPressed: () {
-                    _SaveFamilymember();
-                  },
+                  ],
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 18.0, left: 8, right: 8, bottom: 18.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 45,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    color: constant.appPrimaryMaterialColor[500],
+                    textColor: Colors.white,
+                    splashColor: Colors.white,
+                    child: Text("Save",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600)),
+                    onPressed: () {
+                      _SaveFamilymember();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

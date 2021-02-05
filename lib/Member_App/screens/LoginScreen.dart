@@ -1,13 +1,20 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
 import 'package:smart_society_new/Member_App/screens/OtpScreen.dart';
+import 'package:smart_society_new/Mall_App/Common/services.dart' as serv;
+import 'package:smart_society_new/Mall_App/Common/Constant.dart' as cnst;
+import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
+import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,13 +25,27 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _MobileNumber = new TextEditingController();
   bool isLoading = false;
   ProgressDialog pr;
-  String sendOTP ;
+  String sendOTP;
   List logindata = [];
+  List mallLoginList = [];
+
+  bool isFCMtokenLoading = false;
+  String fcmToken;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
-    pr.style(message: 'Please Wait');getOTPStatus();
+    pr.style(message: 'Please Wait');
+    getOTPStatus();
+
+    _firebaseMessaging.getToken().then((token) {
+      setState(() {
+        fcmToken = token;
+      });
+      print('----------->' + '${token}');
+    });
   }
+
   getOTPStatus() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -65,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
   }
+
   showMsg(String msg, {String title = 'My JINI'}) {
     showDialog(
       context: context,
@@ -85,6 +107,17 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  mallLocalData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        cnst.Session.customerId, mallLoginList[0]["CustomerId"].toString());
+    await prefs.setString(
+        cnst.Session.CustomerName, mallLoginList[0]["CustomerName"]);
+    await prefs.setString(
+        cnst.Session.CustomerEmailId, mallLoginList[0]["CustomerEmailId"]);
+    await prefs.setString(
+        cnst.Session.CustomerPhoneNo, mallLoginList[0]["CustomerPhoneNo"]);
+  }
 
   localdata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -152,13 +185,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         data[0]["ContactNo"].toString(),
                         data[0]["Id"].toString(), () {
                       localdata();
+                      mallLocalData();
                     }),
                   ),
                 );
+                _MallLoginApi();
               } else {
                 await localdata();
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/HomeScreen', (Route<dynamic> route) => false);
+                // await mallLocalData();
+                Navigator.pushAndRemoveUntil(context,
+                    SlideLeftRoute(page: HomeScreen()), (route) => false);
+                _MallLoginApi();
+
+                // Navigator.of(context).pushNamedAndRemoveUntil(
+                //     '/HomeScreen', (Route<dynamic> route) => false);
               }
             } else {
               Fluttertoast.showToast(
@@ -210,6 +250,48 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       },
     );
+  }
+
+  _MallLoginApi() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        FormData body = FormData.fromMap({
+          "CustomerPhoneNo": _MobileNumber.text,
+          "CutomerFCMToken": "${fcmToken}"
+        });
+        serv.Services.postforlist(apiname: 'signIn', body: body).then(
+            (responseList) async {
+          if (responseList.length > 0) {
+            setState(() {
+              mallLoginList = responseList;
+              mallLocalData();
+            });
+            // mallLocalData();
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+            Fluttertoast.showToast(msg: "Data Not Found");
+            //show "data not found" in dialog
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          print("error on call -> ${e.message}");
+          Fluttertoast.showToast(msg: "Something Went Wrong");
+        });
+      }
+    } on SocketException catch (_) {
+      Fluttertoast.showToast(msg: "No Internet Connection.");
+    }
   }
 
   @override

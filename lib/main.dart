@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_society_new/Admin_App/Screens/AddAmenitiesScreen.dart';
 import 'package:smart_society_new/Admin_App/Screens/AddEvent.dart';
 import 'package:smart_society_new/Admin_App/Screens/DirectoryMember.dart';
@@ -117,12 +118,20 @@ import 'Admin_App/Screens/AddPolling.dart';
 import 'Admin_App/Screens/RulesAndRegulations.dart';
 import 'Admin_App/Screens/amcList.dart';
 import 'AllAdvertisementData.dart';
+import 'Mall_App/Providers/CartProvider.dart';
 import 'VisitorOtpScreen.dart';
 import 'Member_App/screens/DirectoryProfileFamily.dart';
 import 'Member_App/screens/DirectoryProfileVehicle.dart';
 
 void main() async {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

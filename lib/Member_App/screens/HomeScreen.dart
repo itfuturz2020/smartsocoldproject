@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -17,10 +18,16 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Mall_App/Screens/HomeScreen.dart' as home;
+import 'package:smart_society_new/Mall_App/Screens/SplashScreen.dart';
+import 'package:smart_society_new/Mall_App/transitions/fade_route.dart';
+import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/Model/ModelClass.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
+import 'package:smart_society_new/Mall_App/common/Services.dart' as serv;
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/constant.dart';
+import 'package:smart_society_new/Mall_App/common/constant.dart' as cnst;
 import 'package:smart_society_new/Member_App/screens/AdDetailPage.dart';
 import 'package:smart_society_new/Member_App/screens/BannerScreen.dart';
 import 'package:smart_society_new/Member_App/screens/SOSDailog.dart';
@@ -36,6 +43,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
+  bool isFCMtokenLoading = false;
 
   void initPlayer() {
     advancedPlayer = new AudioPlayer();
@@ -660,6 +668,7 @@ class _HomeScreenState extends State<HomeScreen> {
         sendFCMTokan(token);
       });
       log(fcmToken);
+      // _registration();
     });
   }
 
@@ -1341,27 +1350,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              // Flexible(
-              //   child: InkWell(
-              //     child: Container(
-              //       width: MediaQuery.of(context).size.width,
-              //       child: Column(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         crossAxisAlignment: CrossAxisAlignment.center,
-              //         children: <Widget>[
-              //           Icon(Icons.shopping_cart, size: 22),
-              //           Text("Mall",
-              //               textAlign: TextAlign.center,
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.bold, fontSize: 11))
-              //         ],
-              //       ),
-              //     ),
-              //     onTap: () {
-              //       Navigator.pushNamed(context, '/Mall');
-              //     },
-              //   ),
-              // ),
+              Flexible(
+                child: InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.shopping_cart, size: 22),
+                        Text("Mall",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 11))
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    //  Navigator.pushNamed(context, '/Mall');
+                    Navigator.pushReplacement(
+                        context, FadeRoute(page: home.HomeScreen()));
+                  },
+                ),
+              ),
               Flexible(
                 child: InkWell(
                   child: Container(
@@ -1415,6 +1426,60 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+//==================by rinki for mall app registration
+//   _registration() async {
+//     if (_formkey.currentState.validate()) {
+//       try {
+//         final result = await InternetAddress.lookup('google.com');
+//         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+//           setState(() {
+//             isLoading = true;
+//           });
+//           SharedPreferences prefs = await SharedPreferences.getInstance();
+//           String CName = prefs.getString(constant.Session.Name);
+//           String Cemail = prefs.getString(constant.Session.Email);
+//           String Cphone = prefs.getString(constant.Session.session_login);
+//           FormData body = FormData.fromMap({
+//             "CustomerName": CName,
+//             "CustomerEmailId": Cemail,
+//             "CustomerPhoneNo": Cphone,
+//             "CutomerFCMToken": "${fcmToken}"
+//           });
+//           serv.Services.postforlist(apiname: 'addCustomer', body: body).then(
+//               (responselist) async {
+//             if (responselist.length > 0) {
+//               saveDataToSession(responselist[0]);
+//             } else {
+//               Fluttertoast.showToast(msg: " Registration fail");
+//             }
+//           }, onError: (e) {
+//             setState(() {
+//               isLoading = false;
+//             });
+//             print("error on call -> ${e.message}");
+//             Fluttertoast.showToast(msg: "something went wrong");
+//           });
+//         }
+//       } on SocketException catch (_) {
+//         Fluttertoast.showToast(msg: "No Internet Connection");
+//       }
+//     } else
+//       Fluttertoast.showToast(msg: "Please fill all the fields");
+//   }
+//
+//   saveDataToSession(var data) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     await prefs.setString(
+//         cnst.Session.customerId, data["CustomerId"].toString());
+//     await prefs.setString(cnst.Session.CustomerName, data["CustomerName"]);
+//     await prefs.setString(
+//         cnst.Session.CustomerEmailId, data["CustomerEmailId"]);
+//     await prefs.setString(
+//         cnst.Session.CustomerPhoneNo, data["CustomerPhoneNo"]);
+//     Navigator.pushAndRemoveUntil(
+//         context, SlideLeftRoute(page: HomeScreen()), (route) => false);
+//   }
 }
 
 class Continue extends StatefulWidget {
