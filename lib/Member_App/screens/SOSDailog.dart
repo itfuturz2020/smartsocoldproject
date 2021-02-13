@@ -27,7 +27,6 @@ class _SOSDailogState extends State<SOSDailog> {
   ProgressDialog pr;
   FormData formData;
 
-
   @override
   void initState() {
     isSelectedWatchmen.clear();
@@ -39,7 +38,6 @@ class _SOSDailogState extends State<SOSDailog> {
     GetFamilyDetail();
     _getLocaldata();
   }
-
 
   _getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -121,85 +119,83 @@ class _SOSDailogState extends State<SOSDailog> {
 
   SendsosData(String type) async {
     try {
-      String fcmtoken = "",titles="";
+      String fcmtoken = "", titles = "";
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        if(type == "Staff"){
-          for(int i=0;i<WatchmenData.length;i++){
-            if(i==WatchmenData.length-1 && isSelectedWatchmen[i]){
-              fcmtoken +=WatchmenData[i]["DeviceToken"];
-            }
-            else if(isSelectedWatchmen[i] && i!=WatchmenData.length-1){
-              fcmtoken+=WatchmenData[i]["DeviceToken"] + ",";
+        if (type == "Staff") {
+          for (int i = 0; i < WatchmenData.length; i++) {
+            if (i == WatchmenData.length - 1 && isSelectedWatchmen[i]) {
+              fcmtoken += WatchmenData[i]["DeviceToken"];
+            } else if (isSelectedWatchmen[i] && i != WatchmenData.length - 1) {
+              fcmtoken += WatchmenData[i]["DeviceToken"] + ",";
             }
           }
-          if(!isSelectedWatchmen.contains(true)){
+          if (!isSelectedWatchmen.contains(true)) {
             Fluttertoast.showToast(
               msg: "Please select atleast one field",
               backgroundColor: Colors.green,
               gravity: ToastGravity.TOP,
             );
-          }
-          else{
+          } else {
             setState(() {
               isLoading = true;
             });
             print("WatchmenData");
             print(WatchmenData);
-            for(int i=0;i<WatchmenData.length;i++){
-              if(isSelectedWatchmen[i] && i!=WatchmenData.length-1){
-                titles +=WatchmenData[i]["Name"] + ",";
-              }
-              else if(isSelectedWatchmen[i] && i == WatchmenData.length-1){
-                titles +=WatchmenData[i]["Name"];
+            for (int i = 0; i < WatchmenData.length; i++) {
+              if (isSelectedWatchmen[i] && i != WatchmenData.length - 1) {
+                titles += WatchmenData[i]["Name"] + ",";
+              } else if (isSelectedWatchmen[i] &&
+                  i == WatchmenData.length - 1) {
+                titles += WatchmenData[i]["Name"];
               }
             }
           }
-        }
-        else{
+        } else {
           print("isSelectedFamilyMember");
           print(isSelectedFamilyMember);
-          for(int i=0;i<FmemberData.length;i++){
-            if(i!=FmemberData.length-1 && isSelectedFamilyMember[i]){
-              fcmtoken +=FmemberData[i]["FcmToken"] + ",";
-            }
-            else if(isSelectedFamilyMember[i] && i == FmemberData.length-1){
-              fcmtoken +=FmemberData[i]["FcmToken"];
+          for (int i = 0; i < FmemberData.length; i++) {
+            if (i != FmemberData.length - 1 && isSelectedFamilyMember[i]) {
+              fcmtoken += FmemberData[i]["FcmToken"] + ",";
+            } else if (isSelectedFamilyMember[i] &&
+                i == FmemberData.length - 1) {
+              fcmtoken += FmemberData[i]["FcmToken"];
             }
           }
-          if(!isSelectedFamilyMember.contains(true)){
+          if (!isSelectedFamilyMember.contains(true)) {
             Fluttertoast.showToast(
               msg: "Please select atleast one field",
               backgroundColor: Colors.green,
               gravity: ToastGravity.TOP,
             );
-          }
-          else{
+          } else {
             setState(() {
               isLoading = true;
             });
-            for(int i=0;i<isSelectedFamilyMember.length;i++){
-              if(isSelectedFamilyMember[i] && i!=isSelectedFamilyMember.length-1){
-                titles +=FmemberData[i]["Name"] + ",";
-              }
-              else if(isSelectedFamilyMember[i] && i == isSelectedFamilyMember.length-1){
-                titles +=FmemberData[i]["Name"];
+            for (int i = 0; i < isSelectedFamilyMember.length; i++) {
+              if (isSelectedFamilyMember[i] &&
+                  i != isSelectedFamilyMember.length - 1) {
+                titles += FmemberData[i]["Name"] + ",";
+              } else if (isSelectedFamilyMember[i] &&
+                  i == isSelectedFamilyMember.length - 1) {
+                titles += FmemberData[i]["Name"];
               }
             }
           }
         }
         var data = {
-          "FcmToken" :fcmtoken,
-          "message" : txtMsg.text,
-          "Type" : type,
-          "titles" :titles
+          "FcmToken": fcmtoken,
+          "message": txtMsg.text,
+          "Type": type,
+          "titles": titles
         };
         formData = new FormData.fromMap(data);
         print("data");
         print(data);
         print("titles");
         print(titles);
-        if(isSelectedFamilyMember.contains(true) || isSelectedWatchmen.contains(true)){
+        if (isSelectedFamilyMember.contains(true) ||
+            isSelectedWatchmen.contains(true)) {
           Services.SendNotification(formData).then((data) async {
             setState(() {
               isLoading = false;
@@ -234,7 +230,6 @@ class _SOSDailogState extends State<SOSDailog> {
     }
   }
 
-
   showHHMsg(String title, String msg) {
     showDialog(
       context: context,
@@ -254,6 +249,7 @@ class _SOSDailogState extends State<SOSDailog> {
       },
     );
   }
+
   _addSOS() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -306,11 +302,12 @@ class _SOSDailogState extends State<SOSDailog> {
   List<bool> isSelectedFamilyMember = [];
 
   Widget _FamilyMember(BuildContext context, int index) {
-    for(int i=0;i<FmemberData.length;i++){
+    for (int i = 0; i < FmemberData.length; i++) {
       isSelectedFamilyMember.add(false);
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Expanded(
           child: Column(
@@ -340,13 +337,13 @@ class _SOSDailogState extends State<SOSDailog> {
             }),
         CircularCheckBox(
           value: isSelectedFamilyMember[index],
-          checkColor: Colors.white  ,
+          checkColor: Colors.white,
           activeColor: Colors.green,
           inactiveColor: Colors.purple,
-          disabledColor: Colors.grey ,
+          disabledColor: Colors.grey,
           onChanged: (val) => this.setState(() {
             isSelectedFamilyMember[index] = val;
-          }) ,
+          }),
         ),
       ],
     );
@@ -356,7 +353,7 @@ class _SOSDailogState extends State<SOSDailog> {
 
   Widget _Watchmen(BuildContext context, int index) {
     print(WatchmenData.length);
-    for(int i=0;i<WatchmenData.length;i++){
+    for (int i = 0; i < WatchmenData.length; i++) {
       isSelectedWatchmen.add(false);
     }
     return Row(
@@ -389,14 +386,14 @@ class _SOSDailogState extends State<SOSDailog> {
               launch(('tel:// ${WatchmenData[index]["MobileNo"]}'));
             }),
         CircularCheckBox(
-            value: isSelectedWatchmen[index],
-            checkColor: Colors.white  ,
-            activeColor: Colors.green,
-            inactiveColor: Colors.purple,
-            disabledColor: Colors.grey ,
-            onChanged: (val) => this.setState(() {
-              isSelectedWatchmen[index] = val;
-            }) ,
+          value: isSelectedWatchmen[index],
+          checkColor: Colors.white,
+          activeColor: Colors.green,
+          inactiveColor: Colors.purple,
+          disabledColor: Colors.grey,
+          onChanged: (val) => this.setState(() {
+            isSelectedWatchmen[index] = val;
+          }),
         ),
       ],
     );
@@ -500,29 +497,41 @@ class _SOSDailogState extends State<SOSDailog> {
           // ],
           isLoading
               ? Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
               : FmemberData.length > 0
-              ? Container(
-            width: MediaQuery.of(context).size.width*0.4,
-                height: 50*double.parse(FmemberData.length.toString()),
-                child: ListView.builder(
-                itemBuilder: _FamilyMember,
-                itemCount: FmemberData.length,
-                shrinkWrap: true,),
-              )
-              : WatchmenData.length > 0 ? Container(
-            width: MediaQuery.of(context).size.width*0.4,
-            height: 52*double.parse(WatchmenData.length.toString()),
-            child: ListView.builder(
-              itemBuilder: _Watchmen,
-              itemCount: WatchmenData.length,
-              shrinkWrap: true,),
-          ):Container(
-            child: Center(child: Text("No FamilyMember Added")),
-          ),
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 4.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height:
+                            50 * double.parse(FmemberData.length.toString()),
+                        child: ListView.builder(
+                          itemBuilder: _FamilyMember,
+                          itemCount: FmemberData.length,
+                          shrinkWrap: true,
+                        ),
+                      ),
+                    )
+                  : WatchmenData.length > 0
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            height: 52 *
+                                double.parse(WatchmenData.length.toString()),
+                            child: ListView.builder(
+                              itemBuilder: _Watchmen,
+                              itemCount: WatchmenData.length,
+                              shrinkWrap: true,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          child: Center(child: Text("No FamilyMember Added")),
+                        ),
           SizedBox(
             height: 50,
             child: Padding(
@@ -558,18 +567,16 @@ class _SOSDailogState extends State<SOSDailog> {
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                 onPressed: () {
-                  if(txtMsg.text == ""){
+                  if (txtMsg.text == "") {
                     Fluttertoast.showToast(
                       msg: "Please enter message",
                       backgroundColor: Colors.green,
                       gravity: ToastGravity.TOP,
                     );
-                  }
-                  else{
-                    if(WatchmenData.isNotEmpty){
+                  } else {
+                    if (WatchmenData.isNotEmpty) {
                       SendsosData("Staff");
-                    }
-                    else{
+                    } else {
                       SendsosData("Family");
                     }
                   }
@@ -579,7 +586,6 @@ class _SOSDailogState extends State<SOSDailog> {
           ),
         ],
       ),
-
     );
   }
 }

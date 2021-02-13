@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
           setState(() {
             isLoading = false;
           });
+          log("=============Notification${data.Message}");
           if (data.Data == "1" && data.IsSuccess == true) {
             // SharedPreferences preferences =
             //     await SharedPreferences.getInstance();
@@ -63,6 +65,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
                 textColor: Colors.white,
                 gravity: ToastGravity.TOP,
                 toastLength: Toast.LENGTH_SHORT);
+
+            log("=============Notification${data.Message}");
           } else {
             setState(() {
               isLoading = false;
@@ -362,41 +366,48 @@ class _NotificationPopupState extends State<NotificationPopup> {
                 height: 40,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 130,
-                    child: Text(
-                      "${widget.data["data"]["Name"]}",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          color: Colors.grey[800]),
+                    //width: 130,
+                    child: Flexible(
+                      child: Text(
+                        "${widget.data["data"]["Name"]}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Colors.grey[800]),
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset('images/telephone.png',
-                            width: 40, height: 40),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  GestureDetector(
-                    onTap: onJoin,
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset('images/video_call.png',
-                            width: 40, height: 40),
-                      ],
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: 30,
+                  // ),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: Column(
+                          children: <Widget>[
+                            Image.asset('images/telephone.png',
+                                width: 40, height: 40),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      GestureDetector(
+                        onTap: onJoin,
+                        child: Column(
+                          children: <Widget>[
+                            Image.asset('images/video_call.png',
+                                width: 40, height: 40),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
               SizedBox(
@@ -464,6 +475,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
           right: -180,
           child: GestureDetector(
             onTap: () {
+              log("//=================#${_notifcationReplylist[0]}");
               NotificationReply(
                   _notifcationReplylist[0],
                   widget.data["data"]["EntryId"],

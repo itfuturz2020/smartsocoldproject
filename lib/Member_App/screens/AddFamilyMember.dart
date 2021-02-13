@@ -111,7 +111,7 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 widget.onAddFamily();
-                widget.onAddFamily();
+                //widget.onAddFamily();
 
                 // Navigator.pushReplacement(
                 //     context, SlideLeftRoute(page: CustomerProfile()));

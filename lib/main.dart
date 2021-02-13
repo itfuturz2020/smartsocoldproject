@@ -167,7 +167,7 @@ class _MyAppState extends State<MyApp> {
     _firebaseMessaging.configure(
       //when app is open
       onMessage: (Map<String, dynamic> message) async {
-        Get.to(NotificationPopup(message));
+        // Get.to(NotificationPopup(message));
         print("----");
         if (message["data"]["Type"] == 'Visitor') {
           Get.to(NotificationPopup(message));
@@ -181,14 +181,34 @@ class _MyAppState extends State<MyApp> {
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         // _navigateToItemDetail(message);
-        Get.to(NotificationPopup(message));
+        // Get.to(NotificationPopup(message));
+
+        // Get.to(NotificationPopup(message));
+        print("----");
+        if (message["data"]["Type"] == 'Visitor') {
+          Get.to(NotificationPopup(message));
+          audioCache.play('Sound.mp3');
+        } else {
+          showNotification('$Title', '$bodymessage');
+          audioCache.play('Sound.mp3');
+        }
       },
       //when app is in background and user click on notification
       onResume: (Map<String, dynamic> message) async {
         print(
             "onResume:------------------- $message  --------------------------------");
         // _navigateToItemDetail(message);
-        Get.to(NotificationPopup(message));
+        //  Get.to(NotificationPopup(message));
+
+        //Get.to(NotificationPopup(message));
+        print("----");
+        if (message["data"]["Type"] == 'Visitor') {
+          Get.to(NotificationPopup(message));
+          audioCache.play('Sound.mp3');
+        } else {
+          showNotification('$Title', '$bodymessage');
+          audioCache.play('Sound.mp3');
+        }
       },
     );
 
