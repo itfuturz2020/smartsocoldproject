@@ -187,7 +187,7 @@ class _DirectoryProfileVehicleState extends State<DirectoryProfileVehicle> {
                           "images/automobile.png",
                           width: 40,
                         )
-                      : Image.asset("images/Bike.png", width: 40),
+                      : Image.asset("images/bike.png", width: 40),
                 ),
                 Expanded(
                   child: Padding(

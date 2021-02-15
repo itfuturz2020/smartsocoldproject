@@ -340,9 +340,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
             new FlatButton(
               child: new Text("OK"),
               onPressed: () {
-                Navigator.pushReplacement(
-                    context, SlideLeftRoute(page: CustomerProfile()));
-                //Navigator.pushReplacementNamed(context, "/MyProfile");
+                // Navigator.pushReplacement(
+                //     context, SlideLeftRoute(page: CustomerProfile()));
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/HomeScreen', (route) => false);
               },
             ),
           ],
@@ -373,379 +374,367 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.pushReplacement(
-            context, SlideLeftRoute(page: CustomerProfile()));
-        // Navigator.pushAndRemoveUntil(
-        //     context, SlideLeftRoute(page: CustomerProfile()), (route) => false);
-        //Navigator.pushReplacementNamed(context, "/MyProfile");
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                // Navigator.pushAndRemoveUntil(context,
-                //     SlideLeftRoute(page: CustomerProfile()), (route) => false);
-
-                Navigator.pushReplacement(
-                    context, SlideLeftRoute(page: CustomerProfile()));
-                //Navigator.pushReplacementNamed(context, "/MyProfile");
-              }),
-          centerTitle: true,
-          title: Text(
-            'Profile Update',
-            style: TextStyle(fontSize: 18),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(10),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        // leading: IconButton(
+        //     icon: Icon(Icons.arrow_back),
+        //     onPressed: () {
+        //       // Navigator.pushAndRemoveUntil(context,
+        //       //     SlideLeftRoute(page: CustomerProfile()), (route) => false);
+        //
+        //       Navigator.pushReplacement(
+        //           context, SlideLeftRoute(page: CustomerProfile()));
+        //       //Navigator.pushReplacementNamed(context, "/MyProfile");
+        //     }),
+        centerTitle: true,
+        title: Text(
+          'Profile Update',
+          style: TextStyle(fontSize: 18),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(10),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Container(
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                            image: new DecorationImage(
+                                image: _image == null
+                                    ? '$Profile' == "null" || '$Profile' == ""
+                                        ? AssetImage("images/man.png")
+                                        : NetworkImage(
+                                            constant.Image_Url + '$Profile')
+                                    : FileImage(_image),
+                                fit: BoxFit.cover),
+                            borderRadius:
+                                BorderRadius.all(new Radius.circular(75.0)),
+                            boxShadow: [
+                              BoxShadow(color: Colors.grey[600], blurRadius: 2)
+                            ]),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _profileImagePopup(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 105.0, left: 90),
                         child: Container(
-                          width: 120,
-                          height: 120,
+                          width: 25,
+                          height: 25,
                           decoration: BoxDecoration(
-                              image: new DecorationImage(
-                                  image: _image == null
-                                      ? '$Profile' == "null" || '$Profile' == ""
-                                          ? AssetImage("images/man.png")
-                                          : NetworkImage(
-                                              constant.Image_Url + '$Profile')
-                                      : FileImage(_image),
-                                  fit: BoxFit.cover),
+                              color: constant.appPrimaryMaterialColor,
                               borderRadius:
-                                  BorderRadius.all(new Radius.circular(75.0)),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey[600], blurRadius: 2)
-                              ]),
+                                  BorderRadius.all(Radius.circular(100.0))),
+                          child: Icon(Icons.add, color: Colors.white),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          _profileImagePopup(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 105.0, left: 90),
-                          child: Container(
-                            width: 25,
-                            height: 25,
-                            decoration: BoxDecoration(
-                                color: constant.appPrimaryMaterialColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100.0))),
-                            child: Icon(Icons.add, color: Colors.white),
-                          ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Text("Private Your Profile",
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[700])),
+            ),
+            Transform.scale(
+              scale: 1.2,
+              child: Switch(
+                onChanged: (val) => setState(
+                    () => _isSwitched = val == true ? "true" : "false"),
+                value: _isSwitched == "true" ? true : false,
+                activeColor: Colors.green,
+                activeTrackColor: Colors.green[200],
+                inactiveThumbColor: Colors.grey,
+                inactiveTrackColor: Colors.grey[400],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextFormField(
+                      controller: Nametxt,
+                      // controller: _MobileNumber,
+                      decoration: InputDecoration(
+                        hintText: "Enter Name",
+                        hasFloatingPlaceholder: true,
+                        labelText: "Name",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextFormField(
+                      controller: MobileNumbertxt,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: "Enter Mobile Number",
+                        hasFloatingPlaceholder: true,
+                        labelText: "Mobile No",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextFormField(
+                      controller: CompanyNametxt,
+                      decoration: InputDecoration(
+                        hintText: "Enter Company Name",
+                        hasFloatingPlaceholder: true,
+                        labelText: "Company Name",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextFormField(
+                      controller: BusinessJobtxt,
+                      decoration: InputDecoration(
+                        hintText: "Enter Business / Job",
+                        hasFloatingPlaceholder: true,
+                        labelText: "Job / Business",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextFormField(
+                      controller: Descriptiontxt,
+                      // controller: _MobileNumber,
+                      decoration: InputDecoration(
+                        hintText: "Enter Business / Job Description",
+                        hasFloatingPlaceholder: true,
+                        labelText: "Job / Business Desscription",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 8.0, top: 12.0),
+              child: DropdownButton(
+                items: _dropdownValues
+                    .map((value) => DropdownMenuItem(
+                          child: Text(value),
+                          value: value,
+                        ))
+                    .toList(),
+                value: Selected_bloodGroup,
+                onChanged: (newValue) {
+                  setState(() {
+                    Selected_bloodGroup = newValue;
+                  });
+                },
+                isExpanded: true,
+                hint: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text('--Select Blood Group --'),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextFormField(
+                      maxLines: 3,
+                      controller: Addresstxt,
+                      // controller: _MobileNumber,
+                      decoration: InputDecoration(
+                        hintText: "Enter Address",
+                        hasFloatingPlaceholder: true,
+                        labelText: "Address",
+                        hintStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 9.0, top: 10),
+                    child: Text("Gender", style: TextStyle(fontSize: 13)),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Radio(
+                    value: 'Male',
+                    groupValue: Gender,
+                    onChanged: (value) {
+                      setState(() {
+                        Gender = value;
+                        print(Gender);
+                      });
+                    }),
+                Text("Male", style: TextStyle(fontSize: 13)),
+                Radio(
+                    value: 'Female',
+                    groupValue: Gender,
+                    onChanged: (value) {
+                      setState(() {
+                        Gender = value;
+                        print(Gender);
+                      });
+                    }),
+                Text("Female", style: TextStyle(fontSize: 13)),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                spacing: 10,
+                children: List.generate(_residentTypeList.length, (index) {
+                  return ChoiceChip(
+                    backgroundColor: Colors.grey[200],
+                    label: Text(_residentTypeList[index]),
+                    selected: selected_Index == index,
+                    onSelected: (selected) {
+                      if (selected) {
+                        setState(() {
+                          selected_Index = index;
+                          print(_residentTypeList[index]);
+                        });
+                      }
+                    },
+                  );
+                }),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, bottom: 4.0),
+                  child: Text(
+                    "Date Of Birth",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  _showDatePicker();
+                },
+                child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          _BirthDate != null && _BirthDate != ""
+                              ? setDate(_BirthDate.toString())
+                              : "Select Your BirthDate",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w600),
                         ),
                       )
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Text("Private Your Profile",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[700])),
-              ),
-              Transform.scale(
-                scale: 1.2,
-                child: Switch(
-                  onChanged: (val) => setState(
-                      () => _isSwitched = val == true ? "true" : "false"),
-                  value: _isSwitched == "true" ? true : false,
-                  activeColor: Colors.green,
-                  activeTrackColor: Colors.green[200],
-                  inactiveThumbColor: Colors.grey,
-                  inactiveTrackColor: Colors.grey[400],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextFormField(
-                        controller: Nametxt,
-                        // controller: _MobileNumber,
-                        decoration: InputDecoration(
-                          hintText: "Enter Name",
-                          hasFloatingPlaceholder: true,
-                          labelText: "Name",
-                          hintStyle: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextFormField(
-                        controller: MobileNumbertxt,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "Enter Mobile Number",
-                          hasFloatingPlaceholder: true,
-                          labelText: "Mobile No",
-                          hintStyle: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextFormField(
-                        controller: CompanyNametxt,
-                        decoration: InputDecoration(
-                          hintText: "Enter Company Name",
-                          hasFloatingPlaceholder: true,
-                          labelText: "Company Name",
-                          hintStyle: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextFormField(
-                        controller: BusinessJobtxt,
-                        decoration: InputDecoration(
-                          hintText: "Enter Business / Job",
-                          hasFloatingPlaceholder: true,
-                          labelText: "Job / Business",
-                          hintStyle: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextFormField(
-                        controller: Descriptiontxt,
-                        // controller: _MobileNumber,
-                        decoration: InputDecoration(
-                          hintText: "Enter Business / Job Description",
-                          hasFloatingPlaceholder: true,
-                          labelText: "Job / Business Desscription",
-                          hintStyle: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 12.0, right: 8.0, top: 12.0),
-                child: DropdownButton(
-                  items: _dropdownValues
-                      .map((value) => DropdownMenuItem(
-                            child: Text(value),
-                            value: value,
-                          ))
-                      .toList(),
-                  value: Selected_bloodGroup,
-                  onChanged: (newValue) {
-                    setState(() {
-                      Selected_bloodGroup = newValue;
-                    });
-                  },
-                  isExpanded: true,
-                  hint: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text('--Select Blood Group --'),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: TextFormField(
-                        maxLines: 3,
-                        controller: Addresstxt,
-                        // controller: _MobileNumber,
-                        decoration: InputDecoration(
-                          hintText: "Enter Address",
-                          hasFloatingPlaceholder: true,
-                          labelText: "Address",
-                          hintStyle: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 9.0, top: 10),
-                      child: Text("Gender", style: TextStyle(fontSize: 13)),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  Radio(
-                      value: 'Male',
-                      groupValue: Gender,
-                      onChanged: (value) {
-                        setState(() {
-                          Gender = value;
-                          print(Gender);
-                        });
-                      }),
-                  Text("Male", style: TextStyle(fontSize: 13)),
-                  Radio(
-                      value: 'Female',
-                      groupValue: Gender,
-                      onChanged: (value) {
-                        setState(() {
-                          Gender = value;
-                          print(Gender);
-                        });
-                      }),
-                  Text("Female", style: TextStyle(fontSize: 13)),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  spacing: 10,
-                  children: List.generate(_residentTypeList.length, (index) {
-                    return ChoiceChip(
-                      backgroundColor: Colors.grey[200],
-                      label: Text(_residentTypeList[index]),
-                      selected: selected_Index == index,
-                      onSelected: (selected) {
-                        if (selected) {
-                          setState(() {
-                            selected_Index = index;
-                            print(_residentTypeList[index]);
-                          });
-                        }
-                      },
-                    );
-                  }),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, bottom: 4.0),
-                    child: Text(
-                      "Date Of Birth",
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 18.0, left: 8, right: 8, bottom: 18.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 45,
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  color: constant.appPrimaryMaterialColor[500],
+                  textColor: Colors.white,
+                  splashColor: Colors.white,
+                  child: Text("Update",
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _showDatePicker();
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  onPressed: () {
+                    _UpdateProfile();
                   },
-                  child: Container(
-                    height: 40,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Text(
-                            _BirthDate != null && _BirthDate != ""
-                                ? setDate(_BirthDate.toString())
-                                : "Select Your BirthDate",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 18.0, left: 8, right: 8, bottom: 18.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 45,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    color: constant.appPrimaryMaterialColor[500],
-                    textColor: Colors.white,
-                    splashColor: Colors.white,
-                    child: Text("Update",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
-                    onPressed: () {
-                      _UpdateProfile();
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

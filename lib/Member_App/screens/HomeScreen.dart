@@ -1389,7 +1389,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/MyProfile');
+                    // Navigator.pushReplacementNamed(context, '/MyProfile');
+                    Navigator.pushNamed(context, '/CustomerProfile');
                   },
                 ),
               )

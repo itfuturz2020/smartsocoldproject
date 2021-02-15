@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
@@ -7,11 +7,87 @@ import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/constant.dart';
 import 'package:xml2json/xml2json.dart';
 
-
 Dio dio = new Dio();
 Xml2Json xml2json = new Xml2Json();
 
 class Services {
+  static Future<SaveDataClass> Savestaff(body) async {
+    print(body.toString());
+    String url = API_URL + 'SaveStaffs';
+    print("SaveStaff : " + url);
+    try {
+      final response = await dio.post(url, data: body);
+      if (response.statusCode == 200) {
+        SaveDataClass saveData =
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+        var responseData = response.data;
+
+        print("SaveStaff Response: " + responseData.toString());
+
+        saveData.Message = responseData["Message"].toString();
+        saveData.IsSuccess =
+            responseData["IsSuccess"].toString() == "true" ? true : false;
+        saveData.Data = responseData["Data"].toString();
+
+        return saveData;
+      } else {
+        print("Server Error");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("App Error ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<List> getFlatData(String WingId) async {
+    String url = API_URL + 'GetFlatByWing?WingId=$WingId';
+    print("getFlatByWing URL: " + url);
+    try {
+      Response response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("getFlatByWing Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("getFlatByWing Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
+  static Future<List<StaffType>> getRoleType() async {
+    String url = API_URL + 'GetRoles';
+    print("getRoles URL:" + url);
+
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List<StaffType> staff = [];
+        print("getRoles URL Response" + response.data.toString());
+
+        final jsonResponse = response.data;
+        StaffTypeData staffData = new StaffTypeData.fromJson(jsonResponse);
+
+        staff = staffData.Data;
+
+        return staff;
+      } else {
+        throw Exception("No Internet Connection");
+      }
+    } catch (e) {
+      print("Check getRoles URL Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
 
   static Future<List> GetSubCategory(String ServiceId) async {
     String url = constant.API_URL + 'GetSubCategory?ServiceId=$ServiceId';
@@ -97,8 +173,9 @@ class Services {
     }
   }
 
-  static Future<List> GetFlatNumber(String societyid,String wingid) async {
-    String url = constant.API_URL + 'GetFlatNumber?societyid=$societyid&wingid=$wingid';
+  static Future<List> GetFlatNumber(String societyid, String wingid) async {
+    String url =
+        constant.API_URL + 'GetFlatNumber?societyid=$societyid&wingid=$wingid';
     print("GetFlatNumber url : " + url);
     try {
       final response = await dio.get(
@@ -125,19 +202,21 @@ class Services {
     }
   }
 
-  static Future<List<servicelistClass>> GetServicePackageDropdown(String id) async {
+  static Future<List<servicelistClass>> GetServicePackageDropdown(
+      String id) async {
     String url = constant.API_URL + "GetServicePackagePrice?id=$id";
     print("GetServicePackageDropdown url = " + url);
     try {
       Response response = await dio.get(url);
       if (response.statusCode == 200) {
         List<servicelistClass> list = [];
-        print("GetServicePackageDropdown Response: " + response.data.toString());
+        print(
+            "GetServicePackageDropdown Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
           final jsonResponse = response.data;
           servicelistClassData servicelistclassdata =
-          new servicelistClassData.fromJson(jsonResponse);
+              new servicelistClassData.fromJson(jsonResponse);
 
           list = servicelistclassdata.data;
 
@@ -150,7 +229,8 @@ class Services {
     }
   }
 
-  static Future<List<winglistClass>> GetWingsBySocietyId(String societyid) async {
+  static Future<List<winglistClass>> GetWingsBySocietyId(
+      String societyid) async {
     String url = constant.API_URL + "GetWingsBySocietyId?societyid=$societyid";
     print("GetWingsBySocietyId url = " + url);
     try {
@@ -162,7 +242,7 @@ class Services {
         if (responseData["IsSuccess"] == true) {
           final jsonResponse = response.data;
           winglistClassData winglistclassdata =
-          new winglistClassData.fromJson(jsonResponse);
+              new winglistClassData.fromJson(jsonResponse);
 
           list = winglistclassdata.data;
 
@@ -175,19 +255,21 @@ class Services {
     }
   }
 
-  static Future<List<vendorlistClass>> GetVendorDataDropDown(String ServiceId)  async {
+  static Future<List<vendorlistClass>> GetVendorDataDropDown(
+      String ServiceId) async {
     String url = constant.API_URL + "GetVendor?id=$ServiceId";
     print("GetServicePackageDropdown url = " + url);
     try {
       Response response = await dio.get(url);
       if (response.statusCode == 200) {
-        List<vendorlistClass>  list = [];
-        print("GetServicePackageDropdown Response: " + response.data.toString());
+        List<vendorlistClass> list = [];
+        print(
+            "GetServicePackageDropdown Response: " + response.data.toString());
         var responseData = response.data;
         if (responseData["IsSuccess"] == true) {
           final jsonResponse = response.data;
           vendorlistClassData vendorlistclassdata =
-          new vendorlistClassData.fromJson(jsonResponse);
+              new vendorlistClassData.fromJson(jsonResponse);
 
           list = vendorlistclassdata.data;
 
@@ -199,9 +281,6 @@ class Services {
       throw Exception(e);
     }
   }
-
-
-
 
   static Future<SaveDataClass> Registration(body) async {
     print(body.toString());
@@ -230,8 +309,6 @@ class Services {
       throw Exception(e.toString());
     }
   }
-
-
 
   // Society code verify
 
@@ -938,6 +1015,33 @@ class Services {
     }
   }
 
+  static Future<List> GetDailyResource(
+      String societyId, String flatId, String wingId) async {
+    String url = API_URL +
+        'MemberResourceDetails?societyId=$societyId&flatId=$flatId&wingId=$wingId';
+    print("DailyResourceData url : " + url);
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("DailyResourceData Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        print("Error FamilyMemberData");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error FamilyMemberData   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
   static Future<List> GetWatchmen(String societyId, String roleId) async {
     String url =
         API_URL + 'GetStaffRolewiseDetails?societyid=$societyId&roleId=$roleId';
@@ -973,7 +1077,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -1057,6 +1161,33 @@ class Services {
       if (response.statusCode == 200) {
         SaveDataClass saveData = new SaveDataClass(
             Message: 'No Data', IsSuccess: false, IsRecord: false, Data: "");
+        print("DeleteMember Response: " + response.data.toString());
+        var responseData = response.data;
+        saveData.Message = responseData["Message"];
+        saveData.IsSuccess = responseData["IsSuccess"];
+        saveData.Data = responseData["Data"].toString();
+
+        return saveData;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("DeleteMember Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
+  static Future<SaveDataClass> DeleteDailyResource(
+      String staffId, String societyId, String flatId, String wingId) async {
+    String url = API_URL +
+        'DeleteStaff?staffId=$staffId&societyId=$societyId&flatId=$flatId&wingId=$wingId';
+    print("DeleteMember URL: " + url);
+    try {
+      Response response = await dio.get(url);
+
+      if (response.statusCode == 200) {
+        SaveDataClass saveData =
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: "");
         print("DeleteMember Response: " + response.data.toString());
         var responseData = response.data;
         saveData.Message = responseData["Message"];
@@ -1573,9 +1704,10 @@ class Services {
       throw Exception(e);
     }
   }
-  
-  static Future<bool> CheckWishList(String memberid,advertisementid) async {
-    String url = constant.API_URL + 'CheckWishList?memberid=$memberid&advertisementid=$advertisementid';
+
+  static Future<bool> CheckWishList(String memberid, advertisementid) async {
+    String url = constant.API_URL +
+        'CheckWishList?memberid=$memberid&advertisementid=$advertisementid';
     print("GetWishListData URL: " + url);
     try {
       Response response = await dio.get(url);
@@ -1608,7 +1740,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -1638,7 +1770,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -1668,7 +1800,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -1698,7 +1830,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -1728,7 +1860,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -2172,10 +2304,38 @@ class Services {
   }
 
   static Future<List> GetSocietyDetails(String SocietyId) async {
-    String url = API_URL + 'GetSocietyBySocietyId?societyId=$SocietyId';
+    String url = API_URL + 'GetSocietyDetails?societyid=$SocietyId';
     print("GetSocietyDetails url : " + url);
     try {
       final response = await dio.get(url);
+      print(response);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetSocietyDetails Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+          log('===sss===sss===ss===${list}');
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        print("Error GetSocietyDetails");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error GetSocietyDetails   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<List> GetSocietyStatistics(String SocietyId) async {
+    String url = API_URL + 'GetSocietySummaryData?societyid=$SocietyId';
+    print("GetSocietyDetails url : " + url);
+    try {
+      final response = await dio.get(url);
+      print(response);
       if (response.statusCode == 200) {
         List list = [];
         print("GetSocietyDetails Response: " + response.data.toString());
@@ -2205,7 +2365,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -2235,7 +2395,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -2257,7 +2417,6 @@ class Services {
   }
 
   static Future<List> GetLeadsByMember(String memberid) async {
-
     String url = constant.API_URL + 'GetLeadsByMember?memberid=$memberid';
     print("GetNewLead URL: " + url);
     try {
@@ -2332,7 +2491,7 @@ class Services {
     }
   }
 
- /* static Future<List> GetProduct() async {
+  /* static Future<List> GetProduct() async {
     String url = constant.API_URL + 'GetProductForMember';
     print("GetProductForMember URL: " + url);
     try {
@@ -2391,7 +2550,7 @@ class Services {
       final response = await dio.post(url, data: body);
       if (response.statusCode == 200) {
         SaveDataClass saveData =
-        new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
+            new SaveDataClass(Message: 'No Data', IsSuccess: false, Data: '0');
 
         var responseData = response.data;
 
@@ -2424,7 +2583,7 @@ class Services {
         if (responseData["IsSuccess"] == true) {
           final jsonResponse = response.data;
           stateClassData stateclassdata =
-          new stateClassData.fromJson(jsonResponse);
+              new stateClassData.fromJson(jsonResponse);
 
           list = stateclassdata.data;
 
@@ -2449,7 +2608,7 @@ class Services {
         if (responseData["IsSuccess"] == true) {
           final jsonResponse = response.data;
           cityClassData cityclassdata =
-          new cityClassData.fromJson(jsonResponse);
+              new cityClassData.fromJson(jsonResponse);
           list = cityclassdata.data;
 
           return list;
@@ -2460,5 +2619,4 @@ class Services {
       throw Exception(e);
     }
   }
-
 }

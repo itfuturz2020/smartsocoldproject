@@ -179,7 +179,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             "images/automobile.png",
                             width: 40,
                           )
-                        : Image.asset("images/Bike.png", width: 40),
+                        : Image.asset("images/bike.png", width: 40),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30.0),
@@ -577,7 +577,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   Navigator.pushNamed(context, "/GetMyVehicle");
                 },
                 child: ListTile(
-                  leading: Image.asset('images/Bike.png',
+                  leading: Image.asset('images/bike.png',
                       width: 20, height: 20, color: Colors.grey[400]),
                   title: Text("My Parking Detail"),
                   subtitle: Text("click to view"),
@@ -687,7 +687,7 @@ class _Addvehicale_dialogueState extends State<Addvehicale_dialogue> {
     // TODO: implement initState
     super.initState();
     getLocaldata();
-    vehiclelist.add(new VehicleModel(false, "Bike", "Bike.png"));
+    vehiclelist.add(new VehicleModel(false, "Bike", "bike.png"));
     vehiclelist.add(new VehicleModel(false, "Car", "automobile.png"));
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(message: 'Please Wait');
