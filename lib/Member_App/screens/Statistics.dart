@@ -156,68 +156,68 @@ class _StatisticsState extends State<Statistics> {
                     ),
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: Card(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "152",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: constant.appPrimaryMaterialColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                "Total Adults",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Card(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "75",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: constant.appPrimaryMaterialColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                "Total Children",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: <Widget>[
+                //     Flexible(
+                //       child: Card(
+                //         child: Container(
+                //           width: MediaQuery.of(context).size.width / 2,
+                //           height: 100,
+                //           child: Column(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: <Widget>[
+                //               Text(
+                //                 "152",
+                //                 style: TextStyle(
+                //                     fontSize: 20,
+                //                     color: constant.appPrimaryMaterialColor,
+                //                     fontWeight: FontWeight.w600),
+                //               ),
+                //               SizedBox(
+                //                 height: 8,
+                //               ),
+                //               Text(
+                //                 "Total Adults",
+                //                 style: TextStyle(
+                //                   fontSize: 13,
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     Flexible(
+                //       child: Card(
+                //         child: Container(
+                //           width: MediaQuery.of(context).size.width / 2,
+                //           height: 100,
+                //           child: Column(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: <Widget>[
+                //               Text(
+                //                 "75",
+                //                 style: TextStyle(
+                //                     fontSize: 20,
+                //                     color: constant.appPrimaryMaterialColor,
+                //                     fontWeight: FontWeight.w600),
+                //               ),
+                //               SizedBox(
+                //                 height: 8,
+                //               ),
+                //               Text(
+                //                 "Total Children",
+                //                 style: TextStyle(
+                //                   fontSize: 13,
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Row(
                   children: <Widget>[
                     Flexible(

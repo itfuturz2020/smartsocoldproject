@@ -26,16 +26,16 @@ class _BankDetailsState extends State<BankDetails> {
       body: Column(
         children: [
           ListTile(
-            title: Text(
-              "${widget.bankData["BankName"]}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            title: Text(widget.bankData["BankName"] == "" ? "Bank Of Baroda"
+             : "${widget.bankData["BankName"]}",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
             ),
             leading: Icon(Icons.account_balance),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "UPI Id : ${widget.bankData["UPIID"]}",
+                Text(widget.bankData["UPIID"] == null ? "UPI Id : 9995552221@upi"
+                  :"UPI Id : ${widget.bankData["UPIID"]}",
                   style: TextStyle(fontSize: 15),
                 ),
                 Text(
@@ -46,13 +46,15 @@ class _BankDetailsState extends State<BankDetails> {
                   "IFSC Number : ${widget.bankData["IFSCCode"]}",
                   style: TextStyle(fontSize: 15),
                 ),
-                Text(
-                  "Adress : ${widget.bankData["BankAddress"]}",
+                Text(widget.bankData["UPIID"] == null ? "Address : Surat, Gujarat"
+                 : "Adress : ${widget.bankData["BankAddress"]}",
                   style: TextStyle(fontSize: 15),
                 ),
               ],
             ),
           ),
+          Divider(color: Colors.grey[300],)
+
         ],
       ),
     );

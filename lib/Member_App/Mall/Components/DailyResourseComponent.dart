@@ -191,7 +191,7 @@ class _DailyResourseComponentState extends State<DailyResourseComponent> {
                     Padding(
                       padding: const EdgeInsets.only(left: 25),
                       child: Text(
-                        "Daily Resource",
+                        "Daily Resources",
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,

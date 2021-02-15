@@ -29,7 +29,9 @@ class _BuildingInfoState extends State<BuildingInfo> {
         children: <Widget>[
           SizedBox(
             height: MediaQuery.of(context).size.height / 3.5,
-            child: FadeInImage.assetNetwork(
+            child: widget.societyData["Image"] == null ?
+           Image.asset("images/Building.png")
+           : FadeInImage.assetNetwork(
               placeholder: "",
               image: "${constant.Image_Url}${widget.societyData["Image"]}",
               fit: BoxFit.cover,
@@ -52,16 +54,16 @@ class _BuildingInfoState extends State<BuildingInfo> {
                   "${widget.societyData["Address"]},",
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-                Text(
-                  "${widget.societyData["AreaName"]},",
+                Text(widget.societyData["CityName"] == null ? "VIP road"
+                 : "${widget.societyData["AreaName"]},",
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-                Text(
-                  "${widget.societyData["CityName"]},",
+                Text(widget.societyData["CityName"] == null ? "Surat"
+                  :"${widget.societyData["CityName"]},",
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-                Text(
-                  "${widget.societyData["StateName"]},",
+                Text(widget.societyData["CityName"] == null ? "Gujrat"
+                  :"${widget.societyData["StateName"]},",
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               ],
