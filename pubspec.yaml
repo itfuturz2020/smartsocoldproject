@@ -72,7 +72,6 @@ dependencies:
   agora_rtm: ^0.9.11
   image_picker: ^0.6.7+2
   intro_slider: ^2.3.3
-  bidirectional_scroll_view: ^0.1.1
   multi_image_picker: ^4.7.14
   share: ^0.6.5+4
   geocoder: ^0.2.1
@@ -143,7 +142,6 @@ flutter:
     - images/phone.png
     - images/Blood.png
     - images/gender.png
-    - images/Bike.png
     - images/automobile.png
     - images/ElectronicIcon.png
     - images/plumbing.png

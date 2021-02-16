@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:bidirectional_scroll_view/bidirectional_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
