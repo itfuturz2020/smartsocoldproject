@@ -166,7 +166,16 @@ class _MemberGuestListState extends State<MemberGuestList> {
                       ],
                     ),
                   ),
-
+                  GestureDetector(
+                   onTap: (){
+                     launch(
+                         ('tel://${_GuestList[index]["ContactNo"]}'));
+                   },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0,right: 10),
+                      child: Icon(Icons.phone,color: Colors.green,size: 20,)
+                    ),
+                  ),
 
                   GestureDetector(
                     onTap: (){

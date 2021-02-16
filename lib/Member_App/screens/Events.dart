@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Admin_App/Common/Services.dart';
+import 'package:smart_society_new/Admin_App/Screens/AddEvent.dart';
 import 'package:smart_society_new/Admin_App/Screens/EventDetailAdmin.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/screens/EventDetail.dart';
@@ -98,7 +99,7 @@ class _EventsState extends State<Events> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, "/HomeScreen");
+        Navigator.pushReplacementNamed(context, "/Dashboard");
       },
       child: Scaffold(
         appBar: AppBar(
@@ -109,7 +110,7 @@ class _EventsState extends State<Events> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, "/HomeScreen");
+                Navigator.pushReplacementNamed(context, "/Dashboard");
               }),
         ),
         body: ListView.separated(
@@ -189,7 +190,14 @@ class _EventsState extends State<Events> {
           backgroundColor: constant.appPrimaryMaterialColor,
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/AddEvent');
+
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddEvent()
+                ),
+                    (Route<dynamic> route) => false);
+           // Navigator.pushReplacementNamed(context, '/AddEvent');
           },
         ),
       ),

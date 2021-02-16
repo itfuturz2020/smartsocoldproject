@@ -13,6 +13,12 @@ const Inr_Rupee = "₹";
 const String whatsAppLink =
     "https://api.whatsapp.com/send?phone=#mobile&text=#msg";
 
+class MESSAGES {
+  static const String INTERNET_ERROR = "No Internet Connection";
+  static const String INTERNET_ERROR_RETRY =
+      "No Internet Connection.\nPlease Retry";
+}
+
 class Session {
   static const String session_login = "Login_data";
   static const String Member_Id = "Member_id";
@@ -39,7 +45,6 @@ class Session {
   static const String digital_Id = "digital_Id";
   static const String IsVerified = "is_verified";
   static const String forFirstTime = "forFirstTime";
-
 }
 
 Map<int, Color> appprimarycolors = {

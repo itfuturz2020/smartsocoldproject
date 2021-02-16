@@ -15,12 +15,14 @@ import 'package:smart_society_new/Member_App/Mall/Components/MyResidenceComponen
 import 'package:smart_society_new/Member_App/Mall/Components/MyVehicleComponent.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/component/masktext.dart';
+import 'package:smart_society_new/Member_App/screens/AddDailyResource.dart';
 import 'package:smart_society_new/Member_App/screens/AddFamilyMember.dart';
 import 'package:smart_society_new/Member_App/screens/AddMyResidents.dart';
 import 'package:smart_society_new/Member_App/screens/EmergencyContactScreen.dart';
 import 'package:smart_society_new/Member_App/screens/PreferenceScreen.dart';
 import 'package:smart_society_new/Member_App/screens/UpdateProfileScreen.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:share/share.dart';
 
 class CustomerProfile extends StatefulWidget {
   @override
@@ -30,9 +32,10 @@ class CustomerProfile extends StatefulWidget {
 class _CustomerProfileState extends State<CustomerProfile> {
   String Name, MobileNo, Profile;
   List FmemberData = new List();
+  List DailyResourceData = new List();
   bool isLoading = true;
   List VehicleData = new List();
-  String SocietyId, MemberId, ParentId;
+  String SocietyId, MemberId, ParentId, FlatId, WingId;
 
   @override
   void initState() {
@@ -40,6 +43,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     super.initState();
     profile();
     GetFamilyDetail();
+    GetDailyResourceDetail();
     GetMyvehicleData();
   }
 
@@ -51,12 +55,48 @@ class _CustomerProfileState extends State<CustomerProfile> {
       Profile = prefs.getString(constant.Session.Profile);
       SocietyId = prefs.getString(constant.Session.SocietyId);
       MemberId = prefs.getString(constant.Session.Member_Id);
+      FlatId = prefs.getString(constant.Session.FlatNo);
+      WingId = prefs.getString(constant.Session.WingId);
       if (prefs.getString(constant.Session.ParentId) == "null" ||
           prefs.getString(constant.Session.ParentId) == "")
         ParentId = "0";
       else
         ParentId = prefs.getString(constant.Session.ParentId);
     });
+  }
+
+  void _showConfirmDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("My JINI"),
+          content: new Text("Are You Sure You Want To Exit?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _logout();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    Navigator.pushReplacementNamed(context, "/IntroScreen");
   }
 
   @override
@@ -91,9 +131,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         const EdgeInsets.only(top: 17.0, left: 10, right: 10),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context, SlideLeftRoute(page: UpdateProfile()));
-                        // Navigator.pushNamed(context, '/UpdateProfile');
+                        // Navigator.pushReplacement(
+                        //     context, SlideLeftRoute(page: UpdateProfile()));
+                        Navigator.pushNamed(context, '/UpdateProfile');
                       },
                       child: Container(
                         color: Colors.grey[100],
@@ -162,93 +202,93 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   ),
 
                   //for my residence
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20.0, right: 10, top: 20),
-                    child: Row(
-                      children: [
-                        Icon(Icons.home_work_outlined),
-                        Expanded(
-                            child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            "My Residents",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
-                        )),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(context,
-                                SlideLeftRoute(page: AddMyResidents()));
-                          },
-                          child: Container(
-                            //color: Colors.orange[300],
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.orange[300],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    size: 15,
-                                  ),
-                                  Text("Add  ",
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w600))
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 25.0,
-                      //bottom: 10,
-                    ),
-                    child: Container(
-                      height: 90,
-                      child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 2 + 1,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index > 2 - 1) {
-                              return Container(
-                                width: 150,
-                                decoration: DottedDecoration(
-                                  shape: Shape.box,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: FlatButton(
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 30,
-                                    color: appPrimaryMaterialColor,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pushReplacement(context,
-                                        SlideLeftRoute(page: AddMyResidents()));
-                                  },
-                                ),
-                              );
-                            } else {
-                              return MyResidenceComponent(
-                                  //resData: ,
-                                  );
-                            }
-                          }),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.only(left: 20.0, right: 10, top: 20),
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(Icons.home_work_outlined),
+                  //       Expanded(
+                  //           child: Padding(
+                  //         padding: const EdgeInsets.only(left: 8.0),
+                  //         child: Text(
+                  //           "My Residents",
+                  //           style: TextStyle(
+                  //               fontSize: 15, fontWeight: FontWeight.w600),
+                  //         ),
+                  //       )),
+                  //       GestureDetector(
+                  //         onTap: () {
+                  //           Navigator.push(context,
+                  //               SlideLeftRoute(page: AddMyResidents()));
+                  //         },
+                  //         child: Container(
+                  //           //color: Colors.orange[300],
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(5),
+                  //             color: Colors.orange[300],
+                  //           ),
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.all(5.0),
+                  //             child: Row(
+                  //               children: [
+                  //                 Icon(
+                  //                   Icons.add,
+                  //                   size: 15,
+                  //                 ),
+                  //                 Text("Add  ",
+                  //                     style: TextStyle(
+                  //                         fontSize: 13,
+                  //                         fontWeight: FontWeight.w600))
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  //
+                  // Padding(
+                  //   padding: const EdgeInsets.only(
+                  //     top: 25.0,
+                  //     //bottom: 10,
+                  //   ),
+                  //   child: Container(
+                  //     height: 90,
+                  //     child: ListView.builder(
+                  //         physics: BouncingScrollPhysics(),
+                  //         scrollDirection: Axis.horizontal,
+                  //         itemCount: 2 + 1,
+                  //         shrinkWrap: true,
+                  //         itemBuilder: (BuildContext context, int index) {
+                  //           if (index > 2 - 1) {
+                  //             return Container(
+                  //               width: 150,
+                  //               decoration: DottedDecoration(
+                  //                 shape: Shape.box,
+                  //                 borderRadius: BorderRadius.circular(5),
+                  //               ),
+                  //               child: FlatButton(
+                  //                 child: Icon(
+                  //                   Icons.add,
+                  //                   size: 30,
+                  //                   color: appPrimaryMaterialColor,
+                  //                 ),
+                  //                 onPressed: () {
+                  //                   Navigator.pushReplacement(context,
+                  //                       SlideLeftRoute(page: AddMyResidents()));
+                  //                 },
+                  //               ),
+                  //             );
+                  //           } else {
+                  //             return MyResidenceComponent(
+                  //                 //resData: ,
+                  //                 );
+                  //           }
+                  //         }),
+                  //   ),
+                  // ),
 
                   //for Family Member
                   Padding(
@@ -380,7 +420,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context,
-                                SlideLeftRoute(page: AddFamilyMember()));
+                                SlideLeftRoute(page: AddDailyResource()));
                           },
                           child: Container(
                             //color: Colors.orange[300],
@@ -418,10 +458,10 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       child: ListView.builder(
                           physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemCount: 2 + 1,
+                          itemCount: DailyResourceData.length + 1,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
-                            if (index > 2 - 1) {
+                            if (index > DailyResourceData.length - 1) {
                               return Container(
                                 width: 100,
                                 decoration: DottedDecoration(
@@ -438,14 +478,19 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                     Navigator.push(
                                         context,
                                         SlideLeftRoute(
-                                            page: AddFamilyMember()));
+                                            page: AddDailyResource()));
                                   },
                                 ),
                               );
                             } else {
                               return DailyResourseComponent(
-                                  //resData: ,
-                                  );
+                                dailyResourceData: DailyResourceData[index],
+                                onDelete: () {
+                                  setState(() {
+                                    DailyResourceData.removeAt(index);
+                                  });
+                                },
+                              );
                             }
                           }),
                     ),
@@ -620,61 +665,75 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 18.0, bottom: 8),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.feedback_outlined,
-                                size: 25,
-                                color: Colors.black54,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
-                                child: Text(
-                                  "Support & Feedback",
-                                  style: TextStyle(fontSize: 16),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(top: 18.0, bottom: 8),
+                        //   child: Row(
+                        //     children: [
+                        //       Icon(
+                        //         Icons.feedback_outlined,
+                        //         size: 25,
+                        //         color: Colors.black54,
+                        //       ),
+                        //       Padding(
+                        //         padding: const EdgeInsets.only(left: 12.0),
+                        //         child: Text(
+                        //           "Support & Feedback",
+                        //           style: TextStyle(fontSize: 16),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        //   ),
+                        // ),
+                        GestureDetector(
+                          onTap: () {
+                            Share.share(
+                                "Download MyJini App now to manage your society security, maintenance, staffing & operations and more:\n http://myjini.in/\n\nDownload the App from the below link\nhttp://tinyurl.com/wz2aeao");
+                          },
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 18.0, bottom: 8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.share,
+                                  size: 25,
+                                  color: Colors.black54,
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 12.0),
+                                  child: Text(
+                                    "Tell a friend about My Jini",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 18.0, bottom: 8),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.share,
-                                size: 25,
-                                color: Colors.black54,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
-                                child: Text(
-                                  "Tell a friend about My Jini",
-                                  style: TextStyle(fontSize: 16),
+                        GestureDetector(
+                          onTap: () {
+                            _showConfirmDialog();
+                          },
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 18.0, bottom: 8),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.logout,
+                                  size: 25,
+                                  color: Colors.black54,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 18.0, bottom: 8),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.logout,
-                                size: 25,
-                                color: Colors.black54,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 12.0),
-                                child: Text(
-                                  "Logout",
-                                  style: TextStyle(fontSize: 16),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 12.0),
+                                  child: Text(
+                                    "Logout",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -768,6 +827,40 @@ class _CustomerProfileState extends State<CustomerProfile> {
     }
   }
 
+  GetDailyResourceDetail() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Services.GetDailyResource(SocietyId, FlatId, WingId).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              DailyResourceData = data;
+            });
+            print('============================${DailyResourceData}');
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
   showHHMsg(String title, String msg) {
     showDialog(
       context: context,
@@ -841,7 +934,7 @@ class _Addvehicale_dialogueState extends State<Addvehicale_dialogue> {
     // TODO: implement initState
     super.initState();
     getLocaldata();
-    vehiclelist.add(new VehicleModel(false, "Bike", "Bike.png"));
+    vehiclelist.add(new VehicleModel(false, "Bike", "bike.png"));
     vehiclelist.add(new VehicleModel(false, "Car", "automobile.png"));
     pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
     pr.style(message: 'Please Wait');

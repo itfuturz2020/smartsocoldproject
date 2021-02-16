@@ -88,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          title: GestureDetector(
+          title:
+              /*GestureDetector(
             onTap: () {
               Navigator.push(context, SlideLeftRoute(page: ProfileScreen()));
             },
@@ -119,7 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-          ),
+          )*/
+              Text('Online Shopping'),
         ),
         body: WillPopScope(
             child: isLoading == true

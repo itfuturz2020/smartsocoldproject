@@ -47,6 +47,7 @@ import 'package:smart_society_new/Member_App/screens/Committees.dart';
 import 'package:smart_society_new/Member_App/screens/ContactList.dart';
 import 'package:smart_society_new/Member_App/screens/ContactUs.dart';
 import 'package:smart_society_new/Member_App/screens/CreateSociety.dart';
+import 'package:smart_society_new/Member_App/screens/CustomerProfile.dart';
 import 'package:smart_society_new/Member_App/screens/DirectoryScreen.dart';
 import 'package:smart_society_new/Member_App/screens/DocumentScreen.dart';
 import 'package:smart_society_new/Member_App/screens/EventDetail.dart';
@@ -87,6 +88,7 @@ import 'package:smart_society_new/Member_App/Services/SubServicesScreen.dart';
 import 'package:smart_society_new/Member_App/screens/UpdateProfileScreen.dart';
 import 'package:smart_society_new/Member_App/screens/AddGuest.dart';
 import 'package:smart_society_new/Member_App/Services/ServiceDetailScreen.dart';
+import 'package:smart_society_new/Member_App/screens/AddDailyResource.dart';
 
 //admin App screens
 import 'package:smart_society_new/Admin_App/Screens/AddGallary.dart';
@@ -283,6 +285,8 @@ class _MyAppState extends State<MyApp> {
         '/SetupWings': (context) => SetupWings(),
         '/WingDetail': (context) => WingDetail(),
         '/WingFlat': (context) => WingFlat(),
+        '/CustomerProfile': (context) => CustomerProfile(),
+        '/AddDailyResource': (context) => AddDailyResource(),
 
         '/AdvertisementManage': (context) => AdvertisementManage(),
         '/ContactList': (context) => ContactList(),

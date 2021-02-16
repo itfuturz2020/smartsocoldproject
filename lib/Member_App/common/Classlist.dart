@@ -67,7 +67,7 @@ class cityClass {
   String StateId;
   String Name;
 
-  cityClass({this.id,this.StateId, this.Name});
+  cityClass({this.id, this.StateId, this.Name});
 
   factory cityClass.fromJson(Map<String, dynamic> json) {
     return cityClass(
@@ -167,7 +167,7 @@ class servicelistClass {
   String ParentId;
   String Title;
 
-  servicelistClass({this.id,this.ParentId, this.Title});
+  servicelistClass({this.id, this.ParentId, this.Title});
 
   factory servicelistClass.fromJson(Map<String, dynamic> json) {
     return servicelistClass(
@@ -199,7 +199,7 @@ class vendorlistClass {
   String ParentId;
   String Name;
 
-  vendorlistClass({this.id,this.ParentId, this.Name});
+  vendorlistClass({this.id, this.ParentId, this.Name});
 
   factory vendorlistClass.fromJson(Map<String, dynamic> json) {
     return vendorlistClass(
@@ -231,7 +231,7 @@ class winglistClass {
   String ParentId;
   String WingName;
 
-  winglistClass({this.id,this.ParentId, this.WingName});
+  winglistClass({this.id, this.ParentId, this.WingName});
 
   factory winglistClass.fromJson(Map<String, dynamic> json) {
     return winglistClass(
@@ -241,4 +241,36 @@ class winglistClass {
   }
 }
 
+class StaffTypeData {
+  String Message;
+  bool IsSuccess;
+  List<StaffType> Data;
 
+  StaffTypeData({
+    this.Message,
+    this.IsSuccess,
+    this.Data,
+  });
+
+  factory StaffTypeData.fromJson(Map<String, dynamic> json) {
+    return StaffTypeData(
+        Message: json['Message'] as String,
+        IsSuccess: json['IsSuccess'] as bool,
+        Data: json['Data']
+            .map<StaffType>((json) => StaffType.fromJson(json))
+            .toList());
+  }
+}
+
+class StaffType {
+  String TypeId;
+  String TypeName;
+
+  StaffType({this.TypeId, this.TypeName});
+
+  factory StaffType.fromJson(Map<String, dynamic> json) {
+    return StaffType(
+        TypeId: json['Id'].toString() as String,
+        TypeName: json['Title'].toString() as String);
+  }
+}

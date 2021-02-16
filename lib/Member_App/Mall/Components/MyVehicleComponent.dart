@@ -37,7 +37,7 @@ class _MyVehicleComponentState extends State<MyVehicleComponent> {
                         "images/automobile.png",
                         width: 40,
                       )
-                    : Image.asset("images/Bike.png", width: 40),
+                    : Image.asset("images/bike.png", width: 40),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10),
                   child: Column(
@@ -101,7 +101,7 @@ class _MyVehicleComponentState extends State<MyVehicleComponent> {
                                     "images/automobile.png",
                                   )
                                 : AssetImage(
-                                    "images/Bike.png",
+                                    "images/bike.png",
                                   ),
                             backgroundColor: Colors.grey[200],
                             radius: 45,

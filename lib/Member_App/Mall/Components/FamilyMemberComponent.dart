@@ -103,8 +103,8 @@ class _FamilyMemberComponentState extends State<FamilyMemberComponent> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Share.share(widget.familyData["ContactNo"],
-                              subject: 'Name : ${widget.familyData["Name"]}');
+                          Share.share(
+                              "Download MyJini App now to manage your society security, maintenance, staffing & operations and more:\n http://myjini.in/\n\nDownload the App from the below link\nhttp://tinyurl.com/wz2aeao");
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

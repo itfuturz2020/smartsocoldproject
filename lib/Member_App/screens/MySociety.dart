@@ -25,11 +25,11 @@ class _MySocietyState extends State<MySociety> {
       "title": "Building Info",
       "screen": "BuildingInfo",
     },
-    {
-      "image": "images/Rules.png",
-      "title": "Rules",
-      "screen": "Rules",
-    },
+    // {
+    //   "image": "images/Rules.png",
+    //   "title": "Rules",
+    //   "screen": "Rules",
+    // },
     {
       "image": "images/document.png",
       "title": "Documents",
@@ -77,7 +77,7 @@ class _MySocietyState extends State<MySociety> {
           setState(() {
             isLoading = false;
           });
-          showHHMsg("Try Again.", "");
+          // showHHMsg("Try Again.", "");
         });
       }
     } on SocketException catch (_) {
@@ -119,7 +119,7 @@ class _MySocietyState extends State<MySociety> {
                 Navigator.pushReplacementNamed(context, "/HomeScreen");
               }),
           centerTitle: true,
-          title: Text('MySociety', style: TextStyle(fontSize: 18)),
+          title: Text('My Society', style: TextStyle(fontSize: 18)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(10),
