@@ -196,8 +196,6 @@ class _AddMyResidentsState extends State<AddMyResidents> {
 
   @override
   Widget build(BuildContext context) {
-    print('==ss==${wingData}');
-    print('==ss==${wings}');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -289,41 +287,44 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              size: 30,
-                            ),
-                            //isDense: true,
-                            hint: new Text(selState),
-                            // value: _memberClass,
-                            onChanged: (val) {
-                              print(val);
-                              cities = [];
-                              for (int i = 0; i < stateandcities.length; i++) {
-                                if (stateandcities[i]["state"] ==
-                                    val.toString()) {
-                                  cities.add(stateandcities[i]["name"]);
-                                  cities.sort();
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:8.0),
+                            child: DropdownButton<String>(
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                              ),
+                              //isDense: true,
+                              hint: new Text(selState),
+                              // value: _memberClass,
+                              onChanged: (val) {
+                                print(val);
+                                cities = [];
+                                for (int i = 0; i < stateandcities.length; i++) {
+                                  if (stateandcities[i]["state"] ==
+                                      val.toString()) {
+                                    cities.add(stateandcities[i]["name"]);
+                                    cities.sort();
+                                  }
                                 }
-                              }
-                              print("cities");
-                              print(cities);
-                              setState(() {
-                                selState = val;
-                              });
-                            },
-                            //value: selState,
-                            items: states
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(
-                                  value,
-                                  style: new TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
+                                print("cities");
+                                print(cities);
+                                setState(() {
+                                  selState = val;
+                                });
+                              },
+                              //value: selState,
+                              items: states
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: new Text(
+                                    value,
+                                    style: new TextStyle(color: Colors.black),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
                       ),
@@ -388,30 +389,33 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              size: 30,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:8.0),
+                            child: DropdownButton<String>(
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                              ),
+                              //isDense: true,
+                              hint: new Text(selCity),
+                              // value: _memberClass,
+                              onChanged: (val) {
+                                setState(() {
+                                  selCity = val;
+                                });
+                              },
+                              //value: selCity,
+                              items: cities
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: new Text(
+                                    value,
+                                    style: new TextStyle(color: Colors.black),
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                            //isDense: true,
-                            hint: new Text(selCity),
-                            // value: _memberClass,
-                            onChanged: (val) {
-                              setState(() {
-                                selCity = val;
-                              });
-                            },
-                            //value: selCity,
-                            items: cities
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(
-                                  value,
-                                  style: new TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
                           ),
                         ),
                       ),
@@ -476,30 +480,33 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              size: 30,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:8.0),
+                            child: DropdownButton<String>(
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                              ),
+                              //isDense: true,
+                              hint: new Text(selSociety),
+                              // value: _memberClass,
+                              onChanged: (val) {
+                                setState(() {
+                                  selSociety = val;
+                                });
+                              },
+                              //value: selCity,
+                              items: societies
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: new Text(
+                                    value,
+                                    style: new TextStyle(color: Colors.black),
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                            //isDense: true,
-                            hint: new Text(selSociety),
-                            // value: _memberClass,
-                            onChanged: (val) {
-                              setState(() {
-                                selSociety = val;
-                              });
-                            },
-                            //value: selCity,
-                            items: societies
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(
-                                  value,
-                                  style: new TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
                           ),
                         ),
                       ),
@@ -564,30 +571,33 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              size: 30,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:8.0),
+                            child: DropdownButton<String>(
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                              ),
+                              //isDense: true,
+                              hint: new Text(selWing),
+                              // value: _memberClass,
+                              onChanged: (val) {
+                                setState(() {
+                                  selWing = val;
+                                });
+                              },
+                              //value: selCity,
+                              items: wings
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: new Text(
+                                    value,
+                                    style: new TextStyle(color: Colors.black),
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                            //isDense: true,
-                            hint: new Text(selWing),
-                            // value: _memberClass,
-                            onChanged: (val) {
-                              setState(() {
-                                selWing = val;
-                              });
-                            },
-                            //value: selCity,
-                            items: wings
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: new Text(
-                                  value,
-                                  style: new TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
                           ),
                         ),
                       ),

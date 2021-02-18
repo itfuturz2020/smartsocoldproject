@@ -170,12 +170,12 @@ class _MyAppState extends State<MyApp> {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
           //for vibration
-          Vibration.vibrate(duration: 5000,);
+          Vibration.vibrate(duration: 7000,);
         } else {
           showNotification('$Title', '$bodymessage');
           audioCache.play('Sound.mp3');
           //..
-          Vibration.vibrate(duration: 5000,);
+          Vibration.vibrate(duration: 7000,);
         }
       },
       //when app is closed and user click on notification
@@ -190,12 +190,12 @@ class _MyAppState extends State<MyApp> {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
           // Vibration.vibrate();
-          Vibration.vibrate(duration: 5000,);
+          Vibration.vibrate(duration: 7000,);
         } else {
           showNotification('$Title', '$bodymessage');
           audioCache.play('Sound.mp3');
           // Vibration.vibrate();
-          Vibration.vibrate(duration: 5000,);
+          Vibration.vibrate(duration: 7000,);
         }
       },
       //when app is in background and user click on notification
@@ -211,12 +211,12 @@ class _MyAppState extends State<MyApp> {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
           // Vibration.vibrate();
-          Vibration.vibrate(duration: 5000,);
+          Vibration.vibrate(duration: 7000,);
         } else {
           showNotification('$Title', '$bodymessage');
           audioCache.play('Sound.mp3');
           // Vibration.vibrate();
-          Vibration.vibrate(duration: 5000,);
+          Vibration.vibrate(duration: 7000,);
         }
       },
     );
