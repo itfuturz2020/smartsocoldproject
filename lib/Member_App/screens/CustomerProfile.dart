@@ -33,6 +33,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   String Name, MobileNo, Profile;
   List FmemberData = new List();
   List DailyResourceData = new List();
+  List MyResidentsData = new List();
   bool isLoading = true;
   List VehicleData = new List();
   String SocietyId, MemberId, ParentId, FlatId, WingId;
@@ -42,6 +43,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     // TODO: implement initState
     super.initState();
     profile();
+    GetMyResidents();
     GetFamilyDetail();
     GetDailyResourceDetail();
     GetMyvehicleData();
@@ -202,93 +204,93 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   ),
 
                   //for my residence
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.only(left: 20.0, right: 10, top: 20),
-                  //   child: Row(
-                  //     children: [
-                  //       Icon(Icons.home_work_outlined),
-                  //       Expanded(
-                  //           child: Padding(
-                  //         padding: const EdgeInsets.only(left: 8.0),
-                  //         child: Text(
-                  //           "My Residents",
-                  //           style: TextStyle(
-                  //               fontSize: 15, fontWeight: FontWeight.w600),
-                  //         ),
-                  //       )),
-                  //       GestureDetector(
-                  //         onTap: () {
-                  //           Navigator.push(context,
-                  //               SlideLeftRoute(page: AddMyResidents()));
-                  //         },
-                  //         child: Container(
-                  //           //color: Colors.orange[300],
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(5),
-                  //             color: Colors.orange[300],
-                  //           ),
-                  //           child: Padding(
-                  //             padding: const EdgeInsets.all(5.0),
-                  //             child: Row(
-                  //               children: [
-                  //                 Icon(
-                  //                   Icons.add,
-                  //                   size: 15,
-                  //                 ),
-                  //                 Text("Add  ",
-                  //                     style: TextStyle(
-                  //                         fontSize: 13,
-                  //                         fontWeight: FontWeight.w600))
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  //
-                  // Padding(
-                  //   padding: const EdgeInsets.only(
-                  //     top: 25.0,
-                  //     //bottom: 10,
-                  //   ),
-                  //   child: Container(
-                  //     height: 90,
-                  //     child: ListView.builder(
-                  //         physics: BouncingScrollPhysics(),
-                  //         scrollDirection: Axis.horizontal,
-                  //         itemCount: 2 + 1,
-                  //         shrinkWrap: true,
-                  //         itemBuilder: (BuildContext context, int index) {
-                  //           if (index > 2 - 1) {
-                  //             return Container(
-                  //               width: 150,
-                  //               decoration: DottedDecoration(
-                  //                 shape: Shape.box,
-                  //                 borderRadius: BorderRadius.circular(5),
-                  //               ),
-                  //               child: FlatButton(
-                  //                 child: Icon(
-                  //                   Icons.add,
-                  //                   size: 30,
-                  //                   color: appPrimaryMaterialColor,
-                  //                 ),
-                  //                 onPressed: () {
-                  //                   Navigator.pushReplacement(context,
-                  //                       SlideLeftRoute(page: AddMyResidents()));
-                  //                 },
-                  //               ),
-                  //             );
-                  //           } else {
-                  //             return MyResidenceComponent(
-                  //                 //resData: ,
-                  //                 );
-                  //           }
-                  //         }),
-                  //   ),
-                  // ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20.0, right: 10, top: 20),
+                    child: Row(
+                      children: [
+                        Icon(Icons.home_work_outlined),
+                        Expanded(
+                            child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            "My Residents",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w600),
+                          ),
+                        )),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                SlideLeftRoute(page: AddMyResidents()));
+                          },
+                          child: Container(
+                            //color: Colors.orange[300],
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.orange[300],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    size: 15,
+                                  ),
+                                  Text("Add  ",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600))
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 25.0,
+                      //bottom: 10,
+                    ),
+                    child: Container(
+                      height: 90,
+                      child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: MyResidentsData.length + 1,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index > MyResidentsData.length - 1) {
+                              return Container(
+                                width: 150,
+                                decoration: DottedDecoration(
+                                  shape: Shape.box,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: FlatButton(
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 30,
+                                    color: appPrimaryMaterialColor,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(context,
+                                        SlideLeftRoute(page: AddMyResidents()));
+                                  },
+                                ),
+                              );
+                            } else {
+                              return MyResidenceComponent(
+                                resData: MyResidentsData[index],
+                              );
+                            }
+                          }),
+                    ),
+                  ),
 
                   //for Family Member
                   Padding(
@@ -791,6 +793,40 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 });
               },
             ));
+  }
+
+  //get My Residents api
+  GetMyResidents() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Services.GetMemberSocietyDetails(MobileNo).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              MyResidentsData = data;
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
   }
 
   //get family api

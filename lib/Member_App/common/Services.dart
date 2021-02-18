@@ -989,6 +989,103 @@ class Services {
     }
   }
 
+  static Future<List> getStatesCities() async {
+    String url =
+        "https://raw.githubusercontent.com/nshntarora/Indian-Cities-JSON/master/cities.json";
+    print("getStatesCities Url:" + url);
+
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        var getStatesCitiesList = json.decode(response.data);
+        print("getStatesCities Response" + response.data.toString());
+
+        // final jsonResponse = response.data;
+        return getStatesCitiesList;
+      } else {
+        throw Exception("No Internet Connection");
+      }
+    } catch (e) {
+      print("Check GetState Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
+  static Future<List> GetMemberSocietyDetails(String mobile) async {
+    String url = API_URL + 'GetMemberSociety?mobile=$mobile';
+    print("GetMemberSocietyData url : " + url);
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetMemberSocietyData Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        print("Error GetMemberSocietyData");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error GetMemberSocietyData   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<List> GetSocietyList() async {
+    String url = API_URL + 'GetSocietyList';
+    print("GetSocietyListData url : " + url);
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetSocietyListData Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        print("Error GetSocietyListData");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error GetSocietyListData   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<List> GetSocietyWingDetails(String societyid) async {
+    String url = API_URL + 'GetWingsBySocietyId?societyid=$societyid';
+    print("GetWingsBySocietyId url : " + url);
+    try {
+      final response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetWingsBySocietyId Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        print("Error GetWingsBySocietyId");
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      print("Error GetWingsBySocietyId   : ${e.toString()}");
+      throw Exception(e.toString());
+    }
+  }
+
   static Future<List> GetFamilyMember(String parentId, String MemberId) async {
     String url =
         API_URL + 'GetFamilyMember?parentId=$parentId&memberId=$MemberId';

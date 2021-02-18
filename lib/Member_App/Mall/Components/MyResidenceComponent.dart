@@ -36,13 +36,13 @@ class _MyResidenceComponentState extends State<MyResidenceComponent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Demo",
+                      "${widget.resData['Name']}",
                       style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                     Row(
                       children: [
                         Text(
-                          "A1-103",
+                          "${widget.resData['WingName']}-${widget.resData['FlatNo']}",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w600,
