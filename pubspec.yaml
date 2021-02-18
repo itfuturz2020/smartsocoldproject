@@ -91,6 +91,8 @@ dependencies:
   dotted_decoration: ^1.2.2
   flutter_dtmf: ^0.0.3
   flutter_masked_text: ^0.8.0
+  vibration: ^1.7.3
+
 
 
 
@@ -262,6 +264,7 @@ flutter:
     - images/
     - assets/assets/
     - images/bike.png
+    - assets/Sound.mp3
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

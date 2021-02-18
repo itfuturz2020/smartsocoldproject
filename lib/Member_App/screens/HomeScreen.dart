@@ -676,7 +676,8 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        Future res = Services.SendTokanToServer(FcmToken);
+        var deviceType = Platform.isAndroid ? "Android" : "Ios";
+        Future res = Services.SendTokanToServer(FcmToken, deviceType);
         res.then((data) async {}, onError: (e) {
           print("Error : on Login Call");
         });

@@ -1967,15 +1967,14 @@ class Services {
     }
   }
 
-  static Future<List> SendTokanToServer(String fcmToken) async {
+  static Future<List> SendTokanToServer(String fcmToken,String deviceType) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String memberId = prefs.getString(Session.Member_Id);
     String mobileno = prefs.getString(Session.session_login);
     String SocietyId = prefs.getString(Session.SocietyId);
-
     String url = API_URL +
-        'NewUpdateMemberFCMToken?fcmToken=$fcmToken&mobileno=$mobileno&societyId=$SocietyId&memberId=$memberId';
+        'NewUpdateMemberFCMToken?fcmToken=$fcmToken&mobileno=$mobileno&societyId=$SocietyId&memberId=$memberId&DeviceType=$deviceType';
     print("SendTokanToServer: " + url);
     try {
       Response response = await dio.get(url);

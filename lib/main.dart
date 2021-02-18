@@ -107,6 +107,7 @@ import 'package:smart_society_new/Member_App/screens/UpdateProfileScreen.dart';
 import 'package:smart_society_new/Member_App/screens/VisitorSuccess.dart';
 import 'package:smart_society_new/Member_App/screens/WingDetail.dart';
 import 'package:smart_society_new/Member_App/screens/WingFlat.dart';
+import 'package:vibration/vibration.dart';
 
 import 'Admin_App/Screens/AddAMC.dart';
 import 'Admin_App/Screens/AddExpense.dart';
@@ -153,7 +154,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // this.initState();
-    // initPlayer();
+    initPlayer();
     setNotification();
   }
 
@@ -168,9 +169,13 @@ class _MyAppState extends State<MyApp> {
         if (message["data"]["Type"] == 'Visitor') {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
+          //for vibration
+          Vibration.vibrate(duration: 5000,);
         } else {
           showNotification('$Title', '$bodymessage');
           audioCache.play('Sound.mp3');
+          //..
+          Vibration.vibrate(duration: 5000,);
         }
       },
       //when app is closed and user click on notification
@@ -184,9 +189,13 @@ class _MyAppState extends State<MyApp> {
         if (message["data"]["Type"] == 'Visitor') {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
+          // Vibration.vibrate();
+          Vibration.vibrate(duration: 5000,);
         } else {
           showNotification('$Title', '$bodymessage');
           audioCache.play('Sound.mp3');
+          // Vibration.vibrate();
+          Vibration.vibrate(duration: 5000,);
         }
       },
       //when app is in background and user click on notification
@@ -201,9 +210,13 @@ class _MyAppState extends State<MyApp> {
         if (message["data"]["Type"] == 'Visitor') {
           Get.to(NotificationPopup(message));
           audioCache.play('Sound.mp3');
+          // Vibration.vibrate();
+          Vibration.vibrate(duration: 5000,);
         } else {
           showNotification('$Title', '$bodymessage');
           audioCache.play('Sound.mp3');
+          // Vibration.vibrate();
+          Vibration.vibrate(duration: 5000,);
         }
       },
     );
