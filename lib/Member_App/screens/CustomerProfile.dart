@@ -222,7 +222,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context,
-                                SlideLeftRoute(page: AddMyResidents()));
+                                SlideLeftRoute(page: AddMyResidents(
+                              onAddMyResidents: () {
+                                setState(() {
+                                  GetMyResidents();
+                                });
+                              },
+                            )));
                           },
                           child: Container(
                             //color: Colors.orange[300],
@@ -279,7 +285,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   ),
                                   onPressed: () {
                                     Navigator.push(context,
-                                        SlideLeftRoute(page: AddMyResidents()));
+                                        SlideLeftRoute(page: AddMyResidents(
+                                      onAddMyResidents: () {
+                                        setState(() {
+                                          GetMyResidents();
+                                        });
+                                      },
+                                    )));
                                   },
                                 ),
                               );
