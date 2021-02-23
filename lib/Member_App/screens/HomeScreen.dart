@@ -902,34 +902,34 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.pushNamed(context, "/MyWishList");
                       },
                     ),
-                    ListTile(
-                      title: Text(
-                        'Terms & Conditions',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      leading: Icon(
-                        Icons.priority_high,
-                        color: constant.appPrimaryMaterialColor,
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, "/TermsAndConditions");
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Privacy Policy',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      leading: Icon(
-                        Icons.label,
-                        color: constant.appPrimaryMaterialColor,
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, "/PrivacyPolicy");
-                      },
-                    ),
+                    // ListTile(
+                    //   title: Text(
+                    //     'Terms & Conditions',
+                    //     style: TextStyle(fontWeight: FontWeight.w600),
+                    //   ),
+                    //   leading: Icon(
+                    //     Icons.priority_high,
+                    //     color: constant.appPrimaryMaterialColor,
+                    //   ),
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //     Navigator.pushNamed(context, "/TermsAndConditions");
+                    //   },
+                    // ),
+                    // ListTile(
+                    //   title: Text(
+                    //     'Privacy Policy',
+                    //     style: TextStyle(fontWeight: FontWeight.w600),
+                    //   ),
+                    //   leading: Icon(
+                    //     Icons.label,
+                    //     color: constant.appPrimaryMaterialColor,
+                    //   ),
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //     Navigator.pushNamed(context, "/PrivacyPolicy");
+                    //   },
+                    // ),
                     ListTile(
                       title: Text(
                         'Share My Address',

@@ -183,8 +183,10 @@ class Services {
     }
   }
 
-  static Future<SaveDataClass> EventRegistration(String memberId,String noofpersons,String eventid) async {
-    String url = API_URL + 'RegisterForEvent?memberId=$memberId&noofPerson=$noofpersons&eventid=$eventid';
+  static Future<SaveDataClass> EventRegistration(
+      String memberId, String noofpersons, String eventid) async {
+    String url = API_URL +
+        'RegisterForEvent?memberId=$memberId&noofPerson=$noofpersons&eventid=$eventid';
     print("EventRegistration URL: " + url);
     try {
       Response response = await dio.get(url);
@@ -948,8 +950,10 @@ class Services {
     }
   }
 
-  static Future<List> getVisitorByMemberId(String memberId) async {
-    String url = API_URL + 'GetVisitorByMemberId?memberId=$memberId';
+  static Future<List> getVisitorByMemberId(
+      String societyId, String MemberId) async {
+    String url = API_URL +
+        'GetVisitorsByMemberId?societyId=$societyId&MemberId=$MemberId';
     print("getVisitorByMemberId URL: " + url);
     try {
       Response response = await dio.get(url);

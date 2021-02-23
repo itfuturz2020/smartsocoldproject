@@ -1383,7 +1383,7 @@ class Services {
         'DeleteStaff?staffId=$staffId&societyId=$societyId&flatId=$flatId&wingId=$wingId';
     print("DeleteMember URL: " + url);
     try {
-      Response response = await dio.get(url);
+      Response response = await dio.post(url);
 
       if (response.statusCode == 200) {
         SaveDataClass saveData =
@@ -1399,7 +1399,7 @@ class Services {
         throw Exception("Something Went Wrong");
       }
     } catch (e) {
-      print("DeleteMember Erorr : " + e.toString());
+      print("DeleteMember Error : " + e.toString());
       throw Exception(e);
     }
   }
