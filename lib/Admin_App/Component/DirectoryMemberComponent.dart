@@ -1,8 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:smart_society_new/Admin_App/Screens/MemberProfile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:smart_society_new/Admin_App/Common/Constants.dart' as cnst;
+import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:smart_society_new/Member_App/common/Services.dart';
 
 class DirectoryMemberComponent extends StatefulWidget {
   var memberData;
@@ -22,6 +28,75 @@ class _DirectoryMemberComponentState extends State<DirectoryMemberComponent> {
     String urlwithmobile = whatsAppLink.replaceAll("#mobile", "91$mobile");
     String urlwithmsg = urlwithmobile.replaceAll("#msg", "");
     launch(urlwithmsg);
+  }
+
+  shareFile(String ImgUrl) async {
+    ImgUrl = ImgUrl.replaceAll(" ", "%20");
+    if (ImgUrl.toString() != "null" && ImgUrl.toString() != "") {
+      var request = await HttpClient()
+          .getUrl(Uri.parse("http://smartsociety.itfuturz.com/${ImgUrl}"));
+      var response = await request.close();
+      Uint8List bytes = await consolidateHttpClientResponseBytes(response);
+      await Share.files('Share Profile', {'eyes.vcf': bytes}, 'image/pdf');
+    }
+  }
+
+  bool isLoading = false;
+  String Data = "";
+
+  GetVcard() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Services.GetVcardofMember(widget.memberData['Id'].toString()).then(
+            (data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null) {
+            setState(() {
+              Data = data;
+            });
+            shareFile('${Data}');
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
+  showHHMsg(String title, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -121,7 +196,11 @@ class _DirectoryMemberComponentState extends State<DirectoryMemberComponent> {
                                           memberData: widget.memberData,
                                         )));
                           }),
-                      IconButton(icon: Icon(Icons.share), onPressed: () {}),
+                      IconButton(
+                          icon: Icon(Icons.share),
+                          onPressed: () {
+                            GetVcard();
+                          }),
                     ],
                   ),
                 )

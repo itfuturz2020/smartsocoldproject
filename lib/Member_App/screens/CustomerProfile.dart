@@ -222,7 +222,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context,
-                                SlideLeftRoute(page: AddMyResidents()));
+                                SlideLeftRoute(page: AddMyResidents(
+                              onAddMyResidents: () {
+                                setState(() {
+                                  GetMyResidents();
+                                });
+                              },
+                            )));
                           },
                           child: Container(
                             //color: Colors.orange[300],
@@ -279,7 +285,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                   ),
                                   onPressed: () {
                                     Navigator.push(context,
-                                        SlideLeftRoute(page: AddMyResidents()));
+                                        SlideLeftRoute(page: AddMyResidents(
+                                      onAddMyResidents: () {
+                                        setState(() {
+                                          GetMyResidents();
+                                        });
+                                      },
+                                    )));
                                   },
                                 ),
                               );
@@ -422,7 +434,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context,
-                                SlideLeftRoute(page: AddDailyResource()));
+                                SlideLeftRoute(page: AddDailyResource(
+                              onAddDailyResource: () {
+                                setState(() {
+                                  GetDailyResourceDetail();
+                                });
+                              },
+                            )));
                           },
                           child: Container(
                             //color: Colors.orange[300],
@@ -477,10 +495,14 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                     color: appPrimaryMaterialColor,
                                   ),
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        SlideLeftRoute(
-                                            page: AddDailyResource()));
+                                    Navigator.push(context,
+                                        SlideLeftRoute(page: AddDailyResource(
+                                      onAddDailyResource: () {
+                                        setState(() {
+                                          GetDailyResourceDetail();
+                                        });
+                                      },
+                                    )));
                                   },
                                 ),
                               );
@@ -957,7 +979,9 @@ class VehicleRadio extends StatelessWidget {
 
 class Addvehicale_dialogue extends StatefulWidget {
   Function onAdd;
+
   Addvehicale_dialogue({this.onAdd});
+
   @override
   _Addvehicale_dialogueState createState() => _Addvehicale_dialogueState();
 }

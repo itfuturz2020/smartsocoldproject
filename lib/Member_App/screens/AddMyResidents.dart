@@ -6,8 +6,11 @@ import 'dart:io';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+// import 'package:smart_society_new/Member_App/common/constant.dart';
 
 class AddMyResidents extends StatefulWidget {
+  Function onAddMyResidents;
+  AddMyResidents({this.onAddMyResidents});
   @override
   _AddMyResidentsState createState() => _AddMyResidentsState();
 }
@@ -17,61 +20,105 @@ class _AddMyResidentsState extends State<AddMyResidents> {
   String flatHolder;
   TextEditingController txtFloorNo = TextEditingController();
   TextEditingController txtFlatNo = TextEditingController();
-  List stateandcities = [];
+  List stateData = [];
+  String stateId;
+  List cityData = [];
+  String cityId;
   List societyData = [];
+  String societyId;
   List wingData = [];
   List<String> societies = [];
+  String wingId;
+  List flatData = [];
   List<String> wings = [];
+  List<String> flats = [];
+  String flatId;
   List<String> states = [], cities = [];
   String selState = 'Select your State',
       selCity = 'Select your City',
       selSociety = 'Select your Society',
-      selWing = 'Select your Building';
+      selWing = 'Select your Building',
+      selFlat = 'Select your Flat Number';
   bool isLoading = false;
 
   @override
   void initState() {
-    getStatesCities();
-    getSocietyList();
-    getSocietyWingList();
+    getStateList();
+    // getSocietyList();
+    // getSocietyWingList();
   }
 
-  getStatesCities() async {
+  getStateList() async {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
           isLoading = true;
         });
-        Services.getStatesCities().then((data) async {
+
+        Services.GetStates().then((data) async {
           setState(() {
             isLoading = false;
           });
-          if (data != "") {
-            print("statecitiesdata");
-            stateandcities = data;
-            for (int i = 0; i < stateandcities.length; i++) {
-              if (!states.contains(stateandcities[i]["state"])) {
-                states.add(stateandcities[i]["state"]);
+          if (data != null && data.length > 0) {
+            setState(() {
+              stateData = data;
+              for (int i = 0; i < stateData.length; i++) {
+                states.add(stateData[i]['Name']);
                 states.sort();
               }
-            }
-            print("states");
-            print(states);
+            });
           } else {
-            //showMsg(data.Message);
+            setState(() {
+              isLoading = false;
+            });
           }
         }, onError: (e) {
           setState(() {
             isLoading = false;
           });
-          showMsg("Try Again.");
+          showHHMsg("Try Again.", "");
         });
-      } else {
-        showMsg("No Internet Connection.");
       }
     } on SocketException catch (_) {
-      showMsg("No Internet Connection.");
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
+  getCityList() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Services.GetCities(stateId).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              cityData = data;
+              for (int i = 0; i < cityData.length; i++) {
+                cities.add(cityData[i]['Name']);
+                cities.sort();
+              }
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
     }
   }
 
@@ -83,7 +130,7 @@ class _AddMyResidentsState extends State<AddMyResidents> {
           isLoading = true;
         });
 
-        Services.GetSocietyList().then((data) async {
+        Services.GetSocietyList(cityId).then((data) async {
           setState(() {
             isLoading = false;
           });
@@ -119,11 +166,7 @@ class _AddMyResidentsState extends State<AddMyResidents> {
         setState(() {
           isLoading = true;
         });
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        String SocietyId = prefs.getString(constant.Session.SocietyId);
-
-        Services.GetSocietyWingDetails(SocietyId).then((data) async {
+        Services.GetSocietyWingDetails(societyId).then((data) async {
           setState(() {
             isLoading = false;
           });
@@ -135,6 +178,78 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                 wings.sort();
               }
             });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
+  getSocietyFlatList() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+        Services.GetSocietyFlatDetails(wingId, societyId).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            setState(() {
+              flatData = data;
+              for (int i = 0; i < flatData.length; i++) {
+                flats.add(flatData[i]['FlatNo'].toString());
+                flats.sort();
+              }
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
+  addMemberDetails() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+        String name, mobile;
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        name = prefs.getString(constant.Session.Name);
+        mobile = prefs.getString(constant.Session.session_login);
+        Services.InsertMemberData(
+                name, mobile, txtFlatNo.text, wingId, societyId, flatHolder)
+            .then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data == "1") {
+            showHHMsg("Data Updated Successfully", "");
           } else {
             setState(() {
               isLoading = false;
@@ -164,6 +279,8 @@ class _AddMyResidentsState extends State<AddMyResidents> {
               child: new Text("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                widget.onAddMyResidents();
               },
             ),
           ],
@@ -172,27 +289,27 @@ class _AddMyResidentsState extends State<AddMyResidents> {
     );
   }
 
-  showMsg(String msg) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Error"),
-          content: new Text(msg),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Okay"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // showMsg(String msg) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       // return object of type Dialog
+  //       return AlertDialog(
+  //         title: new Text("Error"),
+  //         content: new Text(msg),
+  //         actions: <Widget>[
+  //           // usually buttons at the bottom of the dialog
+  //           new FlatButton(
+  //             child: new Text("Okay"),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -288,7 +405,7 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: Padding(
-                            padding: const EdgeInsets.only(left:8.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: DropdownButton<String>(
                               icon: Icon(
                                 Icons.arrow_drop_down,
@@ -300,22 +417,20 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                               onChanged: (val) {
                                 print(val);
                                 cities = [];
-                                for (int i = 0; i < stateandcities.length; i++) {
-                                  if (stateandcities[i]["state"] ==
-                                      val.toString()) {
-                                    cities.add(stateandcities[i]["name"]);
-                                    cities.sort();
+                                for (int i = 0; i < stateData.length; i++) {
+                                  if (stateData[i]["Name"] == val.toString()) {
+                                    stateId = stateData[i]["Id"].toString();
                                   }
                                 }
-                                print("cities");
-                                print(cities);
+                                print('state id${stateId}');
                                 setState(() {
                                   selState = val;
                                 });
+                                getCityList();
                               },
                               //value: selState,
-                              items: states
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: states.map<DropdownMenuItem<String>>(
+                                  (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: new Text(
@@ -390,7 +505,7 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: Padding(
-                            padding: const EdgeInsets.only(left:8.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: DropdownButton<String>(
                               icon: Icon(
                                 Icons.arrow_drop_down,
@@ -400,13 +515,22 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                               hint: new Text(selCity),
                               // value: _memberClass,
                               onChanged: (val) {
+                                print(val);
+                                societies = [];
+                                for (int i = 0; i < cityData.length; i++) {
+                                  if (cityData[i]["Name"] == val.toString()) {
+                                    cityId = cityData[i]["Id"].toString();
+                                  }
+                                }
+                                print('city id${cityId}');
                                 setState(() {
                                   selCity = val;
                                 });
+                                getSocietyList();
                               },
                               //value: selCity,
-                              items: cities
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: cities.map<DropdownMenuItem<String>>(
+                                  (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: new Text(
@@ -481,7 +605,7 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: Padding(
-                            padding: const EdgeInsets.only(left:8.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: DropdownButton<String>(
                               icon: Icon(
                                 Icons.arrow_drop_down,
@@ -491,13 +615,23 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                               hint: new Text(selSociety),
                               // value: _memberClass,
                               onChanged: (val) {
+                                print(val);
+                                wings = [];
+                                for (int i = 0; i < societyData.length; i++) {
+                                  if (societyData[i]["Name"] ==
+                                      val.toString()) {
+                                    societyId = societyData[i]["Id"].toString();
+                                  }
+                                }
+                                print('society id${societyId}');
                                 setState(() {
                                   selSociety = val;
                                 });
+                                getSocietyWingList();
                               },
                               //value: selCity,
-                              items: societies
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: societies.map<DropdownMenuItem<String>>(
+                                  (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: new Text(
@@ -572,7 +706,7 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: Padding(
-                            padding: const EdgeInsets.only(left:8.0),
+                            padding: const EdgeInsets.only(left: 8.0),
                             child: DropdownButton<String>(
                               icon: Icon(
                                 Icons.arrow_drop_down,
@@ -582,13 +716,23 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                               hint: new Text(selWing),
                               // value: _memberClass,
                               onChanged: (val) {
+                                print(val);
+                                flats = [];
+                                for (int i = 0; i < wingData.length; i++) {
+                                  if (wingData[i]["WingName"] ==
+                                      val.toString()) {
+                                    wingId = wingData[i]["Id"].toString();
+                                  }
+                                }
+                                print('wing id${wingId}');
                                 setState(() {
                                   selWing = val;
                                 });
+                                getSocietyFlatList();
                               },
                               //value: selCity,
-                              items: wings
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: wings.map<DropdownMenuItem<String>>(
+                                  (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: new Text(
@@ -605,127 +749,185 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10.0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Floor No.',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 2.3,
-                              height: 40,
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: txtFloorNo,
-                                validator: (pincode) {
-                                  // Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
-                                  // RegExp regExp = new RegExp(pattern);
-                                  if (pincode.length == 0) {
-                                    return 'Please enter your Floor No';
-                                  }
-                                  return null;
-                                },
-                                style: TextStyle(fontSize: 15),
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.all(5),
-                                  hintText: 'Floor No ',
-                                  hintStyle: TextStyle(fontSize: 17),
-                                  fillColor: Colors.white,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.red),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.red),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Flat No.",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w600),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Flat No.',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 2.3,
-                              height: 40,
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: txtFlatNo,
-                                validator: (pincode) {
-                                  // Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
-                                  // RegExp regExp = new RegExp(pattern);
-                                  if (pincode.length == 0) {
-                                    return 'Please enter your flatNo';
-                                  }
-                                  return null;
-                                },
-                                style: TextStyle(fontSize: 15),
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.all(5),
-                                  hintText: 'Flat No ',
-                                  hintStyle: TextStyle(fontSize: 16),
-                                  fillColor: Colors.white,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.red),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.red),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 2.3,
+                          height: 40,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: txtFlatNo,
+                            validator: (pincode) {
+                              if (pincode.length == 0) {
+                                return 'Please enter your flatNo';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(fontSize: 15),
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(5),
+                              hintText: 'Flat No ',
+                              hintStyle: TextStyle(fontSize: 16),
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(color: Colors.red),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(color: Colors.red),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(color: Colors.grey),
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+                // Padding(
+                //   padding: const EdgeInsets.only(
+                //     top: 10.0,
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: <Widget>[
+                //       Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: <Widget>[
+                //           Text(
+                //             'Floor No.',
+                //             style: TextStyle(
+                //                 fontSize: 15, fontWeight: FontWeight.w600),
+                //           ),
+                //           Padding(
+                //             padding: const EdgeInsets.only(top: 5.0),
+                //             child: Container(
+                //               width: MediaQuery.of(context).size.width / 2.3,
+                //               height: 40,
+                //               child: TextFormField(
+                //                 keyboardType: TextInputType.text,
+                //                 controller: txtFloorNo,
+                //                 validator: (pincode) {
+                //                   // Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
+                //                   // RegExp regExp = new RegExp(pattern);
+                //                   if (pincode.length == 0) {
+                //                     return 'Please enter your Floor No';
+                //                   }
+                //                   return null;
+                //                 },
+                //                 style: TextStyle(fontSize: 15),
+                //                 decoration: InputDecoration(
+                //                   contentPadding: const EdgeInsets.all(5),
+                //                   hintText: 'Floor No ',
+                //                   hintStyle: TextStyle(fontSize: 17),
+                //                   fillColor: Colors.white,
+                //                   enabledBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.grey),
+                //                   ),
+                //                   errorBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.red),
+                //                   ),
+                //                   focusedErrorBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.red),
+                //                   ),
+                //                   focusedBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.grey),
+                //                   ),
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //       Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: <Widget>[
+                //           Text(
+                //             'Flat No.',
+                //             style: TextStyle(
+                //                 fontSize: 15, fontWeight: FontWeight.w600),
+                //           ),
+                //           Padding(
+                //             padding: const EdgeInsets.only(top: 5.0),
+                //             child: Container(
+                //               width: MediaQuery.of(context).size.width / 2.3,
+                //               height: 40,
+                //               child: TextFormField(
+                //                 keyboardType: TextInputType.text,
+                //                 controller: txtFlatNo,
+                //                 validator: (pincode) {
+                //                   // Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
+                //                   // RegExp regExp = new RegExp(pattern);
+                //                   if (pincode.length == 0) {
+                //                     return 'Please enter your flatNo';
+                //                   }
+                //                   return null;
+                //                 },
+                //                 style: TextStyle(fontSize: 15),
+                //                 decoration: InputDecoration(
+                //                   contentPadding: const EdgeInsets.all(5),
+                //                   hintText: 'Flat No ',
+                //                   hintStyle: TextStyle(fontSize: 16),
+                //                   fillColor: Colors.white,
+                //                   enabledBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.grey),
+                //                   ),
+                //                   errorBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.red),
+                //                   ),
+                //                   focusedErrorBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.red),
+                //                   ),
+                //                   focusedBorder: OutlineInputBorder(
+                //                     borderRadius:
+                //                         BorderRadius.all(Radius.circular(5.0)),
+                //                     borderSide: BorderSide(color: Colors.grey),
+                //                   ),
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
@@ -792,7 +994,9 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.grey[300])),
-                      onPressed: () {},
+                      onPressed: () {
+                        addMemberDetails();
+                      },
                     ),
                   ),
                 ),

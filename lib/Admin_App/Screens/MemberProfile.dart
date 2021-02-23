@@ -30,8 +30,9 @@ class _MemberProfileState extends State<MemberProfile> {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        Future res =
-            Services.getVisitorByMemberId(widget.memberData["Id"].toString());
+        Future res = Services.getVisitorByMemberId(
+            widget.memberData["SocietyId"].toString(),
+            widget.memberData["Id"].toString());
         setState(() {
           isLoading = true;
         });
@@ -192,6 +193,12 @@ class _MemberProfileState extends State<MemberProfile> {
                     padding: EdgeInsets.all(4),
                     itemCount: _visitorData.length,
                     itemBuilder: (BuildContext context, int index) {
+                      // String date;
+                      // String time;
+                      // List dateTime =
+                      //     _visitorData[index]['Date'].toString().split(' ');
+                      // date = dateTime[0];
+                      // time = dateTime[1];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Row(
@@ -201,9 +208,8 @@ class _MemberProfileState extends State<MemberProfile> {
                                         _visitorData[index]["Image"] != ""
                                     ? FadeInImage.assetNetwork(
                                         placeholder: '',
-                                        image:
-                                            "http://mywatcher.itfuturz.com/" +
-                                                "${_visitorData[index]["Image"]}",
+                                        image: "http://mywatcher.itfuturz.com/" +
+                                            "${_visitorData[index]["Image"]}",
                                         width: 50,
                                         height: 50,
                                         fit: BoxFit.fill)
@@ -243,19 +249,39 @@ class _MemberProfileState extends State<MemberProfile> {
                               ),
                             ),
                             Container(
-                              width: 50,
+                              width: 100,
                               padding: EdgeInsets.all(4),
                               decoration: BoxDecoration(
                                   color: Colors.grey[300],
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(4))),
-                              child: Text(
-                                "${setDate(_visitorData[index]["Date"])}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey[600]),
+                              child: Column(
+                                children: [
+                                  // date != null || date != ''
+                                  //     ? Text(
+                                  //         "${date}",
+                                  //         textAlign: TextAlign.center,
+                                  //         style: TextStyle(
+                                  //             fontSize: 16,
+                                  //             fontWeight: FontWeight.w600,
+                                  //             color: Colors.grey[600]),
+                                  //       )
+                                  //     : Container(),
+                                  // time != null || time != ''
+                                  //     ? Text(
+                                  //         "${time}",
+                                  //         textAlign: TextAlign.center,
+                                  //         style: TextStyle(
+                                  //             fontSize: 16,
+                                  //             fontWeight: FontWeight.w600,
+                                  //             color: Colors.grey[600]),
+                                  //       )
+                                  //     : Container(),
+                                  Text(
+                                    '${_visitorData[index]['Date'].toString()}',
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
                               ),
                             ),
                           ],
@@ -748,106 +774,196 @@ class _MemberProfileState extends State<MemberProfile> {
                       title: Text("${widget.memberData["Gender"]}"),
                       subtitle: Text("Gender"),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 8.0, left: 5, right: 5, bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: GestureDetector(
-                              onTap: () {
-                                _getVisitor();
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                margin: EdgeInsets.only(left: 6, right: 6),
-                                decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4))),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.person_pin_circle,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
-                                    Text("Visitors",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 13)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: GestureDetector(
-                              onTap: () {
-                                _getFamilyMemberData();
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                margin: EdgeInsets.only(left: 6, right: 6),
-                                decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4))),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.supervised_user_circle,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
-                                    Text("Family Member",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 13)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: GestureDetector(
-                              onTap: () {
-                                _getVehicle();
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                margin: EdgeInsets.only(left: 6, right: 6),
-                                decoration: BoxDecoration(
-                                    color: Colors.deepPurpleAccent,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4))),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.directions_bike,
-                                      size: 20,
-                                      color: Colors.white,
-                                    ),
-                                    Text("Vehicles",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 13)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(
+                    //       top: 8.0, left: 5, right: 5, bottom: 15),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: <Widget>[
+                    //       Flexible(
+                    //         child: GestureDetector(
+                    //           onTap: () {
+                    //             _getVisitor();
+                    //           },
+                    //           child: Container(
+                    //             width: MediaQuery.of(context).size.width,
+                    //             height: 50,
+                    //             margin: EdgeInsets.only(left: 6, right: 6),
+                    //             decoration: BoxDecoration(
+                    //                 color: Colors.green,
+                    //                 borderRadius:
+                    //                     BorderRadius.all(Radius.circular(4))),
+                    //             child: Column(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: <Widget>[
+                    //                 Icon(
+                    //                   Icons.person_pin_circle,
+                    //                   size: 20,
+                    //                   color: Colors.white,
+                    //                 ),
+                    //                 Text("Visitors",
+                    //                     style: TextStyle(
+                    //                         color: Colors.white, fontSize: 13)),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       Flexible(
+                    //         child: GestureDetector(
+                    //           onTap: () {
+                    //             _getFamilyMemberData();
+                    //           },
+                    //           child: Container(
+                    //             width: MediaQuery.of(context).size.width,
+                    //             height: 50,
+                    //             margin: EdgeInsets.only(left: 6, right: 6),
+                    //             decoration: BoxDecoration(
+                    //                 color: Colors.blue,
+                    //                 borderRadius:
+                    //                     BorderRadius.all(Radius.circular(4))),
+                    //             child: Column(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: <Widget>[
+                    //                 Icon(
+                    //                   Icons.supervised_user_circle,
+                    //                   size: 20,
+                    //                   color: Colors.white,
+                    //                 ),
+                    //                 Text("Family Member",
+                    //                     style: TextStyle(
+                    //                         color: Colors.white, fontSize: 13)),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       Flexible(
+                    //         child: GestureDetector(
+                    //           onTap: () {
+                    //             _getVehicle();
+                    //           },
+                    //           child: Container(
+                    //             width: MediaQuery.of(context).size.width,
+                    //             height: 50,
+                    //             margin: EdgeInsets.only(left: 6, right: 6),
+                    //             decoration: BoxDecoration(
+                    //                 color: Colors.deepPurpleAccent,
+                    //                 borderRadius:
+                    //                     BorderRadius.all(Radius.circular(4))),
+                    //             child: Column(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: <Widget>[
+                    //                 Icon(
+                    //                   Icons.directions_bike,
+                    //                   size: 20,
+                    //                   color: Colors.white,
+                    //                 ),
+                    //                 Text("Vehicles",
+                    //                     style: TextStyle(
+                    //                         color: Colors.white, fontSize: 13)),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
             ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Flexible(
+              child: GestureDetector(
+                onTap: () {
+                  print('${widget.memberData}');
+                  _getVisitor();
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  margin: EdgeInsets.only(left: 6, right: 6),
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.all(Radius.circular(4))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.person_pin_circle,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                      Text("Visitors",
+                          style: TextStyle(color: Colors.white, fontSize: 13)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Flexible(
+              child: GestureDetector(
+                onTap: () {
+                  _getFamilyMemberData();
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  margin: EdgeInsets.only(left: 6, right: 6),
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all(Radius.circular(4))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.supervised_user_circle,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                      Text("Family Member",
+                          style: TextStyle(color: Colors.white, fontSize: 13)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Flexible(
+              child: GestureDetector(
+                onTap: () {
+                  _getVehicle();
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  margin: EdgeInsets.only(left: 6, right: 6),
+                  decoration: BoxDecoration(
+                      color: Colors.deepPurpleAccent,
+                      borderRadius: BorderRadius.all(Radius.circular(4))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.directions_bike,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                      Text("Vehicles",
+                          style: TextStyle(color: Colors.white, fontSize: 13)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

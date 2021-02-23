@@ -15,12 +15,10 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
-
   List EventsData = new List();
   bool isLoading = false;
   String SocietyId, MemberId, ParentId;
   ProgressDialog pr;
-
 
   @override
   void initState() {
@@ -29,7 +27,6 @@ class _EventsState extends State<Events> {
     GetEventDetails();
     _getLocaldata();
   }
-
 
   _getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -99,7 +96,7 @@ class _EventsState extends State<Events> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pushReplacementNamed(context, "/Dashboard");
+        Navigator.pushReplacementNamed(context, "/HomeScreen");
       },
       child: Scaffold(
         appBar: AppBar(
@@ -110,7 +107,7 @@ class _EventsState extends State<Events> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, "/Dashboard");
+                Navigator.pushReplacementNamed(context, "/HomeScreen");
               }),
         ),
         body: ListView.separated(
@@ -120,7 +117,8 @@ class _EventsState extends State<Events> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EventDetail(EventsData : EventsData[index]),
+                    builder: (context) =>
+                        EventDetail(EventsData: EventsData[index]),
                   ),
                 );
               },
@@ -190,14 +188,11 @@ class _EventsState extends State<Events> {
           backgroundColor: constant.appPrimaryMaterialColor,
           child: Icon(Icons.add),
           onPressed: () {
-
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => AddEvent()
-                ),
-                    (Route<dynamic> route) => false);
-           // Navigator.pushReplacementNamed(context, '/AddEvent');
+                MaterialPageRoute(builder: (context) => AddEvent()),
+                (Route<dynamic> route) => false);
+            // Navigator.pushReplacementNamed(context, '/AddEvent');
           },
         ),
       ),

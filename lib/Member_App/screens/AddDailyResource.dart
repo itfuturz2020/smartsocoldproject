@@ -11,6 +11,8 @@ import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/component/masktext.dart';
 
 class AddDailyResource extends StatefulWidget {
+  Function onAddDailyResource;
+  AddDailyResource({this.onAddDailyResource});
   @override
   _AddDailyResourceState createState() => _AddDailyResourceState();
 }
@@ -328,6 +330,7 @@ class _AddDailyResourceState extends State<AddDailyResource> {
               // Navigator.of(context).pushNamedAndRemoveUntil(
               //     '/CustomerProfile', (Route<dynamic> route) => false);
               Navigator.pop(context);
+              widget.onAddDailyResource();
             } else {
               pr.hide();
               showMsg(data.Message, title: "Error");

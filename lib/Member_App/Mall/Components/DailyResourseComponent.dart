@@ -9,7 +9,9 @@ import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 class DailyResourseComponent extends StatefulWidget {
   var dailyResourceData;
   Function onDelete;
+
   DailyResourseComponent({this.dailyResourceData, this.onDelete});
+
   @override
   _DailyResourseComponentState createState() => _DailyResourseComponentState();
 }
@@ -243,22 +245,24 @@ class _DailyResourseComponentState extends State<DailyResourseComponent> {
                               ),
                             ),
                           ),
-                          // Row(
-                          //   children: [
-                          //     GestureDetector(
-                          //       onTap: () {
-                          //         Navigator.pop(context);
-                          //         _showConfirmDialog(widget
-                          //             .dailyResourceData["Id"]
-                          //             .toString());
-                          //       },
-                          //       child: Padding(
-                          //         padding: const EdgeInsets.all(5.0),
-                          //         child: Icon(Icons.delete),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // )
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  print(
+                                      '${widget.dailyResourceData["Id"].toString()}');
+                                  _showConfirmDialog(widget
+                                      .dailyResourceData["Id"]
+                                      .toString());
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Icon(Icons.delete),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -318,13 +322,16 @@ class _DailyResourseComponentState extends State<DailyResourseComponent> {
 class AlertDelete extends StatefulWidget {
   var deleteId;
   Function onDelete;
+
   AlertDelete({this.deleteId, this.onDelete});
+
   @override
   _AlertDeleteState createState() => _AlertDeleteState();
 }
 
 class _AlertDeleteState extends State<AlertDelete> {
   String SocietyId, FlatId, WingId;
+
   @override
   void initState() {
     // TODO: implement initState
