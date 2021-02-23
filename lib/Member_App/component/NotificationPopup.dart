@@ -28,6 +28,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
     "DENY"
   ];
   int selected_Index;
+  var mydata;
 
   @override
   void initState() {
@@ -37,8 +38,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
 
   AgoraentryId() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.setString('data', widget.data["data"]["EntryId"]);
-    print("smit member1 ${widget.data["data"]["EntryId"]}");
+    await preferences.setString('data', widget.data["EntryId"]);
+    print("smit member1 ${widget.data["EntryId"]}");
   }
 
   NotificationReply(String Msg, String EntryId, String WatchmanId) async {
@@ -138,14 +139,14 @@ class _NotificationPopupState extends State<NotificationPopup> {
 //                           borderRadius: BorderRadius.all(Radius.circular(8.0))),
 //                     ),
 //                   ),
-//                   widget.data["data"]["Image"] == null &&
-//                           widget.data["data"]["Image"] == ""
+//                   widget.data["Image"] == null &&
+//                           widget.data["Image"] == ""
 //                       ? Padding(
 //                           padding: const EdgeInsets.all(8.0),
 //                           child: CircleAvatar(
 //                             radius: 45.0,
 //                             backgroundImage: NetworkImage(constant.Image_Url +
-//                                 "${widget.data["data"]["Image"]}"),
+//                                 "${widget.data["Image"]}"),
 //                             backgroundColor: Colors.transparent,
 //                           ),
 //                         )
@@ -160,7 +161,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
 //                   Column(
 //                     children: <Widget>[
 //                       Text(
-//                         "${widget.data["data"]["Name"]}",
+//                         "${widget.data["Name"]}",
 //                         style: TextStyle(
 //                             fontWeight: FontWeight.w600,
 //                             fontSize: 18,
@@ -172,12 +173,12 @@ class _NotificationPopupState extends State<NotificationPopup> {
 //                           children: <Widget>[
 //                             Image.network(
 //                               constant.Image_Url +
-//                                   '${widget.data["data"]["CompanyImage"]}',
+//                                   '${widget.data["CompanyImage"]}',
 //                               width: 85,
 //                               height: 35,
 //                             ),
 //                             Text(
-//                               "${widget.data["data"]["CompanyName"]}",
+//                               "${widget.data["CompanyName"]}",
 //                               style: TextStyle(
 //                                 fontSize: 15,
 //                                 color: Colors.grey[800],
@@ -197,8 +198,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
 //                           onTap: () {
 //                             NotificationReply(
 //                                 _notifcationReplylist[0],
-//                                 widget.data["data"]["EntryId"],
-//                                 widget.data["data"]["WatchmanId"]);
+//                                 widget.data["EntryId"],
+//                                 widget.data["WatchmanId"]);
 //                             Get.back();
 //                           },
 //                           child: Column(
@@ -228,8 +229,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
 //                           onTap: () {
 //                             NotificationReply(
 //                                 _notifcationReplylist[1],
-//                                 widget.data["data"]["EntryId"],
-//                                 widget.data["data"]["WatchmanId"]);
+//                                 widget.data["EntryId"],
+//                                 widget.data["WatchmanId"]);
 //                             Get.back();
 //                           },
 //                           child: Column(
@@ -250,8 +251,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
 //                           onTap: () {
 //                             NotificationReply(
 //                                 _notifcationReplylist[2],
-//                                 widget.data["data"]["EntryId"],
-//                                 widget.data["data"]["WatchmanId"]);
+//                                 widget.data["EntryId"],
+//                                 widget.data["WatchmanId"]);
 //                             Get.back();
 //                           },
 //                           child: Column(
@@ -372,7 +373,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
                     //width: 130,
                     child: Flexible(
                       child: Text(
-                        "${widget.data["data"]["Name"]}",
+                        "${widget.data["Name"]}",
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
@@ -416,8 +417,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
             ],
           ),
         ),
-        widget.data["data"]["Image"] == null ||
-                widget.data["data"]["Image"] == ""
+        widget.data["Image"] == null || widget.data["Image"] == ""
             ? Positioned(
                 left: 20,
                 right: 20,
@@ -445,7 +445,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
                   backgroundColor: Colors.transparent,
                   radius: 65,
                   backgroundImage: NetworkImage(
-                    constant.Image_Url + "${widget.data["data"]["Image"]}",
+                    constant.Image_Url + "${widget.data["Image"]}",
                   ),
                 ),
               ),
@@ -462,7 +462,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
               // height: 60,
               // width: 60,
               child: Image.network(
-                constant.Image_Url + '${widget.data["data"]["CompanyImage"]}',
+                constant.Image_Url + '${widget.data["CompanyImage"]}',
                 width: 60,
                 height: 60,
               ),
@@ -476,10 +476,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
           child: GestureDetector(
             onTap: () {
               log("//=================#${_notifcationReplylist[0]}");
-              NotificationReply(
-                  _notifcationReplylist[0],
-                  widget.data["data"]["EntryId"],
-                  widget.data["data"]["WatchmanId"]);
+              NotificationReply(_notifcationReplylist[0],
+                  widget.data["EntryId"], widget.data["WatchmanId"]);
               Get.back();
             },
             child: Column(
@@ -511,10 +509,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
           right: 20,
           child: GestureDetector(
             onTap: () {
-              NotificationReply(
-                  _notifcationReplylist[1],
-                  widget.data["data"]["EntryId"],
-                  widget.data["data"]["WatchmanId"]);
+              NotificationReply(_notifcationReplylist[1],
+                  widget.data["EntryId"], widget.data["WatchmanId"]);
               Get.back();
             },
             child: Column(
@@ -546,10 +542,8 @@ class _NotificationPopupState extends State<NotificationPopup> {
           right: 20,
           child: GestureDetector(
             onTap: () {
-              NotificationReply(
-                  _notifcationReplylist[2],
-                  widget.data["data"]["EntryId"],
-                  widget.data["data"]["WatchmanId"]);
+              NotificationReply(_notifcationReplylist[2],
+                  widget.data["EntryId"], widget.data["WatchmanId"]);
               Get.back();
             },
             child: Column(
