@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -165,58 +167,120 @@ class _MyAppState extends State<MyApp> {
       //when app is open
       onMessage: (Map<String, dynamic> message) async {
         // Get.to(NotificationPopup(message));
-        print("----");
-        if (message["data"]["Type"] == 'Visitor') {
-          Get.to(NotificationPopup(message));
-          audioCache.play('Sound.mp3');
-          //for vibration
-          Vibration.vibrate(duration: 7000,);
+        print("onMessage:---- $message------------------------");
+        if (Platform.isAndroid) {
+          if (message["data"]["Type"] == 'Visitor') {
+            Get.to(NotificationPopup(message["data"]));
+            audioCache.play('Sound.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          } else {
+            showNotification('$Title', '$bodymessage');
+            audioCache.play('Sound.mp3');
+            //..
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          }
         } else {
-          showNotification('$Title', '$bodymessage');
-          audioCache.play('Sound.mp3');
-          //..
-          Vibration.vibrate(duration: 7000,);
+          if (message["Type"] == 'Visitor') {
+            Get.to(NotificationPopup(message));
+            audioCache.play('Sound.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          } else {
+            showNotification('$Title', '$bodymessage');
+            audioCache.play('Sound.mp3');
+            //..
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          }
         }
       },
       //when app is closed and user click on notification
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+        print("onLaunch:----- $message-----------------------");
         // _navigateToItemDetail(message);
         // Get.to(NotificationPopup(message));
 
         // Get.to(NotificationPopup(message));
-        print("----");
-        if (message["data"]["Type"] == 'Visitor') {
-          Get.to(NotificationPopup(message));
-          audioCache.play('Sound.mp3');
-          // Vibration.vibrate();
-          Vibration.vibrate(duration: 7000,);
+        if (Platform.isAndroid) {
+          if (message["data"]["Type"] == 'Visitor') {
+            Get.to(NotificationPopup(message["data"]));
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          } else {
+            showNotification('$Title', '$bodymessage');
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          }
         } else {
-          showNotification('$Title', '$bodymessage');
-          audioCache.play('Sound.mp3');
-          // Vibration.vibrate();
-          Vibration.vibrate(duration: 7000,);
+          if (message["Type"] == 'Visitor') {
+            Get.to(NotificationPopup(message));
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          } else {
+            showNotification('$Title', '$bodymessage');
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          }
         }
       },
       //when app is in background and user click on notification
       onResume: (Map<String, dynamic> message) async {
         print(
             "onResume:------------------- $message  --------------------------------");
-        // _navigateToItemDetail(message);
-        //  Get.to(NotificationPopup(message));
 
-        //Get.to(NotificationPopup(message));
-        print("----");
-        if (message["data"]["Type"] == 'Visitor') {
-          Get.to(NotificationPopup(message));
-          audioCache.play('Sound.mp3');
-          // Vibration.vibrate();
-          Vibration.vibrate(duration: 7000,);
+        if (Platform.isAndroid) {
+          if (message["data"]["Type"] == 'Visitor') {
+            Get.to(NotificationPopup(message["data"]));
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          } else {
+            showNotification('$Title', '$bodymessage');
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          }
         } else {
-          showNotification('$Title', '$bodymessage');
-          audioCache.play('Sound.mp3');
-          // Vibration.vibrate();
-          Vibration.vibrate(duration: 7000,);
+          print("---------------------------------------data");
+          if (message["Type"] == 'Visitor') {
+            Get.to(NotificationPopup(message));
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          } else {
+            showNotification('$Title', '$bodymessage');
+            audioCache.play('Sound.mp3');
+            // Vibration.vibrate();
+            Vibration.vibrate(
+              duration: 7000,
+            );
+          }
         }
       },
     );
