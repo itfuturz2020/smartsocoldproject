@@ -301,15 +301,6 @@ class _MyAppState extends State<MyApp> {
     flutterLocalNotificationsPlugin.initialize(initSetttings);
   }
 
-  void _navigateToItemDetail(dynamic message) async {
-    if (message["data"]["Type"] == 'Visitor') {
-      Get.to(NotificationPopup(message));
-    } else {
-      showNotification('$Title', '$bodymessage');
-      audioCache.play('Sound.mp3');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
