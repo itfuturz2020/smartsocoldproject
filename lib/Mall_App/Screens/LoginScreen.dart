@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ import 'package:smart_society_new/Mall_App/Screens/HomeScreen.dart';
 import 'package:smart_society_new/Mall_App/Screens/RegistrationScreen.dart';
 import 'package:smart_society_new/Mall_App/Screens/TearmsLogin.dart';
 import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
+
 import 'VerificationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -40,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         fcmToken = token;
       });
-      print('----------->' + '${token}');
+      print('FCM----------->' + '${token}');
     });
   }
 
