@@ -4,9 +4,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_rtm/agora_rtm.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/settings.dart';
-import 'loding.dart';
 
 // import 'package:wakelock/wakelock.dart';
 
@@ -121,7 +119,15 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   Widget _videoView(view) {
-    return Expanded(child: ClipRRect(child: view));
+    return Column(
+      children: [
+        Expanded(
+          child: ClipRRect(
+            child: view,
+          ),
+        ),
+      ],
+    );
   }
 
   /// Video view row wrapper

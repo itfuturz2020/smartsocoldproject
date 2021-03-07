@@ -1,20 +1,19 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_permission_validator/easy_permission_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Mall_App/Common/Constant.dart' as cnst;
+import 'package:smart_society_new/Mall_App/Common/services.dart' as serv;
 import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
 import 'package:smart_society_new/Member_App/screens/OtpScreen.dart';
-import 'package:smart_society_new/Mall_App/Common/services.dart' as serv;
-import 'package:smart_society_new/Mall_App/Common/Constant.dart' as cnst;
-import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
-import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -44,6 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       print('----------->' + '${token}');
     });
+    final permissionValidator = EasyPermissionValidator(
+      context: context,
+      appName: 'Easy Permission Validator',
+    );
+    permissionValidator.camera();
   }
 
   getOTPStatus() async {

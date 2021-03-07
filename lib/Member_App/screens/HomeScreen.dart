@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:dio/dio.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,21 +19,15 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Mall_App/Screens/HomeScreen.dart' as home;
-import 'package:smart_society_new/Mall_App/Screens/SplashScreen.dart';
 import 'package:smart_society_new/Mall_App/transitions/fade_route.dart';
-import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/Model/ModelClass.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
-import 'package:smart_society_new/Mall_App/common/Services.dart' as serv;
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/constant.dart';
-import 'package:smart_society_new/Mall_App/common/constant.dart' as cnst;
-import 'package:smart_society_new/Member_App/screens/AdDetailPage.dart';
+import 'package:smart_society_new/Member_App/common/join.dart';
 import 'package:smart_society_new/Member_App/screens/BannerScreen.dart';
 import 'package:smart_society_new/Member_App/screens/SOSDailog.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'AdvertismentDetailPage.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -708,6 +702,16 @@ class _HomeScreenState extends State<HomeScreen> {
           toastLength: Toast.LENGTH_SHORT);
   }
 
+  Future<void> onJoin() {
+    // await for camera and mic permissions before pushing video page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => JoinPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -720,11 +724,27 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           centerTitle: true,
           actions: <Widget>[
+            GestureDetector(
+              onTap: onJoin,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 9.0, right: 2.0),
+                    child: Image.asset(
+                      'images/video_call.png',
+                      width: 23,
+                      height: 23,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             IconButton(
                 icon: Icon(Icons.add_to_home_screen),
                 onPressed: () {
                   Navigator.pushNamed(context, "/Dashboard");
-                })
+                }),
           ],
           bottom: PreferredSize(
               child: GestureDetector(

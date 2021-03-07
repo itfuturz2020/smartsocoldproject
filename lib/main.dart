@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:easy_permission_validator/easy_permission_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -158,6 +159,11 @@ class _MyAppState extends State<MyApp> {
     // this.initState();
     initPlayer();
     setNotification();
+    final permissionValidator = EasyPermissionValidator(
+      context: context,
+      appName: 'Easy Permission Validator',
+    );
+    permissionValidator.microphone();
   }
 
   void setNotification() async {
@@ -207,7 +213,6 @@ class _MyAppState extends State<MyApp> {
         print("onLaunch:----- $message-----------------------");
         // _navigateToItemDetail(message);
         // Get.to(NotificationPopup(message));
-
         // Get.to(NotificationPopup(message));
         if (Platform.isAndroid) {
           if (message["data"]["Type"] == 'Visitor') {

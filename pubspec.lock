@@ -169,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1"
+  easy_permission_validator:
+    dependency: "direct main"
+    description:
+      name: easy_permission_validator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.8"
   esys_flutter_share:
     dependency: "direct main"
     description:
