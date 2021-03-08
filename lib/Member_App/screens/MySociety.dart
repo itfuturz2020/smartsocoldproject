@@ -72,6 +72,8 @@ class _MySocietyState extends State<MySociety> {
             setState(() {
               _societyData = data;
             });
+            print("_societyData");
+            print(_societyData);
           }
         }, onError: (e) {
           setState(() {
@@ -139,7 +141,7 @@ class _MySocietyState extends State<MySociety> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => BuildingInfo(
-                              societyData: _societyData[0],
+                              societyData: _societyData,
                             ),
                           ),
                         );
@@ -148,7 +150,7 @@ class _MySocietyState extends State<MySociety> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => BankDetails(
-                              bankData: _societyData[0],
+                              bankData: _societyData,
                             ),
                           ),
                         );

@@ -381,11 +381,15 @@ class _HomeScreenState extends State<HomeScreen> {
           isLoading = true;
         });
         res.then((data) async {
+          print("data");
+          print(data);
           if (data != null && data.length > 0) {
             setState(() {
               _advertisementData = data;
               isLoading = false;
             });
+            print("_advertisementData");
+            print(_advertisementData);
           } else {
             setState(() {
               isLoading = false;
@@ -1072,7 +1076,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text("Instagram",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600)),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -1305,8 +1309,14 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: Container(
           height: 54,
           decoration: BoxDecoration(
-              color: Colors.grey[100],
-              border: Border(top: BorderSide(color: Colors.grey, width: 0.3))),
+            color: Colors.grey[100],
+            border: Border(
+              top: BorderSide(
+                color: Colors.grey,
+                width: 0.3,
+              ),
+            ),
+          ),
           child: Row(
             children: <Widget>[
               Flexible(

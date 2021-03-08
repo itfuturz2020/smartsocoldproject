@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Mall_App/Common/Constant.dart' as cnst;
+import 'package:smart_society_new/Mall_App/Common/services.dart' as serv;
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
-
-import 'package:smart_society_new/Mall_App/Common/services.dart' as serv;
-import 'package:smart_society_new/Mall_App/Common/Constant.dart' as cnst;
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -155,9 +154,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'MobileNo': txtmobile.text.trim(),
               'ResidenceType': _residentTypeList[selected_Index],
               'Gender': gen,
-              'SocietyId': SocietyId,
-              'WingId': _wingClass.WingId,
-              'Wing': _wingClass.WingName,
+              'SocietyId': codeValue,
+              'WingId': '',
+              'Wing': '',
               'FlatNo': txtFlatNo.text.trim(),
             };
             print("Body: ${data}");
@@ -167,7 +166,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Services.Registration(data).then((data) async {
               pr.hide();
               if (data.Data != "0" && data.IsSuccess == true) {
-                showHHMsg("Registration Successfully", "");
+                // showHHMsg("Registration Successfully", "");
+                Fluttertoast.showToast(
+                    msg: "Registration Successfully",
+                    toastLength: Toast.LENGTH_LONG);
                 _Mallregistration();
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/LoginScreen', (route) => false);
@@ -359,10 +361,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: 50,
+                          height: 70,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: TextFormField(
+                              maxLength: 10,
                               textInputAction: TextInputAction.done,
                               focusNode: _Mobile,
                               controller: txtmobile,
@@ -493,6 +496,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   verify = false;
                                 });
                               },
+                              onEditingComplete: () {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                                _CodeVerification();
+                              },
                               decoration: InputDecoration(
                                   border: new OutlineInputBorder(
                                     borderRadius:
@@ -502,24 +510,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   hintText: "Enter Society Code",
                                   hintStyle: TextStyle(fontSize: 13),
                                   suffixIcon: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: isLoading
-                                        ? CircularProgressIndicator(
-                                            strokeWidth: 4,
-                                          )
-                                        : verify
-                                            ? valid
-                                                ? Image.asset(
-                                                    'images/success.png',
-                                                    width: 18,
-                                                    height: 18,
-                                                  )
-                                                : Image.asset(
-                                                    'images/error.png',
-                                                    width: 20,
-                                                    height: 20,
-                                                  )
-                                            : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: isLoading
+                                          ? CircularProgressIndicator(
+                                              strokeWidth: 4,
+                                            )
+                                          : verify
+                                              // ? valid
+                                              ? Image.asset(
+                                                  'images/success.png',
+                                                  width: 18,
+                                                  height: 18,
+                                                )
+                                              : Image.asset(
+                                                  'images/error.png',
+                                                  width: 20,
+                                                  height: 20,
+                                                )
+                                      /*: Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 6.0, right: 8.0),
                                                 child: GestureDetector(
@@ -541,8 +549,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                                         .w600),
                                                           )
                                                         : Text("")),
-                                              ),
-                                  )),
+                                              ),*/
+                                      )),
                             ),
                           ),
                         ),

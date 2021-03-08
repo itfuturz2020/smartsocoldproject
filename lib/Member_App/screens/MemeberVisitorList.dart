@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
@@ -13,6 +16,7 @@ class MemberVisitorList extends StatefulWidget {
 class _MemberVisitorListState extends State<MemberVisitorList> {
   bool isLoading = false;
   List _VisitorList = [];
+  ProgressDialog pr;
 
   @override
   void initState() {
@@ -91,6 +95,22 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
     return final_date;
   }
 
+  _saveAllToContact(String name, String mobileno, String companyname) async {
+    // pr.show();
+    Contact contact = new Contact();
+    contact.givenName = name;
+    contact.phones = [Item(label: "mobileno", value: mobileno.toString())];
+    // contact.emails = [Item(label: "mobileno", value: mobileno.toString())];
+    contact.company = companyname.toString();
+    await ContactsService.addContact(contact);
+
+    Fluttertoast.showToast(
+        msg: "Contact Saved Successfully...",
+        gravity: ToastGravity.TOP,
+        toastLength: Toast.LENGTH_LONG);
+    // pr.hide();
+  }
+
   Widget _MyGuestlistCard(BuildContext context, int index) {
     return Padding(
       padding: const EdgeInsets.only(right: 4.0, left: 4.0),
@@ -144,22 +164,42 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                   ),
                   Column(
                     children: <Widget>[
-                      IconButton(
-                          icon: Icon(
-                            Icons.call,
-                            color: Colors.green[700],
+                      Row(
+                        children: [
+                          IconButton(
+                              icon: Icon(
+                                Icons.contacts,
+                                color: Colors.green[700],
+                              ),
+                              onPressed: () {
+                                _saveAllToContact(
+                                  _VisitorList[index]["Name"],
+                                  _VisitorList[index]["ContactNo"],
+                                  _VisitorList[index]["CompanyName"],
+                                );
+                              }),
+                          IconButton(
+                              icon: Icon(
+                                Icons.call,
+                                color: Colors.green[700],
+                              ),
+                              onPressed: () {}),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Container(
+                          margin: EdgeInsets.only(right: 5, bottom: 6),
+                          padding: EdgeInsets.only(
+                              top: 3, bottom: 3, left: 5, right: 5),
+                          decoration: BoxDecoration(
+                              color: constant.appPrimaryMaterialColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(3))),
+                          child: Text(
+                            "${_VisitorList[index]["VisitorTypeName"]}",
+                            style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
-                          onPressed: () {}),
-                      Container(
-                        margin: EdgeInsets.only(right: 5, bottom: 6),
-                        padding: EdgeInsets.only(
-                            top: 3, bottom: 3, left: 5, right: 5),
-                        decoration: BoxDecoration(
-                            color: constant.appPrimaryMaterialColor,
-                            borderRadius: BorderRadius.all(Radius.circular(3))),
-                        child: Text(
-                          "${_VisitorList[index]["VisitorTypeName"]}",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       )
                     ],

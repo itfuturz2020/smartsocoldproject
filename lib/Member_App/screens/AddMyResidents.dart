@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:smart_society_new/Mall_App/Common/Colors.dart';
-import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
-import 'package:smart_society_new/Member_App/screens/CustomerProfile.dart';
 import 'dart:io';
-import 'package:smart_society_new/Member_App/common/Services.dart';
+
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_society_new/Mall_App/Common/Colors.dart';
+import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 // import 'package:smart_society_new/Member_App/common/constant.dart';
 
@@ -995,7 +995,21 @@ class _AddMyResidentsState extends State<AddMyResidents> {
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(color: Colors.grey[300])),
                       onPressed: () {
-                        addMemberDetails();
+                        if (selState == "Select your State" ||
+                            selCity == 'Select your City' ||
+                            selSociety == 'Select your Society' ||
+                            selWing == 'Select your Building' ||
+                            selFlat == 'Select your Flat Number' ||
+                            flatHolder == "") {
+                          Fluttertoast.showToast(
+                            msg: "Fields can't be empty",
+                            toastLength: Toast.LENGTH_LONG,
+                            backgroundColor: Colors.purple,
+                            textColor: Colors.white,
+                          );
+                        } else {
+                          addMemberDetails();
+                        }
                       },
                     ),
                   ),

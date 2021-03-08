@@ -5,9 +5,9 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:smart_society_new/Member_App/common/ExtensionMethods.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
-import 'package:smart_society_new/Member_App/common/ExtensionMethods.dart';
 import 'package:smart_society_new/Member_App/screens/MemberProfile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -96,6 +96,13 @@ class _MemberComponentState extends State<MemberComponent> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.MemberData["MemberData"]["IsPrivate"]);
   }
 
   @override
@@ -223,8 +230,13 @@ class _MemberComponentState extends State<MemberComponent> {
                         color: Colors.black54,
                       ),
                       onPressed: () {
-                        GetVcard();
-                      }),
+                        widget.MemberData["MemberData"]["IsPrivate"] == true
+                            ? Fluttertoast.showToast(
+                                msg: "Profile is Private",
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white)
+                            : GetVcard();
+                      })
                 ],
               ),
             )

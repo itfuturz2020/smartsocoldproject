@@ -12,21 +12,25 @@ class WingDetail extends StatefulWidget {
 
 class _WingDetailState extends State<WingDetail> {
   int _currentindex;
-  List<List<String>> format =[["301","302","303","201","202","203","101","102","103"],["7","8","9","4","5","6","1","2","3"],["201","202","203","101","102","103","G1","G2","G3"],["4","5","6","1","2","3","G1","G2","G3"],["103","203","303","102","202","302","101","201","301"]];
+  List<List<String>> format = [
+    ["301", "302", "303", "201", "202", "203", "101", "102", "103"],
+    ["7", "8", "9", "4", "5", "6", "1", "2", "3"],
+    ["201", "202", "203", "101", "102", "103", "G1", "G2", "G3"],
+    ["4", "5", "6", "1", "2", "3", "G1", "G2", "G3"],
+    ["103", "203", "303", "102", "202", "302", "101", "201", "301"]
+  ];
   TextEditingController txtname = new TextEditingController();
   TextEditingController txtfloor = new TextEditingController();
   TextEditingController txtUnit = new TextEditingController();
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Wing - "+widget.wingName),
+        title: Text("Wing - " + widget.wingName),
         centerTitle: true,
       ),
+      resizeToAvoidBottomPadding: false,
       body: Column(
         children: <Widget>[
           Padding(
@@ -56,7 +60,8 @@ class _WingDetailState extends State<WingDetail> {
                       borderRadius: new BorderRadius.circular(5.0),
                       borderSide: new BorderSide(),
                     ),
-                    labelText: "Enter Name",
+                    // labelText: "Enter Name",
+                    hintText: 'Enter Name',
                     hintStyle: TextStyle(fontSize: 13)),
               ),
             ),
@@ -89,7 +94,7 @@ class _WingDetailState extends State<WingDetail> {
                     counterText: "",
                     fillColor: Colors.grey[200],
                     contentPadding:
-                    EdgeInsets.only(top: 5, left: 10, bottom: 5),
+                        EdgeInsets.only(top: 5, left: 10, bottom: 5),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         borderSide: BorderSide(width: 0, color: Colors.black)),
@@ -97,7 +102,7 @@ class _WingDetailState extends State<WingDetail> {
                         borderRadius: BorderRadius.all(Radius.circular(4)),
                         borderSide: BorderSide(width: 0, color: Colors.black)),
                     hintText: 'Enter Total Floor',
-                    labelText: "Total Floor",
+                    // labelText: "Total Floor",
                     hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
               ),
             ),
@@ -130,7 +135,7 @@ class _WingDetailState extends State<WingDetail> {
                     counterText: "",
                     fillColor: Colors.grey[200],
                     contentPadding:
-                    EdgeInsets.only(top: 5, left: 10, bottom: 5),
+                        EdgeInsets.only(top: 5, left: 10, bottom: 5),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         borderSide: BorderSide(width: 0, color: Colors.black)),
@@ -138,7 +143,7 @@ class _WingDetailState extends State<WingDetail> {
                         borderRadius: BorderRadius.all(Radius.circular(4)),
                         borderSide: BorderSide(width: 0, color: Colors.black)),
                     hintText: 'Enter Maximum Units',
-                    labelText: "Maximum Units",
+                    // labelText: "Maximum Units",
                     hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
               ),
             ),
@@ -153,7 +158,6 @@ class _WingDetailState extends State<WingDetail> {
               ],
             ),
           ),
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -171,10 +175,8 @@ class _WingDetailState extends State<WingDetail> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              border: _currentindex == index
-                                  ? Border.all()
-                                  : null
-                          ),
+                              border:
+                                  _currentindex == index ? Border.all() : null),
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: Column(
@@ -184,14 +186,15 @@ class _WingDetailState extends State<WingDetail> {
                                   child: Row(
                                     children: <Widget>[
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -204,14 +207,15 @@ class _WingDetailState extends State<WingDetail> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 3.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 3.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -224,18 +228,19 @@ class _WingDetailState extends State<WingDetail> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 3.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 3.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
-                                                "${format[index][2]}",
+                                              "${format[index][2]}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 17),
@@ -251,14 +256,15 @@ class _WingDetailState extends State<WingDetail> {
                                   child: Row(
                                     children: <Widget>[
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -271,14 +277,15 @@ class _WingDetailState extends State<WingDetail> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 3.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 3.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -291,14 +298,15 @@ class _WingDetailState extends State<WingDetail> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 3.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 3.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -318,14 +326,15 @@ class _WingDetailState extends State<WingDetail> {
                                   child: Row(
                                     children: <Widget>[
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -338,14 +347,15 @@ class _WingDetailState extends State<WingDetail> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 3.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 3.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -358,14 +368,15 @@ class _WingDetailState extends State<WingDetail> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 3.0),
+                                        padding:
+                                            const EdgeInsets.only(left: 3.0),
                                         child: Container(
                                           height: 30,
                                           width: 45,
-                                          decoration:
-                                          BoxDecoration(color: constant
-                                              .appPrimaryMaterialColor[500]),
+                                          decoration: BoxDecoration(
+                                              color: constant
+                                                      .appPrimaryMaterialColor[
+                                                  500]),
                                           child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
@@ -383,21 +394,14 @@ class _WingDetailState extends State<WingDetail> {
                               ],
                             ),
                           ),
-                        )
-                    );
+                        ));
                   }),
             ),
           )
-
-
         ],
       ),
-
       bottomNavigationBar: SizedBox(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         height: 45,
         child: RaisedButton(
           shape: RoundedRectangleBorder(),
@@ -405,16 +409,15 @@ class _WingDetailState extends State<WingDetail> {
           textColor: Colors.white,
           splashColor: Colors.white,
           child: Text("Create",
-              style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.w600)),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => WingFlat(
-               floorData: txtfloor.text,
-                  maxUnitData: txtUnit.text,
-                  formatData: _currentindex,
-                )));
-           // Navigator.pushNamed(context, '/WingFlat');
+                      floorData: txtfloor.text,
+                      maxUnitData: txtUnit.text,
+                      formatData: _currentindex,
+                    )));
+            // Navigator.pushNamed(context, '/WingFlat');
           },
         ),
       ),

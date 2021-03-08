@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
@@ -149,7 +150,7 @@ class _CreateSocietyState extends State<CreateSociety> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Padding(
                 padding:
@@ -209,15 +210,14 @@ class _CreateSocietyState extends State<CreateSociety> {
                     const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
                 child: Row(
                   children: <Widget>[
-                    Text("Name",
+                    Text("Society",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500))
                   ],
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
                 child: SizedBox(
                   height: 50,
                   child: TextFormField(
@@ -234,7 +234,8 @@ class _CreateSocietyState extends State<CreateSociety> {
                           borderRadius: new BorderRadius.circular(5.0),
                           borderSide: new BorderSide(),
                         ),
-                        labelText: "Enter Name",
+                        // labelText: "Society Name",
+                        hintText: 'Enter Society Name',
                         hintStyle: TextStyle(fontSize: 13)),
                   ),
                 ),
@@ -251,8 +252,7 @@ class _CreateSocietyState extends State<CreateSociety> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
                 child: SizedBox(
                   height: 50,
                   child: TextFormField(
@@ -272,25 +272,22 @@ class _CreateSocietyState extends State<CreateSociety> {
                         contentPadding:
                             EdgeInsets.only(top: 5, left: 10, bottom: 5),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5)),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
                             borderSide:
                                 BorderSide(width: 0, color: Colors.black)),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4)),
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
                             borderSide:
                                 BorderSide(width: 0, color: Colors.black)),
                         hintText: 'Enter Mobile No',
-                        labelText: "Mobile",
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 14)),
+                        // labelText: "Mobile",
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
                   ),
                 ),
               ),
               Padding(
                 padding:
-                const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
+                    const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
                 child: Row(
                   children: <Widget>[
                     Text("Total Wings",
@@ -300,8 +297,7 @@ class _CreateSocietyState extends State<CreateSociety> {
                 ),
               ),
               Padding(
-                padding:
-                const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
                 child: SizedBox(
                   height: 50,
                   child: TextFormField(
@@ -319,21 +315,18 @@ class _CreateSocietyState extends State<CreateSociety> {
                         counterText: "",
                         fillColor: Colors.grey[200],
                         contentPadding:
-                        EdgeInsets.only(top: 5, left: 10, bottom: 5),
+                            EdgeInsets.only(top: 5, left: 10, bottom: 5),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(5)),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
                             borderSide:
-                            BorderSide(width: 0, color: Colors.black)),
+                                BorderSide(width: 0, color: Colors.black)),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(4)),
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
                             borderSide:
-                            BorderSide(width: 0, color: Colors.black)),
-                        hintText: 'Enter Mobile No',
-                        labelText: "Wings",
-                        hintStyle:
-                        TextStyle(color: Colors.grey, fontSize: 14)),
+                                BorderSide(width: 0, color: Colors.black)),
+                        hintText: 'Enter Total No of Wings',
+                        // labelText: "Wings",
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 14)),
                   ),
                 ),
               ),
@@ -444,8 +437,7 @@ class _CreateSocietyState extends State<CreateSociety> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(top: 30.0, left: 8, right: 8),
+                padding: const EdgeInsets.only(top: 30.0, left: 8, right: 8),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 45,
@@ -459,10 +451,22 @@ class _CreateSocietyState extends State<CreateSociety> {
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w600)),
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) => SetupWings(
-                            wingData: txtwings.text,
-                          )));
+                      if (Price_dropdownValue == "Select" ||
+                          txtname == "" ||
+                          txtmobile == "" ||
+                          txtwings == "" ||
+                          _stateClass.Name == null ||
+                          _cityClass.Name == null) {
+                        Fluttertoast.showToast(
+                          msg: "Fields can't be empty",
+                          gravity: ToastGravity.BOTTOM,
+                        );
+                      } else {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (BuildContext context) => SetupWings(
+                                  wingData: txtwings.text,
+                                )));
+                      }
                       //Navigator.pushNamed(context, '/SetupWings');
                     },
                   ),
