@@ -252,7 +252,7 @@ packages:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.3"
+    version: "6.0.16"
   fl_chart:
     dependency: "direct main"
     description:

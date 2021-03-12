@@ -1,7 +1,10 @@
 package com.itfuturz.mygenie_member
-
 import android.os.Bundle
-
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.media.AudioAttributes
+import android.net.Uri
+import android.os.Build
 import io.flutter.app.FlutterActivity
 import io.flutter.plugins.GeneratedPluginRegistrant
 
@@ -13,33 +16,26 @@ class MainActivity: FlutterActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     GeneratedPluginRegistrant.registerWith(this)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-    notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    if (isOreoOrAbove()) {
-      setupNotificationChannels();
+      val soundUri: Uri = Uri.parse(
+              "android.resource://" +
+                      applicationContext.packageName +
+                      "/" + R.raw.alert)
+
+      val audioAttributes = AudioAttributes.Builder()
+              .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+              .setUsage(AudioAttributes.USAGE_ALARM)
+              .build()
+
+      val channel = NotificationChannel("noti_push_app_1",
+              "noti_push_app",
+              NotificationManager.IMPORTANCE_HIGH)
+      channel.setSound(soundUri, audioAttributes)
+      val notificationManager = getSystemService(NotificationManager::class.java)
+      notificationManager.createNotificationChannel(channel)
     }
+
   }
 
-  @TargetApi(Build.VERSION_CODES.O)
-  fun registerNormalNotificationChannel(notificationManager: android.app.NotificationManager) {
-    val sound: Uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE.toString() + "://" + getPackageName() + "/raw/alert.mp3")
-
-    val channel_all = NotificationChannel("CHANNEL_ID_ALL", "CHANNEL_NAME_ALL", NotificationManager.IMPORTANCE_HIGH)
-    val audioAttributes: AudioAttributes = Builder()
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .setUsage(AudioAttributes.USAGE_ALARM)
-            .build()
-    channel_all.enableVibration(true)
-    channel_all.setSound(sound,audioAttributes)
-    notificationManager.createNotificationChannel(channel_all)
-    notificationManager.notify(( int ) System. currentTimeMillis () ,
-  }
-
-  private fun isOreoOrAbove(): Boolean {
-    return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O
-  }
-
-  private fun setupNotificationChannels() {
-    registerNormalNotificationChannel(notificationManager)
-  }
 }

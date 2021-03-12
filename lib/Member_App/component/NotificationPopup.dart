@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -21,18 +23,30 @@ class NotificationPopup extends StatefulWidget {
 class _NotificationPopupState extends State<NotificationPopup> {
   List NoticeData = new List();
   bool isLoading = false;
+
+  AudioPlayer advancedPlayer;
+  AudioCache audioCache;
+
+  void initPlayer() {
+    advancedPlayer = new AudioPlayer();
+    audioCache = new AudioCache(fixedPlayer: advancedPlayer);
+    audioCache.play("Sound.mp3");
+  }
+
   String SocietyId;
   final List<String> _notifcationReplylist = [
     "APPROVED",
     "LEAVE AT GATE",
     "DENY"
   ];
+
   int selected_Index;
   var mydata;
 
   @override
   void initState() {
-    print(widget.data);
+    initPlayer();
+    // print(widget.data);
     AgoraentryId();
   }
 

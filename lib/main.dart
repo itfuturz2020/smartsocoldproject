@@ -149,15 +149,15 @@ class _MyAppState extends State<MyApp> {
   String Title;
   String bodymessage;
 
-  void initPlayer() {
-    advancedPlayer = new AudioPlayer();
-    audioCache = new AudioCache(fixedPlayer: advancedPlayer);
-  }
+  // void initPlayer() {
+  //   advancedPlayer = new AudioPlayer();
+  //   audioCache = new AudioCache(fixedPlayer: advancedPlayer);
+  // }
 
   @override
   void initState() {
     // this.initState();
-    initPlayer();
+    // initPlayer();
     setNotification();
     final permissionValidator = EasyPermissionValidator(
       context: context,
@@ -177,7 +177,7 @@ class _MyAppState extends State<MyApp> {
         if (Platform.isAndroid) {
           if (message["data"]["Type"] == 'Visitor') {
             Get.to(NotificationPopup(message["data"]));
-            audioCache.play('Sound.mp3');
+            // audioCache.play('Sound.mp3');
             //for vibration
             Vibration.vibrate(
               duration: 7000,
@@ -193,7 +193,7 @@ class _MyAppState extends State<MyApp> {
         } else {
           if (message["Type"] == 'Visitor') {
             Get.to(NotificationPopup(message));
-            audioCache.play('Sound.mp3');
+            // audioCache.play('Sound.mp3');
             //for vibration
             Vibration.vibrate(
               duration: 7000,
@@ -211,13 +211,11 @@ class _MyAppState extends State<MyApp> {
       //when app is closed and user click on notification
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch:----- $message-----------------------");
-        // _navigateToItemDetail(message);
-        // Get.to(NotificationPopup(message));
-        // Get.to(NotificationPopup(message));
+
         if (Platform.isAndroid) {
           if (message["data"]["Type"] == 'Visitor') {
             Get.to(NotificationPopup(message["data"]));
-            audioCache.play('Sound.mp3');
+            // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
               duration: 7000,
@@ -233,7 +231,7 @@ class _MyAppState extends State<MyApp> {
         } else {
           if (message["Type"] == 'Visitor') {
             Get.to(NotificationPopup(message));
-            audioCache.play('Sound.mp3');
+            // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
               duration: 7000,
@@ -256,7 +254,7 @@ class _MyAppState extends State<MyApp> {
         if (Platform.isAndroid) {
           if (message["data"]["Type"] == 'Visitor') {
             Get.to(NotificationPopup(message["data"]));
-            audioCache.play('Sound.mp3');
+            // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
               duration: 7000,
@@ -273,7 +271,7 @@ class _MyAppState extends State<MyApp> {
           print("---------------------------------------data");
           if (message["Type"] == 'Visitor') {
             Get.to(NotificationPopup(message));
-            audioCache.play('Sound.mp3');
+            // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
               duration: 7000,
