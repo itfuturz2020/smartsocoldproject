@@ -1,15 +1,20 @@
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../common/Services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import '../common/constant.dart';
 
 class WingFlat extends StatefulWidget {
-  var floorData, maxUnitData, formatData;
+  var floorData, maxUnitData, formatData,wingName,wingId,societyId;
 
-  WingFlat({this.floorData, this.formatData, this.maxUnitData});
+  WingFlat({this.floorData, this.formatData, this.maxUnitData,this.wingName,this.wingId,this.societyId});
 
   @override
   _WingFlatState createState() => _WingFlatState();
@@ -21,6 +26,7 @@ class _WingFlatState extends State<WingFlat> {
   List colors = [];
 
   List flatList = [];
+  ProgressDialog pr;
   List flatColorsList = [
     constant.appPrimaryMaterialColor,
     Colors.grey,
@@ -33,15 +39,20 @@ class _WingFlatState extends State<WingFlat> {
   void initState() {
     rowscolumn = int.parse(widget.floorData) * int.parse(widget.maxUnitData);
     color1 = constant.appPrimaryMaterialColor;
+    getFlatType();
+    pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
+    pr.style(message: 'Please Wait');
+    print(constant.appPrimaryMaterialColor);
     /*for (int i = 0; i < rowscolumn; i++) {
       colors.add(color1);
     }*/
-    print("=========================");
-    print(widget.formatData);
     formatGrid();
   }
 
   formatGrid() {
+    flatList.clear();
+    print("flatColorsList");
+    print(flatColorsList[0].runtimeType);
     if (widget.formatData == 1) {
       int flatCount = 1;
       for (int i = 0; i < int.parse(widget.floorData); i++) {
@@ -49,6 +60,7 @@ class _WingFlatState extends State<WingFlat> {
           flatList.add({
             'flatTypeColor': flatColorsList[0],
             'flatNumber': flatCount,
+            "FlatType" : "",
           });
           flatCount++;
         }
@@ -57,11 +69,10 @@ class _WingFlatState extends State<WingFlat> {
       int flatCount = 101;
       for (int i = 0; i < int.parse(widget.floorData); i++) {
         for (int j = 0; j < int.parse(widget.maxUnitData); j++) {
-          print("================");
-          print(flatCount);
           flatList.add({
             'flatTypeColor': flatColorsList[0],
             'flatNumber': flatCount,
+            "FlatType" : "",
           });
           flatCount++;
         }
@@ -71,17 +82,17 @@ class _WingFlatState extends State<WingFlat> {
       int flatCount = 1;
       for (int i = 0; i < int.parse(widget.floorData); i++) {
         for (int j = 0; j < int.parse(widget.maxUnitData); j++) {
-          print("================");
-          print(flatCount);
           if (i == 0) {
             flatList.add({
               'flatTypeColor': flatColorsList[0],
               'flatNumber': "G" + flatCount.toString(),
+              "FlatType" : "",
             });
           } else {
             flatList.add({
               'flatTypeColor': flatColorsList[0],
               'flatNumber': flatCount,
+              "FlatType" : "",
             });
           }
           flatCount++;
@@ -99,12 +110,14 @@ class _WingFlatState extends State<WingFlat> {
             flatList.add({
               'flatTypeColor': flatColorsList[0],
               'flatNumber': "G" + flatCountG.toString(),
+              "FlatType" : "",
             });
             flatCountG++;
           } else {
             flatList.add({
               'flatTypeColor': flatColorsList[0],
               'flatNumber': flatCount,
+              "FlatType" : "",
             });
             flatCount++;
           }
@@ -123,6 +136,7 @@ class _WingFlatState extends State<WingFlat> {
           flatList.add({
             'flatTypeColor': flatColorsList[0],
             'flatNumber': flatCount,
+            "FlatType" : "",
           });
           //flatCount++;
           flatCount += 100;
@@ -134,6 +148,8 @@ class _WingFlatState extends State<WingFlat> {
     }
   }
 
+  List flatnoAndType = [];
+
   getFloorAndFlat() {
     return GridView.count(
         crossAxisCount: int.parse(widget.maxUnitData),
@@ -142,7 +158,7 @@ class _WingFlatState extends State<WingFlat> {
         children: List.generate(flatList.length, (index) {
           return GestureDetector(
             onTap: () {
-              changeColor(index: index);
+              changeColor(index: index,flatno : flatList[index]["flatNumber"]);
             },
             child: Container(
               height: MediaQuery.of(context).size.width /
@@ -195,14 +211,46 @@ class _WingFlatState extends State<WingFlat> {
     // return columnList;
   }
 
-  changeColor({int index}) {
+  changeColor({int index,int flatno}) {
     setState(() {
       int colorIndex = flatColorsList.indexOf(flatList[index]["flatTypeColor"]);
-      if (colorIndex <= 3)
+      if (colorIndex <= 3){
         flatList[index]["flatTypeColor"] = flatColorsList[colorIndex + 1];
-      else
+        print(flatList[index]["flatTypeColor"]);
+
+      }
+      else{
         flatList[index]["flatTypeColor"] = flatColorsList[0];
+        print(flatList[index]["flatTypeColor"]);
+
+      }
     });
+
+    // if(flatnoAndType.length == 0){
+    //     flatnoAndType.add({
+    //       "flatno": flatno,
+    //       "colortype" : flatList[index]["flatTypeColor"]
+    //     });
+    //   }
+    //   else{
+    //     for(int i=0;i<flatnoAndType.length;i++){
+    //       print(flatnoAndType[i]["flatno"]);
+    //       print(flatno);
+    //       if(flatnoAndType[i]["flatno"] == flatno){
+    //         print("Yes flatno is repeated");
+    //         print(flatList[index]["flatTypeColor"]);
+    //         flatnoAndType[i]["colortype"] = flatList[index]["flatTypeColor"].toString();
+    //       }
+    //       else{
+    //         flatnoAndType.add({
+    //           "flatno": flatno,
+    //           "colortype" : flatList[index]["flatTypeColor"]
+    //         });
+    //       }
+    //     }
+    //   }
+    // print("flatnoAndType");
+    // print(flatnoAndType);
   }
 
   /*changeColor({int index}) {
@@ -228,6 +276,97 @@ class _WingFlatState extends State<WingFlat> {
       }
     });
   }*/
+
+  showMsg(String msg, {String title = 'My JINI'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Okay"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List winglistClassList = [];
+  List finalDataSent = [];
+  getFlatType() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.getFlatType();
+        res.then((data) async {
+          if (data !=null) {
+            setState(() {
+              winglistClassList = data;
+            });
+            print("getFlatType=> " + winglistClassList.toString());
+          }
+        }, onError: (e) {
+          showMsg("$e");
+        });
+      } else {
+        showMsg("No Internet Connection.");
+      }
+    } on SocketException catch (_) {
+      showMsg("Something Went Wrong");
+    }
+  }
+
+  sendWingData() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          pr.show();
+        });
+        for(int i=0;i<flatList.length;i++){
+          finalDataSent.add({
+            "SocietyId" : widget.societyId,
+            "WingId" : widget.wingId,
+            "Wing" : widget.wingName,
+            "FlatNo" : flatList[i]["flatNumber"],
+            "ResidenceType" : flatList[i]["FlatType"]
+          });
+        }
+        var body = finalDataSent;
+        print("finalDataSent");
+        print(finalDataSent);
+        Services.sendWingData(body).then((data) async {
+          if (data.IsSuccess==true) {
+            prefs.setString('madeAtleastOneWing', "true");
+            Fluttertoast.showToast(
+                msg: "Data Added Successfully",
+                backgroundColor: Colors.green,
+                gravity: ToastGravity.TOP,
+                textColor: Colors.white);
+            formatGrid();
+            Navigator.pushNamed(context, '/SetupWings');
+        }
+        }, onError: (e) {
+          pr.hide();
+          showMsg("$e");
+        });
+      } else {
+        pr.hide();
+        showMsg("No Internet Connection.");
+      }
+    } on SocketException catch (_) {
+      showMsg("Something Went Wrong");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -342,8 +481,7 @@ class _WingFlatState extends State<WingFlat> {
                   getFloorAndFlat(),
               // ),
               // ),
-            )
-
+            ),
             // Expanded(
             //   child: StaggeredGridView.countBuilder(
             //       physics: ScrollPhysics(),
@@ -382,6 +520,40 @@ class _WingFlatState extends State<WingFlat> {
             //         );
             //       }),
             // )
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 40,
+              child: RaisedButton(
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                        color: Colors.white,
+                    ),
+                  ),
+                  color: constant.appPrimaryMaterialColor,
+                  onPressed: (){
+                    for(int index=0;index<flatList.length;index++){
+                      if(flatList[index]["flatTypeColor"].toString() == "MaterialColor(primary value: Color(0xff7222a9))"){
+                        flatList[index]["FlatType"] = "Owner";
+                      }
+                      else if(flatList[index]["flatTypeColor"].toString() == "MaterialColor(primary value: Color(0xff9e9e9e))"){
+                        flatList[index]["FlatType"] = "Closed";
+                      }
+                      else if(flatList[index]["flatTypeColor"].toString() == "MaterialColor(primary value: Color(0xffff9800))"){
+                        flatList[index]["FlatType"] = "Rent";
+                      }
+                      else if(flatList[index]["flatTypeColor"].toString() == "Color(0xff000000)"){
+                        flatList[index]["FlatType"] = "Dead";
+                      }
+                      else if(flatList[index]["flatTypeColor"].toString() == "MaterialAccentColor(primary value: Color(0xff448aff))"){
+                        flatList[index]["FlatType"] = "Shop";
+                      }
+                    }
+                    print(flatList);
+                    sendWingData();
+                  },
+              ),
+            )
           ],
         ),
       ),

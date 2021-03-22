@@ -1,13 +1,16 @@
 import 'dart:io' show Platform;
-
+import './Member_App/screens/AddStaff.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_permission_validator/easy_permission_validator.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import './Member_App/screens/SOS.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_society_new/Admin_App/Screens/AddAmenitiesScreen.dart';
 import 'package:smart_society_new/Admin_App/Screens/AddDocument.dart';
@@ -84,6 +87,7 @@ import 'package:smart_society_new/Member_App/screens/EventDetail.dart';
 import 'package:smart_society_new/Member_App/screens/Events.dart';
 import 'package:smart_society_new/Member_App/screens/FamilyMemberDetail.dart';
 import 'package:smart_society_new/Member_App/screens/GalleryScreen.dart';
+import 'package:smart_society_new/Member_App/screens/GetPass.dart';
 import 'package:smart_society_new/Member_App/screens/GlobalSearchMembers.dart';
 import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
 import 'package:smart_society_new/Member_App/screens/JoinCreateBuildingScreen.dart';
@@ -124,13 +128,16 @@ import 'Member_App/screens/DirectoryProfileFamily.dart';
 import 'Member_App/screens/DirectoryProfileVehicle.dart';
 
 void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => CartProvider()),
-      ],
-      child: MyApp(),
-    ),
+       MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => CartProvider()),
+        ],
+        child: MyApp(),
+      ),
   );
 }
 
@@ -168,26 +175,41 @@ class _MyAppState extends State<MyApp> {
 
   void setNotification() async {
     //_messaging.getToken().then((token) {});
-
     _firebaseMessaging.configure(
       //when app is open
       onMessage: (Map<String, dynamic> message) async {
         // Get.to(NotificationPopup(message));
         print("onMessage:---- $message------------------------");
         if (Platform.isAndroid) {
+          Title = message["notification"]["title"];
+          bodymessage = message["notification"]["body"];
           if (message["data"]["Type"] == 'Visitor') {
+            print('message["data"]');
+            print(message["data"]);
             Get.to(NotificationPopup(message["data"]));
             // audioCache.play('Sound.mp3');
             //for vibration
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
-          } else {
+          }
+          else if(message["data"]["Type"] == "SOS"){
+            print('message["data"]');
+            print(message["data"]);
+            Get.to(SOS(message["notification"]));
+            audioCache.play('ambulance-sound-27708.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 15000,
+            );
+          }
+          else {
+            Get.toNamed('/' + message["data"]["Type"]);
             showNotification('$Title', '$bodymessage');
             audioCache.play('Sound.mp3');
             //..
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
           }
         } else {
@@ -196,14 +218,24 @@ class _MyAppState extends State<MyApp> {
             // audioCache.play('Sound.mp3');
             //for vibration
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
-          } else {
+          } else if(message["data"]["Type"] == "SOS"){
+            print('message["data"]');
+            print(message["data"]);
+            Get.to(SOS(message["data"]));
+            audioCache.play('ambulance-sound-27708.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 15000,
+            );
+          }else {
+            Get.toNamed('/' + message["data"]["Type"]);
             showNotification('$Title', '$bodymessage');
             audioCache.play('Sound.mp3');
             //..
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
           }
         }
@@ -218,30 +250,55 @@ class _MyAppState extends State<MyApp> {
             // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
-          } else {
-            showNotification('$Title', '$bodymessage');
+          }
+          else if(message["data"]["Type"] == "SOS"){
+            print('message["data"]');
+            print(message["data"]);
+            Get.to(SOS(message["data"]));
+            audioCache.play('ambulance-sound-27708.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 15000,
+            );
+          }
+          else {
+            Get.toNamed('/' + message["data"]["Type"]);
+            //showNotification('$Title', '$bodymessage');
             audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
           }
         } else {
-          if (message["Type"] == 'Visitor') {
+          if (message["data"]["Type"] == 'Visitor') {
             Get.to(NotificationPopup(message));
             // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
+
             );
-          } else {
+          }
+          else if(message["data"]["Type"] == "SOS"){
+            print('message["data"]');
+            print(message["data"]);
+            Get.to(SOS(message["data"]));
+            audioCache.play('Sound.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 15000,
+            );
+          }
+          else {
+            Get.toNamed('/' + message["data"]["Type"]);
             showNotification('$Title', '$bodymessage');
             audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
           }
         }
@@ -257,14 +314,26 @@ class _MyAppState extends State<MyApp> {
             // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
-          } else {
+          }
+          else if(message["data"]["Type"] == "SOS"){
+            print('message["data"]');
+            print(message["data"]);
+            Get.to(SOS(message["data"]));
+            audioCache.play('ambulance-sound-27708.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 15000,
+            );
+          }
+          else {
+            Get.toNamed('/' + message["data"]["Type"]);
             showNotification('$Title', '$bodymessage');
             audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
           }
         } else {
@@ -274,14 +343,25 @@ class _MyAppState extends State<MyApp> {
             // audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
-          } else {
+          }
+          else if(message["data"]["Type"] == "SOS"){
+            print('message["data"]');
+            print(message["data"]);
+            Get.to(SOS(message["data"]));
+            audioCache.play('ambulance-sound-27708.mp3');
+            //for vibration
+            Vibration.vibrate(
+              duration: 15000,
+            );
+          }
+          else {
             showNotification('$Title', '$bodymessage');
             audioCache.play('Sound.mp3');
             // Vibration.vibrate();
             Vibration.vibrate(
-              duration: 7000,
+              duration: 15000,
             );
           }
         }
@@ -315,6 +395,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => Splashscreen(),
         '/LoginScreen': (context) => LoginScreen(),
+        '/GetPass': (context) => GetPass(),
         '/HomeScreen': (context) => HomeScreen(),
         '/Notice': (context) => NoticeScreen(),
         '/WaitingScreen': (context) => Approval_admin(),
@@ -329,6 +410,7 @@ class _MyAppState extends State<MyApp> {
         '/Gallery': (context) => GalleryScreen(),
         '/UpdateProfile': (context) => UpdateProfile(),
         '/AddGuest': (context) => AddGuest(),
+        '/AddStaff': (context) => AddStaff(),
         '/MyGuestList': (context) => MyGuestList(),
         '/Rules': (context) => SocietyRules(),
         '/FamilyMemberDetail': (context) => FamilyMemberDetail(),

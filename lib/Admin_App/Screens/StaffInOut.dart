@@ -376,6 +376,13 @@ class _StaffInOutState extends State<StaffInOut> {
                         ),
                 ],
               ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/AddStaff');
+          },
+          child: Icon(Icons.add, color: Colors.white),
+          backgroundColor: cnst.appPrimaryMaterialColor,
+        ),
       ),
     );
   }

@@ -48,7 +48,7 @@ class AddFamilyMemberState extends State<AddFamilyMember> {
   TextEditingController txtmobile = new TextEditingController();
 
   _SaveFamilymember() async {
-    if (txtname.text != "" && txtmobile.text != "") {
+    if (txtname.text != "" && txtmobile.text != "" && txtmobile.text.length==10) {
       if (Relation != null) {
         try {
           final result = await InternetAddress.lookup('google.com');

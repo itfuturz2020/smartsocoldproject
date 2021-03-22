@@ -50,7 +50,11 @@ class _SetupWingScreenState extends State<SetupWingScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Setup all your wings and you will be on dashboard screen.",style: TextStyle(color:cnst.appPrimaryMaterialColor),),
+                  child: Text(
+                    "Setup all your wings and you will be on dashboard screen.",
+                    style: TextStyle(color:cnst.appPrimaryMaterialColor,
+                    ),
+                  ),
                 ),
                 Expanded(
                   child: GridView.builder(
@@ -114,6 +118,7 @@ class _SetupWingScreenState extends State<SetupWingScreen> {
           ),
         ),
       ),
+
     );
   }
 }

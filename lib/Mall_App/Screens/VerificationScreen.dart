@@ -1,3 +1,4 @@
+/*
 import 'dart:developer';
 import 'dart:io';
 
@@ -5,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:smart_society_new/Mall_App/Common/Colors.dart';
 import 'package:smart_society_new/Mall_App/Common/services.dart';
 import 'package:smart_society_new/Mall_App/Screens/RegistrationScreen.dart';
@@ -97,7 +97,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
         verificationCompleted: verificationCompleted,
         verificationFailed: verificationFailed,
         codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    );
   }
 
   void _onFormSubmitted() async {
@@ -108,7 +109,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         verificationId: _verificationId, smsCode: txtOTP.text);
     _firebaseAuth
         .signInWithCredential(_authCredential)
-        .then((UserCredential value) {
+        .then(( value) {
       setState(() {
         isLoading = false;
       });
@@ -133,6 +134,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
     });
   }
 
+*/
 /*
   saveDataToSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -148,8 +150,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
     Navigator.pushAndRemoveUntil(
         context, SlideLeftRoute(page: HomeScreen()), (route) => false);
   }
-*/
+*//*
 
+
+*/
 /*
   _sendOTP() async {
     var rnd = new Random();
@@ -195,7 +199,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
       Fluttertoast.showToast(msg: "No Internet Connection");
     }
   }
-*/
+*//*
+
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +251,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ],
               ),
             ),
+*/
+/*
             Container(
               child: Column(
                 children: <Widget>[
@@ -324,6 +331,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ],
               ),
             )
+*//*
+
           ],
         ),
       ),
@@ -363,3 +372,4 @@ class _VerificationScreenState extends State<VerificationScreen> {
     }
   }
 }
+*/

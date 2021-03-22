@@ -23,7 +23,7 @@ class _SOSDailogState extends State<SOSDailog> {
   List FmemberData = new List();
   List WatchmenData = new List();
   bool isLoading = false;
-  String SocietyId, MemberId, ParentId;
+  String SocietyId, MemberId, ParentId,wingId,flatNo;
   ProgressDialog pr;
   FormData formData;
 
@@ -43,6 +43,8 @@ class _SOSDailogState extends State<SOSDailog> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     SocietyId = prefs.getString(constant.Session.SocietyId);
     MemberId = prefs.getString(constant.Session.Member_Id);
+    wingId = prefs.getString(constant.Session.WingId);
+    flatNo = prefs.getString(constant.Session.FlatNo);
     if (prefs.getString(constant.Session.ParentId) == "null" ||
         prefs.getString(constant.Session.ParentId) == "")
       ParentId = "0";
@@ -58,7 +60,7 @@ class _SOSDailogState extends State<SOSDailog> {
           isLoading = true;
         });
 
-        Services.GetFamilyMember(ParentId, MemberId).then((data) async {
+        Services.GetFamilyMemberDetails(wingId, flatNo,SocietyId).then((data) async {
           setState(() {
             isLoading = false;
           });
@@ -67,6 +69,11 @@ class _SOSDailogState extends State<SOSDailog> {
               FmemberData = data;
               //phoneNumber1 = data[0]["ContactNo"];
             });
+            for(int i=0;i<FmemberData.length;i++){
+              if(FmemberData[i]["Id"].toString() == MemberId){
+                FmemberData.remove(FmemberData[i]);
+              }
+            }
           } else {
             setState(() {
               isLoading = false;
@@ -401,6 +408,7 @@ class _SOSDailogState extends State<SOSDailog> {
 
   @override
   Widget build(BuildContext context) {
+    print(MemberId);
     return AlertDialog(
       titlePadding: EdgeInsets.only(top: 0),
       contentPadding: EdgeInsets.only(top: 10, left: 7, right: 7, bottom: 10),
@@ -563,7 +571,8 @@ class _SOSDailogState extends State<SOSDailog> {
                 color: constant.appPrimaryMaterialColor[600],
                 textColor: Colors.white,
                 splashColor: Colors.white,
-                child: Text("Send",
+                child: Text(
+                    "Send",
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                 onPressed: () {

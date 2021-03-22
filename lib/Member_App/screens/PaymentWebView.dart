@@ -362,7 +362,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           "Id": 0,
           "Title": widget.data["title"],
           "Description": widget.data["desc"],
-          "Image": (filePath != null && filePath != '')
+          "File": (filePath != null && filePath != '')
               ? await MultipartFile.fromFile(filePath,
                   filename: filename.toString())
               : null,
@@ -376,7 +376,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
           "Date": "${DateTime.now().toString()}",
           "WebsiteURL": "${widget.data["WebsiteURL"]}",
           "GoogleMap": "${widget.data["GoogleMap"]}",
-          "Email": "${widget.data["Email"]}",
+          "EmailId": "${widget.data["Email"]}",
           "VideoLink": "${widget.data["VideoLink"]}",
         });
 

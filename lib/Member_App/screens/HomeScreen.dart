@@ -94,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _getLocaldata();
     getAdvertisementData();
     getAds();
+    getSocietyDetails();
     // initSpeechRecognizer();
     if (Platform.isIOS) {
       iosSubscription =
@@ -408,6 +409,41 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  bool isAdmin = false;
+  getMemberRole(String memberId) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.GetmemberRole(memberId);
+        setState(() {
+          isLoading = true;
+        });
+        res.then((data) async {
+          print("data");
+          print(data);
+          if (data == "1") {
+            setState(() {
+              isAdmin = true;
+              isLoading = false;
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+              // _advertisementData = data;
+            });
+          }
+        }, onError: (e) {
+          showMsg("Something Went Wrong.\nPlease Try Again");
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
   getAds() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -629,6 +665,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushReplacementNamed(context, "/IntroScreen");
   }
 
+  String memberId = "";
   _getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -637,11 +674,13 @@ class _HomeScreenState extends State<HomeScreen> {
       Name = prefs.getString(constant.Session.Name);
       Wing = prefs.getString(constant.Session.Wing);
       FlatNo = prefs.getString(constant.Session.FlatNo);
+      memberId = prefs.getString(constant.Session.Member_Id);
       Profile = prefs.getString(constant.Session.Profile);
       ContactNo = prefs.getString(constant.Session.session_login);
       Address = prefs.getString(constant.Session.Address);
       ResidenceType = prefs.getString(constant.Session.ResidenceType);
     });
+    getMemberRole(memberId);
   }
 
   DateTime currentBackPressTime;
@@ -716,6 +755,65 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  showHHMsg(String title, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String societyName = "",societyAddress = "";
+  double lat = 0.0,long = 0.0;
+
+  getSocietyDetails() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+        Services.GetSocietymemberDetails(prefs.getString(constant.Session.SocietyId)).then((data) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (data != null && data.length > 0) {
+            societyName = data[0]["Name"];
+            societyAddress = data[0]["Address"];
+            lat = double.parse(data[0]["Location"].toString().split(",")[0].split("=")[1]);
+            long = double.parse(data[0]["Location"].toString().split(",")[1]);
+
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -728,6 +826,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           centerTitle: true,
           actions: <Widget>[
+            IconButton(
+                icon: Icon(
+                  Icons.share,
+                ),
+              onPressed: (){
+                Share.share(
+                    "Society Name : $societyName\nAddress : $societyAddress\nGoogle map link : 'http://maps.google.com/maps?q=$lat,$long'");
+              },
+            ),
             GestureDetector(
               onTap: onJoin,
               child: Column(
@@ -744,11 +851,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            IconButton(
+            isAdmin ? IconButton(
                 icon: Icon(Icons.add_to_home_screen),
                 onPressed: () {
                   Navigator.pushNamed(context, "/Dashboard");
-                }),
+                }):Container(),
           ],
           bottom: PreferredSize(
               child: GestureDetector(

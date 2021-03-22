@@ -266,7 +266,6 @@ class Services {
   static Future<List> getMembersAllData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String SocietyId = preferences.getString(Session.SocietyId);
-
     String url = API_URL + 'GetMember?societyId=$SocietyId';
     print("getMembers URL: " + url);
     try {
@@ -976,6 +975,32 @@ class Services {
     }
   }
 
+  static Future<int> makeAdmin(
+      String societyId, String MemberId) async {
+    String url = API_URL +
+        'MemberRoleUpdate?SocietyId=$societyId&MemberId=$MemberId';
+    print("MemberRoleUpdate URL: " + url);
+    try {
+      Response response = await dio.get(url);
+      if (response.statusCode == 200) {
+        int list = 0;
+        print("MemberRoleUpdate Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = 0;
+        }
+        return list;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("MemberRoleUpdate Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
   static Future<List> getFamilyByMember(String memberId) async {
     String url = API_URL + 'GetFamilyMember?parentId=0&memberId=$memberId';
     print("getFamilyByMember URL: " + url);
@@ -1132,6 +1157,31 @@ class Services {
       }
     } catch (e) {
       print("getExpenseYearly Erorr : " + e.toString());
+      throw Exception(e);
+    }
+  }
+
+  static Future<List> getMemberSociety(String mobileNo) async {
+    String url =
+        API_URL + 'GetMemberSociety?mobile=$mobileNo';
+    print("GetMemberSociety URL: " + url);
+    try {
+      Response response = await dio.get(url);
+      if (response.statusCode == 200) {
+        List list = [];
+        print("GetMemberSociety Response: " + response.data.toString());
+        var responseData = response.data;
+        if (responseData["IsSuccess"] == true) {
+          list = responseData["Data"];
+        } else {
+          list = [];
+        }
+        return list;
+      } else {
+        throw Exception("Something Went Wrong");
+      }
+    } catch (e) {
+      print("GetMemberSociety Erorr : " + e.toString());
       throw Exception(e);
     }
   }

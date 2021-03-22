@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/screens/WingFlat.dart';
+import '../common/Services.dart';
+import 'dart:io';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class WingDetail extends StatefulWidget {
-  var wingName;
-  WingDetail({this.wingName});
+  var wingName,wingId,societyId;
+  WingDetail({this.wingName,this.wingId,this.societyId});
   @override
   _WingDetailState createState() => _WingDetailState();
 }
 
 class _WingDetailState extends State<WingDetail> {
   int _currentindex;
+  ProgressDialog pr;
   List<List<String>> format = [
     ["301", "302", "303", "201", "202", "203", "101", "102", "103"],
     ["7", "8", "9", "4", "5", "6", "1", "2", "3"],
@@ -22,6 +27,87 @@ class _WingDetailState extends State<WingDetail> {
   TextEditingController txtname = new TextEditingController();
   TextEditingController txtfloor = new TextEditingController();
   TextEditingController txtUnit = new TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.societyId);
+    print(widget.wingId);
+    pr = new ProgressDialog(context, type: ProgressDialogType.Normal);
+    pr.style(
+        message: "Please Wait",
+        borderRadius: 10.0,
+        progressWidget: Container(
+          padding: EdgeInsets.all(15),
+          child: CircularProgressIndicator(),
+        ),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 17.0, fontWeight: FontWeight.w600));
+  }
+
+  showMsg(String msg, {String title = 'My JINI'}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(msg),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  createNewWing(String WingName, String NoOfFloor, String FlatsPerFloor, String wingId, String societyId) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        pr.show();
+        Future res = Services.UpdateWingName(WingName,NoOfFloor,FlatsPerFloor,wingId,societyId);
+        res.then((data) async {
+          print("data");
+          print(data);
+          if (data.toString()=="1") {
+            pr.hide();
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => WingFlat(
+                floorData: txtfloor.text,
+                maxUnitData: txtUnit.text,
+                formatData: _currentindex,
+                societyId: widget.societyId,
+                wingId: widget.wingId,
+                wingName: widget.wingName,
+              ),
+            ),
+            );
+          }
+        }, onError: (e) {
+          showMsg("$e");
+        });
+      } else {
+        showMsg("No Internet Connection.");
+      }
+    } on SocketException catch (_) {
+      showMsg("Something Went Wrong");
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print("yes");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -405,18 +491,22 @@ class _WingDetailState extends State<WingDetail> {
         height: 45,
         child: RaisedButton(
           shape: RoundedRectangleBorder(),
-          color: constant.appPrimaryMaterialColor[500],
+          color: constant.appPrimaryMaterialColor,
           textColor: Colors.white,
           splashColor: Colors.white,
           child: Text("Create",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => WingFlat(
-                      floorData: txtfloor.text,
-                      maxUnitData: txtUnit.text,
-                      formatData: _currentindex,
-                    )));
+            if(txtname.text=="" || txtfloor.text == "" || txtUnit.text=="" || _currentindex == null){
+              Fluttertoast.showToast(
+                  msg: "Please Fill All Details",
+                  backgroundColor: Colors.red,
+                  gravity: ToastGravity.TOP,
+                  textColor: Colors.white);
+            }
+            else{
+              createNewWing(txtname.text, txtfloor.text, txtUnit.text, widget.wingId, widget.societyId);
+            }
             // Navigator.pushNamed(context, '/WingFlat');
           },
         ),

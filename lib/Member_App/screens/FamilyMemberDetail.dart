@@ -166,30 +166,32 @@ class _FamilyMemberDetailState extends State<FamilyMemberDetail> {
                         DecorationImage(image: AssetImage("images/man.png"))),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 6.0, left: 6.0),
-                  child: Text(
-                    "${FmemberData[index]["Name"]}",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromRGBO(81, 92, 111, 1)),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6.0, left: 6.0),
+                    child: Text(
+                      "${FmemberData[index]["Name"]}",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromRGBO(81, 92, 111, 1)),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 0.0, left: 6.0),
-                  child: Text(
-                    "${FmemberData[index]["ContactNo"]}",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0.0, left: 6.0),
+                    child: Text(
+                      "${FmemberData[index]["ContactNo"]}",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -242,6 +244,8 @@ class _FamilyMemberDetailState extends State<FamilyMemberDetail> {
           children: <Widget>[
             InkWell(
               onTap: () {
+                print("FmemberData[index]");
+                print(FmemberData[index]);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

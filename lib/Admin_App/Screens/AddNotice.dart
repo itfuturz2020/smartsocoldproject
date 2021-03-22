@@ -184,6 +184,7 @@ class _AddNoticeState extends State<AddNotice> {
           Services.SaveNotice(formData).then((data) async {
             pr.hide();
 
+
             if (data.Data != "0" && data.IsSuccess == true) {
               Navigator.pushReplacementNamed(context, "/AllNotice");
               //showMsg("Notice Saved Successfully", title: "Success");

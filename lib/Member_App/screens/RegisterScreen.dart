@@ -8,9 +8,14 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Mall_App/Common/Constant.dart' as cnst;
 import 'package:smart_society_new/Mall_App/Common/services.dart' as serv;
+import 'package:smart_society_new/Mall_App/transitions/slide_route.dart';
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:smart_society_new/Member_App/screens/LoginScreen.dart';
+
+import 'HomeScreen.dart';
+import 'OTP.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -23,9 +28,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   int selected_Index;
   bool isLoading = false, verify = false, valid = false;
   String SocietyId = "";
+  String selFlatHolderType = 'Select Residence Type';
   bool _WingLoading = false;
 
   List<WingClass> _winglist = [];
+  List flatholdertypes=[],winglistClassList = [];
   WingClass _wingClass;
 
   ProgressDialog pr;
@@ -52,10 +59,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _firebaseMessaging.getToken().then((token) {
       setState(() {
         fcmToken = token;
-        print('----------->' + '${token}');
+        print('fcm in register----------->' + '${token}');
       });
+      print("fcmToken1");
+      print(fcmToken);
     });
+    getFlatType();
   }
+
+
+  getFlatType() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getString('madeAtleastOneWing') == "true"){
+        Fluttertoast.showToast(
+            msg: "Society Created Successfully",
+            backgroundColor: Colors.red,
+            gravity: ToastGravity.TOP,
+            textColor: Colors.white);
+      }
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.getFlatType();
+        res.then((data) async {
+          if (data !=null) {
+            setState(() {
+              winglistClassList = data;
+            });
+            print("fcmToken2");
+            print(fcmToken);
+            for(int i=0;i<winglistClassList.length;i++){
+              flatholdertypes.add(winglistClassList[i]["Type"]);
+            }
+            print("getFlatType=> " + winglistClassList.toString());
+          }
+        }, onError: (e) {
+          showHHMsg("$e","");
+        });
+      } else {
+        showHHMsg("No Internet Connection.","");
+      }
+    } on SocketException catch (_) {
+      showHHMsg("Something Went Wrong","");
+    }
+  }
+
 
   _CodeVerification() async {
     if (CodeControler.text != "") {
@@ -69,10 +117,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Services.Societycodeverify(CodeControler.text).then((data) async {
             setState(() {
               isLoading = false;
-              verify = true;
             });
             if (data.IsSuccess == true && data.Data != "0") {
               setState(() {
+                verify = true;
                 SocietyId = data.Data;
                 valid = true;
                 _WingListData(data.Data);
@@ -81,6 +129,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
               setState(() {
                 valid = false;
               });
+            }
+          }, onError: (e) {
+            setState(() {
+              isLoading = false;
+            });
+            showHHMsg("Something Went Wrong", "Error");
+          });
+        }
+      } on SocketException catch (_) {
+        showHHMsg("No Internet Connection.", "");
+      }
+    }
+  }
+
+  _checkNumber(String mobileNo,String societyId) async {
+    if (CodeControler.text != "") {
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          pr.show();
+          Services.checkNumber(mobileNo,societyId).then((data) async {
+            setState(() {
+              isLoading = false;
+            });
+            pr.hide();
+            print(data);
+            if (data["Data"].toString() == "1") {
+              print("old number");
+              setState(() {
+                Fluttertoast.showToast(
+                    msg: "Mobile Number Already Exist Please Login",
+                    toastLength: Toast.LENGTH_LONG,
+                backgroundColor: Colors.red,
+                  gravity: ToastGravity.TOP,
+                  textColor: Colors.white,
+                );
+              });
+            } else {
+              print("new number");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OTP(
+                      mobileNo: txtmobile.text.toString(),
+                      onSuccess: () => _Registration(),
+                    ),
+                  ),
+              );
             }
           }, onError: (e) {
             setState(() {
@@ -109,6 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _WingLoading = false;
               _winglist = data;
             });
+
           } else {
             setState(() {
               _WingLoading = false;
@@ -136,11 +233,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       print(val.WingName);
       _wingClass = val;
     });
+    print("_wingClass");
+    print(_wingClass.WingId);
   }
 
   _Registration() async {
     if (txtname.text != "" && txtmobile.text != "" && txtFlatNo.text != "") {
-      if (selected_Index != null) {
+      if (selFlatHolderType!="Select Residence Type") {
         try {
           final result = await InternetAddress.lookup('google.com');
           if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -148,24 +247,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
             if (Gender == "") {
               gen = "Male";
             }
-
+            print("societyid inside registration");
+            print(SocietyId);
             var data = {
               'Name': txtname.text.trim(),
               'MobileNo': txtmobile.text.trim(),
-              'ResidenceType': _residentTypeList[selected_Index],
+              'ResidenceType': selFlatHolderType,
               'Gender': gen,
-              'SocietyId': codeValue,
-              'WingId': '',
-              'Wing': '',
+              'SocietyId': SocietyId,
+              'WingId': _wingClass.WingId,
+              'Wing': _wingClass.WingName,
               'FlatNo': txtFlatNo.text.trim(),
             };
             print("Body: ${data}");
             //==============================
             pr.show();
-
             Services.Registration(data).then((data) async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
               pr.hide();
               if (data.Data != "0" && data.IsSuccess == true) {
+                print("txtname.text");
+                print(fcmToken);
+                prefs.setString(constant.Session.selFlatHolderType, selFlatHolderType);
                 // showHHMsg("Registration Successfully", "");
                 Fluttertoast.showToast(
                     msg: "Registration Successfully",
@@ -268,6 +371,210 @@ class _RegisterScreenState extends State<RegisterScreen> {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
+
+  // _getWingsBySocietyId() async {
+  //   try {
+  //     final result = await InternetAddress.lookup('google.com');
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty && CodeControler.text!="") {
+  //       Future res = Services.GetWingsBySocietyId(CodeControler.text.toString());
+  //       res.then((data) async {
+  //         if (data != null && data.length > 0) {
+  //           setState(() {
+  //             winglistClassList = data;
+  //           });
+  //           for(int i=0;i<winglistClassList.length;i++){
+  //           }
+  //           print("servicelisttt=> " + winglistClassList.toString());
+  //         }
+  //       }, onError: (e) {
+  //         showHHMsg("$e","");
+  //         // setState(() {
+  //         //   winglistLoading = false;
+  //         // });
+  //       });
+  //     } else {
+  //       showHHMsg("No Internet Connection.","");
+  //     }
+  //   } on SocketException catch (_) {
+  //     showHHMsg("Something Went Wrong","");
+  //     // setState(() {
+  //     //   winglistLoading = false;
+  //     // });
+  //   }
+  // }
+
+  List logindata = [];
+  List mallLoginList = [];
+  String sendOTP;
+
+  mallLocalData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        cnst.Session.customerId, mallLoginList[0]["CustomerId"].toString());
+    await prefs.setString(
+        cnst.Session.CustomerName, mallLoginList[0]["CustomerName"]);
+    await prefs.setString(
+        cnst.Session.CustomerEmailId, mallLoginList[0]["CustomerEmailId"]);
+    await prefs.setString(
+        cnst.Session.CustomerPhoneNo, mallLoginList[0]["CustomerPhoneNo"]);
+  }
+
+  localdata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        constant.Session.session_login, logindata[0]["ContactNo"].toString());
+    await prefs.setString(
+        constant.Session.Member_Id, logindata[0]["Id"].toString());
+    await prefs.setString(
+        constant.Session.SocietyId, logindata[0]["SocietyId"].toString());
+    await prefs.setString(
+        constant.Session.IsVerified, logindata[0]["IsVerified"].toString());
+    await prefs.setString(
+        constant.Session.Profile, logindata[0]["Image"].toString());
+    await prefs.setString(constant.Session.ResidenceType,
+        logindata[0]["ResidenceType"].toString());
+    await prefs.setString(
+        constant.Session.FlatNo, logindata[0]["FlatNo"].toString());
+    await prefs.setString(
+        constant.Session.Name, logindata[0]["Name"].toString());
+    await prefs.setString(
+        constant.Session.CompanyName, logindata[0]["CompanyName"].toString());
+    await prefs.setString(
+        constant.Session.Designation, logindata[0]["Designation"].toString());
+    await prefs.setString(constant.Session.BusinessDescription,
+        logindata[0]["BusinessDescription"].toString());
+    await prefs.setString(
+        constant.Session.BloodGroup, logindata[0]["BloodGroup"].toString());
+    await prefs.setString(
+        constant.Session.Gender, logindata[0]["Gender"].toString());
+    await prefs.setString(constant.Session.DOB, logindata[0]["DOB"].toString());
+    await prefs.setString(
+        constant.Session.Address, logindata[0]["Address"].toString());
+    await prefs.setString(
+        constant.Session.isPrivate, logindata[0]["IsPrivate"].toString());
+    await prefs.setString(
+        constant.Session.Wing, logindata[0]["Wing"].toString());
+    await prefs.setString(
+        constant.Session.WingId, logindata[0]["WingId"].toString());
+    await prefs.setString(
+        constant.Session.ParentId, logindata[0]["ParentId"].toString());
+    await prefs.setString(
+        constant.Session.Profile, logindata[0]["Image"].toString());
+  }
+
+  _MallLoginApi() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        FormData body = FormData.fromMap({
+          "CustomerPhoneNo": txtmobile.text,
+          "CutomerFCMToken": "${fcmToken}"
+        });
+        serv.Services.postforlist(apiname: 'signIn', body: body).then(
+                (responseList) async {
+              if (responseList.length > 0) {
+                setState(() {
+                  mallLoginList = responseList;
+                  mallLocalData();
+                });
+                // mallLocalData();
+              } else {
+                // setState(() {
+                //   isLoading = false;
+                // });
+                // Fluttertoast.showToast(msg: "Data Not Found");
+                //show "data not found" in dialog
+              }
+            }, onError: (e) {
+          setState(() {
+            isLoading = false;
+          });
+          print("error on call -> ${e.message}");
+          Fluttertoast.showToast(msg: "Something Went Wrong");
+        });
+      }
+    } on SocketException catch (_) {
+      Fluttertoast.showToast(msg: "No Internet Connection.");
+    }
+  }
+
+  _checkLogin() async {
+    if (txtmobile.text != '') {
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          setState(() {
+            pr.show();
+          });
+          Services.MemberLogin(txtmobile.text).then((data) async {
+            pr.hide();
+            if (data != null && data.length > 0) {
+              setState(() {
+                logindata = data;
+              });
+              // _MallLoginApi();
+              if (sendOTP == "0") {
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OtpScreen(
+                      data[0]["ContactNo"].toString(),
+                      data[0]["Id"].toString(), () {
+                      localdata();
+                      mallLocalData();
+                    },
+                    ),
+                  ),
+                );*/
+              } else {
+                await localdata();
+                // await mallLocalData();
+                Navigator.pushAndRemoveUntil(context,
+                    SlideLeftRoute(page: HomeScreen()), (route) => false);
+                _MallLoginApi();
+
+                // Navigator.of(context).pushNamedAndRemoveUntil(
+                //     '/HomeScreen', (Route<dynamic> route) => false);
+              }
+            } else {
+              Fluttertoast.showToast(
+                  msg: "Incorrect Mobile Number",
+                  toastLength: Toast.LENGTH_LONG,
+                  textColor: Colors.white,
+                  gravity: ToastGravity.TOP,
+                  backgroundColor: Colors.red);
+            }
+          }, onError: (e) {
+            pr.hide();
+            showHHMsg("Try Again.", "");
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+            pr.hide();
+          });
+          showHHMsg("No Internet Connection.", "");
+        }
+      } on SocketException catch (_) {
+        pr.hide();
+        showHHMsg("No Internet Connection.", "");
+      }
+    } else
+      Fluttertoast.showToast(
+          msg: "Enter Your Mobile Number",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+  }
+
+  bool mobileNoExist = false;
 
   @override
   Widget build(BuildContext context) {
@@ -428,7 +735,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(left: 9.0, top: 10),
+                        padding: const EdgeInsets.only(left: 9.0, top: 10,bottom: 7),
                         child: Text(
                           "  Select Residence Type *",
                           style: TextStyle(
@@ -439,6 +746,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
+/*
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Wrap(
@@ -459,6 +767,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         );
                       }),
+                    ),
+                  ),
+*/
+                  Padding(
+                    padding: const EdgeInsets.only(left:16.0,right: 8.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0, right: 8.0, top: 6.0),
+                          child: DropdownButton<dynamic>(
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              size: 30,
+                            ),
+                            //isDense: true,
+                            hint: new Text(selFlatHolderType,
+                            style: TextStyle(fontSize: 14),
+                            ),
+                            // value: _memberClass,
+                            onChanged: (val) {
+                              print(val);
+                              setState(() {
+                                selFlatHolderType = val;
+                              });
+                            },
+                            //value: selCity,
+                            items: flatholdertypes.map<DropdownMenuItem<dynamic>>(
+                                    (dynamic value) {
+                                  return DropdownMenuItem<dynamic>(
+                                    value: value,
+                                    child: new Text(
+                                      value,
+                                      style: new TextStyle(color: Colors.black),
+                                    ),
+                                  );
+                                }).toList(),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Row(
@@ -495,11 +848,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   _winglist = [];
                                   verify = false;
                                 });
-                              },
-                              onEditingComplete: () {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                _CodeVerification();
+                                if(text.length == 5){
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                  _CodeVerification();
+                                }
                               },
                               decoration: InputDecoration(
                                   border: new OutlineInputBorder(
@@ -671,7 +1024,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 50,
                             child: TextFormField(
                               controller: txtFlatNo,
-                              keyboardType: TextInputType.text,
+                              keyboardType: TextInputType.number,
                               textCapitalization: TextCapitalization.characters,
                               decoration: InputDecoration(
                                   border: new OutlineInputBorder(
@@ -724,16 +1077,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: constant.appPrimaryMaterialColor[500],
                         textColor: Colors.white,
                         splashColor: Colors.white,
-                        child: Text("Join Your Society",
+                        child: Text(
+                            "Join Your Society",
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w600)),
+                                fontSize: 18, fontWeight: FontWeight.w600,
+                            ),
+                        ),
                         onPressed: valid
                             ? () {
+                          if(txtname.text != "" &&
+                              txtmobile.text != "" &&
+                              txtFlatNo.text != ""){
+                            _checkNumber(txtmobile.text, SocietyId);
+                          }
+                          else{
+                            Fluttertoast.showToast(
+                                msg: "Fields Can't be empty",
+                                backgroundColor: Colors.red,
+                                gravity: ToastGravity.BOTTOM,
+                                textColor: Colors.white);
+                          }
 //                                Navigator.pushReplacementNamed(
 //                                    context, '/LoginScreen');
-                                _Registration();
-                              }
+                        }
                             : null,
+                       /* onPressed: (){
+                        valid
+                              ?
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OTP(
+                                mobileNo: txtmobile.text,
+                                onSuccess: () {
+                                  _checkLogin();
+                                },
+                              ),
+                            ),\
+
+                          ):null;
+                          () {
+                             Navigator.pushReplacementNamed(
+                                 context, '/LoginScreen');
+                              _Registration();
+                            }
+                        }*/
                       ),
                     ),
                   ),

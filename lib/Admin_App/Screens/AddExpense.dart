@@ -53,7 +53,7 @@ class _AddExpenseState extends State<AddExpense> {
           } else {
             setState(() {
               isLoading = false;
-              _expenseSourceList = data;
+              // _expenseSourceList = data;
             });
           }
         }, onError: (e) {
@@ -430,6 +430,8 @@ class _AddExpenseState extends State<AddExpense> {
                                         },
                                         items: _expenseSourceList
                                             .map((expenseSource Source) {
+                                              print("_expenseSourceList");
+                                              print(_expenseSourceList);
                                           return new DropdownMenuItem<
                                               expenseSource>(
                                             value: Source,

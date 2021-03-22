@@ -264,13 +264,14 @@ class _EventDetailState extends State<EventDetail> {
                         color: Colors.red,
                         child: Text(
                           "No",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          style: TextStyle(color: Colors.white, fontSize: 16,
+                          ),
                         ),
                         padding: EdgeInsets.only(
                             left: 8, right: 8, top: 5, bottom: 5),
                         onPressed: () {
                           dropdownValue = "0";
-                          _RegisterForEvent();
+                          // _RegisterForEvent();
                         },
                       )
                     ],
@@ -278,7 +279,7 @@ class _EventDetailState extends State<EventDetail> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );

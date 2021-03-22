@@ -32,10 +32,54 @@
               "client_type": 3
             },
             {
-              "client_id": "653223090945-b9s6o5lf1kilnjjq93u780t5oltvstil.apps.googleusercontent.com",
+              "client_id": "653223090945-0tqungjefqjfbvhqk8045e8t6ne9ajh2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.itfuturzmyjini"
+                "bundle_id": "com.itfuturz.myjini"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653223090945:android:1e4e676e99c2d1fce19900",
+        "android_client_info": {
+          "package_name": "com.itfuturz.mygenie_member_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653223090945-b8mbmvbccd0psen5oq36kel3jo8fj1ss.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itfuturz.mygenie_member_1",
+            "certificate_hash": "b3415e8abaf5f0d10486ffd37562b364d4befe91"
+          }
+        },
+        {
+          "client_id": "653223090945-valkoh4gc68n93v4iidd3v1bltfks7r4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOddcTZeTp06sLo-uqmQkmtBVZSz7sJg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "653223090945-valkoh4gc68n93v4iidd3v1bltfks7r4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "653223090945-0tqungjefqjfbvhqk8045e8t6ne9ajh2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.itfuturz.myjini"
               }
             }
           ]

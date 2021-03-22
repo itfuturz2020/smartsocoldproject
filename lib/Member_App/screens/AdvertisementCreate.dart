@@ -51,7 +51,7 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
   }
 
   Future<void> _getLocation() async {
-    Position position = await Geolocator()
+    Position position = await Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _lat = position.latitude.toString();
@@ -304,7 +304,9 @@ class _AdvertisementCreateState extends State<AdvertisementCreate> {
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.grey[600],
-                                          fontWeight: FontWeight.w500))
+                                          fontWeight: FontWeight.w500,
+                                      ),
+                                  ),
                                 ],
                               ),
                             ),

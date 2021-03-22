@@ -95,9 +95,9 @@ class _EventsState extends State<Events> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        Navigator.pushReplacementNamed(context, "/HomeScreen");
-      },
+      onWillPop: () =>
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/HomeScreen', (Route<dynamic> route) => false),
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -107,8 +107,8 @@ class _EventsState extends State<Events> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, "/HomeScreen");
-              }),
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/HomeScreen', (Route<dynamic> route) => false);              }),
         ),
         body: ListView.separated(
           itemBuilder: (context, index) {

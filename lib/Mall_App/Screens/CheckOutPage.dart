@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -139,7 +138,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     try {
       _razorpay.open(options);
     } catch (e) {
-      debugPrint(e);
+      print(e);
     }
   }
 

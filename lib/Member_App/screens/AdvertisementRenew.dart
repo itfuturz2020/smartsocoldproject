@@ -60,12 +60,11 @@ class _AdvertisementRenewState extends State<AdvertisementRenew> {
   }
 
   Future<void> _getLocation() async {
-    Position position = await Geolocator()
+    Position position = await Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _result = position.toString();
     });
-
     print(position);
   }
 

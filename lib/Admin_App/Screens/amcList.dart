@@ -92,10 +92,10 @@ class _amcListState extends State<amcList> {
         ),
         body: isLoading
             ? LoadingComponent()
-            : _amcData.length > 0
-                ? Column(
+            :  Column(
                     children: <Widget>[
-                      Expanded(
+                      _amcData.length > 0
+                          ?Expanded(
                           child: AnimationLimiter(
                         child: ListView.builder(
                           padding: EdgeInsets.all(0),
@@ -104,7 +104,8 @@ class _amcListState extends State<amcList> {
                             return amcComponent(index, _amcData[index]);
                           },
                         ),
-                      )),
+                      ),
+                      ): NoDataComponent(),
                       MaterialButton(
                           height: 45,
                           minWidth: MediaQuery.of(context).size.width,
@@ -117,11 +118,13 @@ class _amcListState extends State<amcList> {
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white),
-                          )),
+                                color: Colors.white,
+                            ),
+                          ),
+                      ),
                     ],
                   )
-                : NoDataComponent(),
+
       ),
     );
   }

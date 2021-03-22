@@ -7,6 +7,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
+import 'package:permission_handler/permission_handler.dart';
 
 class MemberVisitorList extends StatefulWidget {
   @override
@@ -27,10 +28,9 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
+       setState(() {
           isLoading = true;
         });
-
         Services.GetMyVisitorList().then((data) async {
           setState(() {
             isLoading = false;
@@ -97,16 +97,28 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
 
   _saveAllToContact(String name, String mobileno, String companyname) async {
     // pr.show();
-    Contact contact = new Contact();
-    contact.givenName = name;
-    contact.phones = [Item(label: "mobileno", value: mobileno.toString())];
-    // contact.emails = [Item(label: "mobileno", value: mobileno.toString())];
-    contact.company = companyname.toString();
-    await ContactsService.addContact(contact);
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.contacts);
+
+    if (permission != PermissionStatus.granted) {
+      await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+      PermissionStatus permission = await PermissionHandler()
+          .checkPermissionStatus(PermissionGroup.contacts);
+      if (permission == PermissionStatus.granted) {
+        Contact contact = new Contact();
+        contact.givenName = name;
+        contact.phones = [Item(label: "mobileno", value: mobileno.toString())];
+        // contact.emails = [Item(label: "mobileno", value: mobileno.toString())];
+        contact.company = companyname.toString();
+        await ContactsService.addContact(contact);
+      }
+      }
+
 
     Fluttertoast.showToast(
         msg: "Contact Saved Successfully...",
         gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
         toastLength: Toast.LENGTH_LONG);
     // pr.hide();
   }
@@ -126,8 +138,8 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                     child: Container(
                       width: 65,
                       height: 65,
-                      decoration: BoxDecoration(
-                        image: new DecorationImage(
+                      decoration:  !isSearching ? BoxDecoration(
+                       image: new DecorationImage(
                             image: _VisitorList[index]["Image"] == "" ||
                                     _VisitorList[index]["Image"] == null
                                 ? AssetImage("images/man.png")
@@ -136,6 +148,16 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                             fit: BoxFit.cover),
                         borderRadius:
                             BorderRadius.all(new Radius.circular(75.0)),
+                      ):BoxDecoration(
+                        image: new DecorationImage(
+                            image: tempList[index]["Image"] == "" ||
+                                tempList[index]["Image"] == null
+                                ? AssetImage("images/man.png")
+                                : NetworkImage(
+                                Image_Url + tempList[index]["Image"]),
+                            fit: BoxFit.cover),
+                        borderRadius:
+                        BorderRadius.all(new Radius.circular(75.0)),
                       ),
                     ),
                   ),
@@ -145,7 +167,11 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: Text("${_VisitorList[index]["Name"]}",
+                          child: !isSearching ? Text("${_VisitorList[index]["Name"]}",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color.fromRGBO(81, 92, 111, 1))):Text("${tempList[index]["Name"]}",
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -153,7 +179,12 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 1.0, top: 3.0),
-                          child: Text("  ${_VisitorList[index]["ContactNo"]}",
+                          child: !isSearching ?
+                          Text("  ${_VisitorList[index]["ContactNo"]}",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey[700])):Text("  ${tempList[index]["ContactNo"]}",
                               style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
@@ -172,11 +203,15 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                                 color: Colors.green[700],
                               ),
                               onPressed: () {
-                                _saveAllToContact(
+                               !isSearching ? _saveAllToContact(
                                   _VisitorList[index]["Name"],
                                   _VisitorList[index]["ContactNo"],
                                   _VisitorList[index]["CompanyName"],
-                                );
+                                ):_saveAllToContact(
+                                 tempList[index]["Name"],
+                                 tempList[index]["ContactNo"],
+                                 tempList[index]["CompanyName"],
+                               );
                               }),
                           IconButton(
                               icon: Icon(
@@ -196,8 +231,11 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
                               color: constant.appPrimaryMaterialColor,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(3))),
-                          child: Text(
+                          child: !isSearching ? Text(
                             "${_VisitorList[index]["VisitorTypeName"]}",
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ): Text(
+                            "${tempList[index]["VisitorTypeName"]}",
                             style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
                         ),
@@ -257,26 +295,91 @@ class _MemberVisitorListState extends State<MemberVisitorList> {
     );
   }
 
+  TextEditingController txtSearch = new TextEditingController();
+
+  List tempList = [];
+  bool isSearching = false;
+
+  void searchOperation(String searchText) {
+    if (searchText != "") {
+      setState(() {
+        tempList.clear();
+        isSearching = true;
+      });
+      String mobile = "",name="";
+      for (int i = 0; i < _VisitorList.length; i++) {
+        name = _VisitorList[i]["Name"];
+        mobile = _VisitorList[i]["ContactNo"];
+        if (name.toLowerCase().contains(searchText.toLowerCase()) ||
+            mobile.toLowerCase().contains(searchText.toLowerCase())) {
+          setState(() {
+            tempList.add(_VisitorList[i]);
+          });
+        }
+      }
+    } else {
+      setState(() {
+        isSearching = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding:
+              const EdgeInsets.only(top: 5.0, right: 8.0, left: 8.0),
+              child: TextFormField(
+                onChanged: searchOperation,
+                controller: txtSearch,
+                scrollPadding: EdgeInsets.all(0),
+                decoration: InputDecoration(
+                    counter: Text(""),
+                    border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.black),
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(8))),
+                    suffixIcon: Icon(
+                      Icons.search,
+                      color: constant.appPrimaryMaterialColor,
+                    ),
+                    hintText: "Search Visitors"),
+                maxLength: 10,
+                keyboardType: TextInputType.text,
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            isLoading
+                ? Container(
               child: Center(child: CircularProgressIndicator()),
             )
-          : _VisitorList.length > 0
-              ? Container(
-                  child: Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _VisitorList.length,
-                      itemBuilder: _MyGuestlistCard,
-                    ),
-                  ),
-                )
-              : Container(
-                  child: Center(child: Text("No Data Found")),
+                : _VisitorList.length > 0
+                ? Container(
+              child: Container(
+                child: isSearching ? ListView.builder(
+                  shrinkWrap: true,
+                  physics: PageScrollPhysics(),
+                  itemCount: tempList.length,
+                  itemBuilder: _MyGuestlistCard,
+                ):ListView.builder(
+                  shrinkWrap: true,
+                  physics: PageScrollPhysics(),
+                  itemCount: _VisitorList.length,
+                  itemBuilder: _MyGuestlistCard,
                 ),
+              ),
+            )
+                : Container(
+              child: Center(child: Text("No Data Found")),
+            ),
+          ],
+        ),
+      ),
+
     );
   }
 }

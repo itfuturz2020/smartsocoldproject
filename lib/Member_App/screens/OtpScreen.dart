@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
@@ -162,6 +161,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           child: Text("We Have Sent an OTP on Your number",
                               style: TextStyle(fontSize: 17))),
                     ),
+/*
                     Padding(
                       padding: const EdgeInsets.only(top: 60.0),
                       child: PinCodeTextField(
@@ -189,6 +189,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             Duration(milliseconds: 100),
                       ),
                     ),
+*/
                     Padding(
                       padding: const EdgeInsets.only(top: 30.0),
                       child: Row(

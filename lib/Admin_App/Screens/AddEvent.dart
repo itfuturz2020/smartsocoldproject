@@ -8,8 +8,9 @@ import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Admin_App/Common/Constants.dart';
+import 'package:smart_society_new/Admin_App/Common/Services.dart' as S;
+import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
-import 'package:smart_society_new/Admin_App/Common/Services.dart';
 
 class AddEvent extends StatefulWidget {
   @override
@@ -47,6 +48,7 @@ class _AddEventState extends State<AddEvent> {
       ParentId = "0";
     else
       ParentId = prefs.getString(constant.Session.ParentId);
+    getWingsId(SocietyId);
   }
 
   void _showDatePicker() {
@@ -113,7 +115,7 @@ class _AddEventState extends State<AddEvent> {
           "EventType": options[tag],
           "Amount": txtAmount.text,
         };
-        Services.AddEventDetails(data).then((data) async {
+        S.Services.AddEventDetails(data).then((data) async {
           setState(() {
             isLoading = false;
           });
@@ -156,20 +158,52 @@ class _AddEventState extends State<AddEvent> {
     'Paid',
   ];
 
+
+  List wingsNameData = [];
+  getWingsId(String societyId) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.GetWingsBySocietyId(societyId.split(".")[0]);
+        res.then((data) async {
+          if (data !=null) {
+            setState(() {
+              for(int i=0;i<data.length;i++){
+                wingsNameData.add({
+                  "Name" : data[i]["WingName"]
+                });
+              }
+              tag = 0;
+            });
+
+          }
+        }, onError: (e) {
+          showMsg("$e","my jini");
+        });
+      } else {
+        showMsg("No Internet Connection.","my jini");
+      }
+    } on SocketException catch (_) {
+      showMsg("Something Went Wrong","my jini");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        Navigator.pushReplacementNamed(context, "/EventsAdmin");
-      },
+      onWillPop: () =>
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/HomeScreen', (Route<dynamic> route) => false),
+
       child: Scaffold(
         appBar: AppBar(
           title: Text("Add Event"),
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, "/EventsAdmin");
-              }),
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/HomeScreen', (Route<dynamic> route) => false);              }),
         ),
         body: Container(
           padding: EdgeInsets.only(left: 15, right: 15, top: 20),
@@ -223,11 +257,7 @@ class _AddEventState extends State<AddEvent> {
                         return 'Please select one or more options';
                       }
                     },
-                    dataSource: [
-                      {"Name": "A"},
-                      {"Name": "B"},
-                      {"Name": "C"},
-                    ],
+                    dataSource: wingsNameData,
                     textField: 'Name',
                     valueField: 'Name',
                     okButtonLabel: 'OK',
@@ -235,6 +265,9 @@ class _AddEventState extends State<AddEvent> {
                     hintText: 'Select Wing',
                     value: selectedWing,
                     onSaved: (value) {
+    print(wingsNameData);
+                      print("ani");
+                      print(selectedWing);
                       setState(() {
                         selectedWing = value;
                       });

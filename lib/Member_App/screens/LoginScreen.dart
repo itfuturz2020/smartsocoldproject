@@ -14,6 +14,8 @@ import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/screens/HomeScreen.dart';
 import 'package:smart_society_new/Member_App/screens/OtpScreen.dart';
+import '../common/Services.dart';
+import 'OTP.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -166,21 +168,67 @@ class _LoginScreenState extends State<LoginScreen> {
         constant.Session.Profile, logindata[0]["Image"].toString());
   }
 
+  updateMemberDetails(String societyId,String name,String mobileNo,String flatNo,String wingId,String flatType,String memberId,String fcmToken) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        // setState(() {
+        //   isLoading = true;
+        // });
+        // String name, mobile;
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        // name = prefs.getString(constant.Session.Name);
+        // mobile = prefs.getString(constant.Session.session_login);
+        Services.updateMemberDetails(
+            societyId, name, mobileNo, flatNo, wingId,flatType,memberId,fcmToken:fcmToken)
+            .then((data) async {
+          // setState(() {
+          //   isLoading = false;
+          // });
+          if (data == "1") {
+            showHHMsg("Data Updated Successfully", "");
+          } else {
+            // setState(() {
+            //   isLoading = false;
+            // });MemberDetailsUpdate url
+          }
+        }, onError: (e) {
+          // setState(() {
+          //   isLoading = false;
+          // });
+          showHHMsg("Try Again.", "");
+        });
+      }
+    } on SocketException catch (_) {
+      showHHMsg("No Internet Connection.", "");
+    }
+  }
+
   _checkLogin() async {
     if (_MobileNumber.text != '') {
       try {
         final result = await InternetAddress.lookup('google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-          setState(() {
-            pr.show();
-          });
-
-          Services.MemberLogin(_MobileNumber.text).then((data) async {
-            pr.hide();
+          pr.show();
+          Services.MemberLogin(_MobileNumber.text,societyId:selectedSocietyId,multiple:multipleSociety).then((data) async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
             if (data != null && data.length > 0) {
+              pr.hide();
               setState(() {
                 logindata = data;
               });
+              print("logindata");
+              print(logindata);
+              updateMemberDetails(
+                logindata[0]["SocietyId"].toString(),
+                logindata[0]["Name"],
+                _MobileNumber.text,
+                logindata[0]["FlatNo"],
+                logindata[0]["WingId"].toString(),
+                prefs.getString(constant.Session.selFlatHolderType),
+                logindata[0]["Id"].toString(),
+                fcmToken,
+              );
               if (sendOTP == "0") {
                 Navigator.push(
                   context,
@@ -190,7 +238,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         data[0]["Id"].toString(), () {
                       localdata();
                       mallLocalData();
-                    }),
+                    },
+                    ),
                   ),
                 );
                 _MallLoginApi();
@@ -271,21 +320,21 @@ class _LoginScreenState extends State<LoginScreen> {
           "CutomerFCMToken": "${fcmToken}"
         });
         serv.Services.postforlist(apiname: 'signIn', body: body).then(
-            (responseList) async {
-          if (responseList.length > 0) {
-            setState(() {
-              mallLoginList = responseList;
-              mallLocalData();
-            });
-            // mallLocalData();
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-            Fluttertoast.showToast(msg: "Data Not Found");
-            //show "data not found" in dialog
-          }
-        }, onError: (e) {
+                (responseList) async {
+              if (responseList.length > 0) {
+                setState(() {
+                  mallLoginList = responseList;
+                  mallLocalData();
+                });
+                // mallLocalData();
+              } else {
+                setState(() {
+                  isLoading = false;
+                });
+                Fluttertoast.showToast(msg: "Data Not Found");
+                //show "data not found" in dialog
+              }
+            }, onError: (e) {
           setState(() {
             isLoading = false;
           });
@@ -298,55 +347,112 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  shareprefrenceData() async {
+
+  }
+
+  String selSociety,societyId,selectedSocietyId="";
+  List societyNames = [];
+  bool mobileNumberRegistered = false;
+  bool multipleSociety = false;
+
+  _getMemberSociety(String mobileNo) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        pr.show();
+        Future res = Services.GetMemberSocietyDetails(mobileNo);
+        setState(() {
+          isLoading = true;
+        });
+        res.then((data) async {
+          if (data != null && data.length > 0) {
+            pr.hide();
+            setState(() {
+              mobileNumberRegistered = true;
+              societyNames = data;
+              isLoading = false;
+            });
+           if(data.length > 1){
+             setState(() {
+               multipleSociety = true;
+               isLoading = false;
+             });
+           }
+          } else {
+            pr.hide();
+            setState(() {
+              isLoading = false;
+              Fluttertoast.showToast(
+                  msg: "This mobile number is not registered",
+                  backgroundColor: Colors.red,
+                  gravity: ToastGravity.TOP,
+                  textColor: Colors.white,
+              );
+            },
+            );
+          }
+        }, onError: (e) {
+          showMsg("Something Went Wrong Please Try Again");
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
             child: Container(
-      color: Colors.white,
-      height: MediaQuery.of(context).size.height,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 110.0),
-          child: Container(
-            child: Center(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    height: 200,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset('images/applogo.png',
-                                  width: 90, height: 90),
-                            ],
-                          ),
-                        ),
-                        Text("Welcome User",
-                            style: TextStyle(
-                                fontSize: 23,
-                                fontWeight: FontWeight.w600,
-                                color: constant.appPrimaryMaterialColor)),
-                        Text("Login with Mobile Number to Continue",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: constant.appPrimaryMaterialColor)),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 180.0),
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+              color: Colors.white,
+              height: MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 110.0),
+                  child: Container(
+                    child: Center(
+                      child: Stack(
                         children: <Widget>[
+                          Container(
+                            height: 200,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset('images/applogo.png',
+                                          width: 90, height: 90),
+                                    ],
+                                  ),
+                                ),
+                                Text("Welcome User",
+                                    style: TextStyle(
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.w600,
+                                        color: constant.appPrimaryMaterialColor)),
+                                Text("Login with Mobile Number to Continue",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: constant.appPrimaryMaterialColor)),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 180.0),
+                            child: Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
 //                  Text(
 //                    "Welcome to,\nMy Genie",
 //                    style: TextStyle(
@@ -354,108 +460,182 @@ class _LoginScreenState extends State<LoginScreen> {
 //                        fontSize: 24,
 //                        color: Color.fromRGBO(81, 92, 111, 1)),
 //                  ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20.0, left: 10.0, right: 10.0),
-                            child: Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 4.0, right: 8.0, top: 6.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        height: 50,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8.0),
-                                          child: TextFormField(
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            controller: _MobileNumber,
-                                            maxLength: 10,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                counterText: "",
-                                                focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: constant
-                                                                .appPrimaryMaterialColor[
-                                                            600])),
-                                                border: new OutlineInputBorder(
-                                                  borderRadius:
-                                                      new BorderRadius.circular(
-                                                          5.0),
-                                                  borderSide: new BorderSide(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20.0, left: 10.0, right: 10.0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 4.0, right: 8.0, top: 6.0),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              SizedBox(
+                                                height: 50,
+                                                child: Padding(
+                                                  padding:
+                                                  const EdgeInsets.only(left: 8.0),
+                                                  child: TextFormField(
+                                                    textInputAction:
+                                                    TextInputAction.done,
+                                                    controller: _MobileNumber,
+                                                    maxLength: 10,
+                                                    keyboardType: TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                        counterText: "",
+                                                        focusedBorder: OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: constant
+                                                                    .appPrimaryMaterialColor[
+                                                                600])),
+                                                        border: new OutlineInputBorder(
+                                                          borderRadius:
+                                                          new BorderRadius.circular(
+                                                              5.0),
+                                                          borderSide: new BorderSide(),
+                                                        ),
+                                                        hintText: "Your Mobile Number",
+                                                        hintStyle:
+                                                        TextStyle(fontSize: 13),
+                                                    ),
+                                                    onChanged: (String val){
+                                                      if(val.length==10){
+                                                        _getMemberSociety(val);
+                                                      }
+                                                      else{
+                                                        setState(() {
+                                                          multipleSociety = false;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
                                                 ),
-                                                hintText: "Your Mobile Number",
-                                                hintStyle:
-                                                    TextStyle(fontSize: 13)),
+                                              ),
+                                              multipleSociety ? Padding(
+                                                padding: const EdgeInsets.only(top: 8.0, right: 2,left: 10),
+                                                child: SizedBox(
+                                                  height: 50,
+                                                  child: DropdownButton(
+                                                    hint: Text('Select Your Society'),
+                                                    value: selSociety,
+                                                    style: TextStyle(
+                                                        fontSize: 17,
+                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.w600,
+                                                    ),
+                                                    onChanged: (newValue) {
+                                                      for(int i=0;i<societyNames.length;i++){
+                                                        print(societyNames[i]);
+                                                        if(societyNames[i]["Name"] == newValue){
+                                                            selectedSocietyId = societyNames[i]["SocietyId"].toString();
+                                                        }
+                                                      }
+                                                      setState(() {
+                                                        selSociety = newValue;
+                                                      });
+                                                    },
+                                                    isExpanded: true,
+                                                    items: societyNames.map((val) {
+                                                      return DropdownMenuItem(
+                                                        child: Text(val["Name"]),
+                                                        value: val["Name"],
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
+                                              ):Container(),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 18.0, left: 8, right: 8),
-                                  child: SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 45,
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      color:
-                                          constant.appPrimaryMaterialColor[500],
-                                      textColor: Colors.white,
-                                      splashColor: Colors.white,
-                                      child: Text("Login",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600)),
-                                      onPressed: () {
-                                        _checkLogin();
-                                      },
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 18.0, left: 8, right: 8),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context).size.width,
+                                            height: 45,
+                                            child: RaisedButton(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(5)),
+                                              color:
+                                              constant.appPrimaryMaterialColor[500],
+                                              textColor: Colors.white,
+                                              splashColor: Colors.white,
+                                              child: Text(
+                                                  "Login",
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.w600)),
+                                              onPressed: () {
+                                                if(selSociety == null && multipleSociety == true){
+                                                  Fluttertoast.showToast(
+                                                      msg: "Please Select Society",
+                                                      backgroundColor: Colors.red,
+                                                      gravity: ToastGravity.BOTTOM,
+                                                      textColor: Colors.white);
+                                                }
+                                                else if(_MobileNumber.text != ''){
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => OTP(
+                                                          mobileNo: _MobileNumber.text.toString(),
+                                                          onSuccess: () {
+                                                            _checkLogin();
+                                                          },
+                                                        ),
+                                                      ));
+                                                }
+                                                else{
+                                                  Fluttertoast.showToast(
+                                                      msg: "Please Enter Mobile Number",
+                                                      backgroundColor: Colors.red,
+                                                      gravity: ToastGravity.BOTTOM,
+                                                      textColor: Colors.white,
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(top: 35.0, bottom: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text("Don't Have an Account?"),
+                                        GestureDetector(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                  context, '/RegisterScreen');
+                                            },
+                                            child: Text("Register",
+                                                style: TextStyle(
+                                                    color: constant
+                                                        .appPrimaryMaterialColor[700],
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                ),
+                                            ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 35.0, bottom: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text("Don't Have an Account?"),
-                                GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/RegisterScreen');
-                                    },
-                                    child: Text("Register",
-                                        style: TextStyle(
-                                            color: constant
-                                                .appPrimaryMaterialColor[700],
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600)))
-                              ],
-                            ),
-                          )
                         ],
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
-    )));
+            )));
   }
 }

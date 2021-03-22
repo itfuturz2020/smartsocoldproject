@@ -42,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         fcmToken = token;
       });
+      print("loginscreen");
       print('FCM----------->' + '${token}');
     });
   }
@@ -268,24 +269,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (OTPstatus == "0") {
                   saveDataToSession(responselist[0]);
                 } else {
-                  Navigator.of(context).push(MaterialPageRoute(
+                /*  Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => new VerificationScreen(
                             mobile: _loginController.text,
                             logindata: responselist[0],
                             onLoginSuccess: () {
                               saveDataToSession(responselist[0]);
                             },
-                          )));
+                          )));*/
                 }
               } else {
-                Navigator.of(context).push(MaterialPageRoute(
+               /* Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => new VerificationScreen(
                           mobile: _loginController.text,
                           logindata: responselist[0],
                           onLoginSuccess: () {
                             saveDataToSession(responselist[0]);
                           },
-                        )));
+                        )));*/
               }
             } else {
               if (Platform.isIOS) {
@@ -295,22 +296,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             Mobile: _loginController.text,
                           )));
                 } else {
-                  Navigator.of(context).push(MaterialPageRoute(
+                /*  Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => new VerificationScreen(
                             mobile: _loginController.text,
                             onLoginSuccess: () {
                               saveDataToSession(responselist[0]);
                             },
-                          )));
+                          )));*/
                 }
               } else {
-                Navigator.of(context).push(MaterialPageRoute(
+               /* Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => new VerificationScreen(
                           mobile: _loginController.text,
                           onLoginSuccess: () {
                             saveDataToSession(responselist[0]);
                           },
-                        )));
+                        )));*/
               }
             }
           }, onError: (e) {

@@ -167,6 +167,7 @@ class _AddDocumentState extends State<AddDocument> {
 
   @override
   Widget build(BuildContext context) {
+    print(_dateTime.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -229,13 +230,13 @@ class _AddDocumentState extends State<AddDocument> {
                         Icon(
                           Icons.calendar_today,
                         ),
-                        Padding(
+                        _dateTime != null ? Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Text(
                             "${_dateTime.toString().substring(8, 10)}-${_dateTime.toString().substring(5, 7)}-${_dateTime.toString().substring(0, 4)}",
                             style: TextStyle(fontSize: 15),
                           ),
-                        )
+                        ):Container()
                       ],
                     ),
                   ),

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:smart_society_new/Mall_App/Common/Colors.dart';
 import 'package:smart_society_new/Mall_App/Common/services.dart';
 
@@ -32,8 +31,9 @@ class _PinCodePopupState extends State<PinCodePopup> {
                   color: Colors.black54),
             ),
           ),
+/*
           Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 15.0),
+            padding: const jEdgeInsets.only(top: 10.0, bottom: 15.0),
             child: PinCodeTextField(
               controller: pincode,
               wrapAlignment: WrapAlignment.center,
@@ -54,6 +54,25 @@ class _PinCodePopupState extends State<PinCodePopup> {
               pinTextAnimatedSwitcherDuration: Duration(milliseconds: 200),
             ),
           ),
+*/
+/*
+          PinCodeTextField(
+            appContext: context,
+            pastedTextStyle: TextStyle(
+              color: Colors.green.shade600,
+              fontWeight: FontWeight.bold,
+            ),
+            length: 6,
+            keyboardType: TextInputType.number,
+            obscureText: false,
+            // obscuringCharacter: '*',
+            animationType: AnimationType.fade,
+            onCompleted: (pin){
+              // code=pin;
+              print("completed");
+            },
+          ),
+*/
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FlatButton(

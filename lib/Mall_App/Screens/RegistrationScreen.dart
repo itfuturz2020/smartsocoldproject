@@ -37,7 +37,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       setState(() {
         _phonenumberController.text = widget.Mobile;
         fcmToken = token;
-        print('----------->' + '${token}');
+        print('fcm in registration----------->' + '${token}');
       });
     });
 

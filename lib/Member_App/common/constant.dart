@@ -22,6 +22,7 @@ class MESSAGES {
 class Session {
   static const String session_login = "Login_data";
   static const String Member_Id = "Member_id";
+  static const String selFlatHolderType = "selFlatHolderType";
   static const String SocietyId = "SocietyId";
   static const String Name = "Member_Name";
   static const String Profile = "Profile";

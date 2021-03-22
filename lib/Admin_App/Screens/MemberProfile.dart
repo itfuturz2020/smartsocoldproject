@@ -8,6 +8,7 @@ import 'package:smart_society_new/Admin_App/Common/Services.dart';
 import 'package:smart_society_new/Admin_App/Component/LoadingComponent.dart';
 import 'package:smart_society_new/Admin_App/Component/NoDataComponent.dart';
 import 'package:smart_society_new/Admin_App/Common/ExtensionMethods.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MemberProfile extends StatefulWidget {
   var memberData;
@@ -52,6 +53,40 @@ class _MemberProfileState extends State<MemberProfile> {
             _showVisitor(context);
           } else
             showMsg("No Visitor Found");
+        }, onError: (e) {
+          showMsg("Something Went Wrong Please Try Again");
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
+    } on SocketException catch (_) {
+      showMsg("No Internet Connection.");
+    }
+  }
+
+  _makeAdmin() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Future res = Services.makeAdmin(
+            widget.memberData["SocietyId"].toString(),
+            widget.memberData["Id"].toString());
+
+        res.then((data) async {
+          if (data.toString() == "1") {
+            setState(() {
+              Fluttertoast.showToast(
+                  msg: "Made Admin Successfully",
+                  backgroundColor: Colors.red,
+                  gravity: ToastGravity.TOP,
+                  textColor: Colors.white);
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
         }, onError: (e) {
           showMsg("Something Went Wrong Please Try Again");
           setState(() {
@@ -567,6 +602,27 @@ class _MemberProfileState extends State<MemberProfile> {
           "Member Profile",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
+        actions: [
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: OutlineButton(
+          onPressed: (){
+            _makeAdmin();
+          },
+          child: Text("Make Admin",
+          style: TextStyle(
+            color: Colors.white
+          ),
+          ),
+        shape:  RoundedRectangleBorder(
+        side:new  BorderSide(color: Colors.blue
+        ),
+            //the outline color
+    borderRadius: new BorderRadius.all(new Radius.circular(4),
+    ),
+        ),
+        ),
+      )],
       ),
       body: isLoading
           ? LoadingComponent()

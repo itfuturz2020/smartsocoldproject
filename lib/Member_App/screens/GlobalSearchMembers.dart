@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_society_new/Member_App/Services/ServiceList.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/component/GlobalMemberComponent.dart';
+import 'package:speech_recognition/speech_recognition.dart';
 
 class GlobalSearchMembers extends StatefulWidget {
   String searchText;
@@ -33,6 +36,38 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
       });
       _getSearchData(widget.searchText);
     }
+    initSpeechRecognizer();
+  }
+
+  initSpeechRecognizer() {
+    _speechRecognitionName.setRecognitionResultHandler(
+          (String speech) => setState(() => _searchcontroller.text = speech),
+    );
+  }
+
+  PermissionStatus _permissionStatus = PermissionStatus.unknown;
+
+  Future<void> requestPermission(PermissionGroup permission) async {
+    final List<PermissionGroup> permissions = <PermissionGroup>[
+      PermissionGroup.microphone
+    ];
+    final Map<PermissionGroup, PermissionStatus> permissionRequestResult =
+    await PermissionHandler().requestPermissions(permissions);
+
+    setState(() {
+      print(permissionRequestResult);
+      _permissionStatus = permissionRequestResult[permission];
+      print(_permissionStatus);
+    });
+    if (permissionRequestResult[permission] == PermissionStatus.granted) {
+     /* setState(() {
+        _searchcontroller.text = "";
+      });*/
+    } else
+      Fluttertoast.showToast(
+          msg: "Permission Not Granted",
+          gravity: ToastGravity.TOP,
+          toastLength: Toast.LENGTH_SHORT);
   }
 
   _getSearchData(String searchText) async {
@@ -89,6 +124,8 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
     );
   }
 
+  SpeechRecognition _speechRecognitionName = new SpeechRecognition();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,6 +148,7 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
                     onTap: () {
                       _getSearchData(_searchcontroller.text);
                     },
+
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -124,6 +162,15 @@ class _GlobalSearchMembersState extends State<GlobalSearchMembers> {
                       ),
                     ),
                   ),
+                  /*suffixIcon: IconButton(
+                    icon: Icon(Icons.mic),
+                    onPressed: () {
+                      requestPermission(PermissionGroup.microphone);
+                      _speechRecognitionName
+                          .listen(locale: "en_US")
+                          .then((result) => print('####-$result'));
+                    },
+                  ),*/
                   border: InputBorder.none,
                   hintText: "Search Here",
                   hintStyle: TextStyle(

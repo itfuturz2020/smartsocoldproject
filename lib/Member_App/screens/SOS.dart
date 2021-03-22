@@ -11,16 +11,16 @@ import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/common/join.dart';
 
-class NotificationPopup extends StatefulWidget {
+class SOS extends StatefulWidget {
   var data;
 
-  NotificationPopup(this.data);
+  SOS(this.data);
 
   @override
-  _NotificationPopupState createState() => _NotificationPopupState();
+  _SOSState createState() => _SOSState();
 }
 
-class _NotificationPopupState extends State<NotificationPopup> {
+class _SOSState extends State<SOS> {
   List NoticeData = new List();
   bool isLoading = false;
 
@@ -34,11 +34,6 @@ class _NotificationPopupState extends State<NotificationPopup> {
   }
 
   String SocietyId;
-  final List<String> _notifcationReplylist = [
-    "APPROVED",
-    "LEAVE AT GATE",
-    "DENY"
-  ];
 
   int selected_Index;
   var mydata;
@@ -306,6 +301,7 @@ class _NotificationPopupState extends State<NotificationPopup> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.data);
     return Scaffold(
       body: Stack(
         children: [
@@ -376,55 +372,26 @@ class _NotificationPopupState extends State<NotificationPopup> {
                 height: 40,
               ),
               Text(
-                "Guest is waiting At Gate",
+               widget.data["body"],
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
               ),
               SizedBox(
                 height: 40,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    //width: 130,
-                    child: Flexible(
-                      child: Text(
-                        "${widget.data["Name"]}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            color: Colors.grey[800]),
-                      ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset('images/telephone.png',
+                            width: 40, height: 40),
+                      ],
                     ),
                   ),
-                  // SizedBox(
-                  //   width: 30,
-                  // ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: Column(
-                          children: <Widget>[
-                            Image.asset('images/telephone.png',
-                                width: 40, height: 40),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      GestureDetector(
-                        onTap: onJoin,
-                        child: Column(
-                          children: <Widget>[
-                            Image.asset('images/video_call.png',
-                                width: 40, height: 40),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
+                  SizedBox(
+                    width: 15,
+                  ),
                 ],
               ),
               SizedBox(
@@ -435,36 +402,36 @@ class _NotificationPopupState extends State<NotificationPopup> {
         ),
         widget.data["Image"] == null || widget.data["Image"] == ""
             ? Positioned(
-                left: 20,
-                right: 20,
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      radius: 65,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(65),
-                        ),
-                        child: Image.asset(
-                          "images/user.png",
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : Positioned(
-                left: 20,
-                right: 20,
-                child: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: 65,
-                  backgroundImage: NetworkImage(
-                    constant.Image_Url + "${widget.data["Image"]}",
+          left: 20,
+          right: 20,
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 65,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(65),
+                  ),
+                  child: Image.asset(
+                    "images/user.png",
                   ),
                 ),
               ),
+            ],
+          ),
+        )
+            : Positioned(
+          left: 20,
+          right: 20,
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: 65,
+            backgroundImage: NetworkImage(
+              constant.Image_Url + "${widget.data["Image"]}",
+            ),
+          ),
+        ),
         //company image
         Positioned(
           top: 80,
@@ -482,106 +449,6 @@ class _NotificationPopupState extends State<NotificationPopup> {
                 width: 60,
                 height: 60,
               ),
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: -45,
-          left: 20,
-          right: -180,
-          child: GestureDetector(
-            onTap: () {
-              log("//=================#${_notifcationReplylist[0]}");
-              NotificationReply(_notifcationReplylist[0],
-                  widget.data["EntryId"], widget.data["WatchmanId"]);
-              Get.back();
-            },
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: 25,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(65)),
-                      child: Image.asset("images/success.png")),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "APPROVE",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.white),
-                )
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: -45,
-          left: 20,
-          right: 20,
-          child: GestureDetector(
-            onTap: () {
-              NotificationReply(_notifcationReplylist[1],
-                  widget.data["EntryId"], widget.data["WatchmanId"]);
-              Get.back();
-            },
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: 25,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(65)),
-                      child: Image.asset("images/user.png")),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "LEAVE AT GATE",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.white),
-                )
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: -45,
-          left: -180,
-          right: 20,
-          child: GestureDetector(
-            onTap: () {
-              NotificationReply(_notifcationReplylist[2],
-                  widget.data["EntryId"], widget.data["WatchmanId"]);
-              Get.back();
-            },
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: 25,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(65)),
-                      child: Image.asset("images/deny.png")),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "DENY",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                      color: Colors.white),
-                )
-              ],
             ),
           ),
         ),

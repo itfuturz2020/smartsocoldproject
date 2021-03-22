@@ -1,17 +1,25 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:location/location.dart' as loc;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:smart_society_new/Member_App/common/Classlist.dart';
 import 'package:smart_society_new/Member_App/common/Services.dart';
 import 'package:smart_society_new/Member_App/common/constant.dart' as constant;
 import 'package:smart_society_new/Member_App/screens/SetupWings.dart';
 
+import 'OTP.dart';
+
 class CreateSociety extends StatefulWidget {
   @override
   _CreateSocietyState createState() => _CreateSocietyState();
 }
+
+const kGoogleApiKey = "AIzaSyCm9L8-lLCSpRYME1D4lfMb4CS-oX1U6eQ";
+GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 
 class _CreateSocietyState extends State<CreateSociety> {
   ProgressDialog pr;
@@ -30,6 +38,9 @@ class _CreateSocietyState extends State<CreateSociety> {
   TextEditingController txtname = new TextEditingController();
   TextEditingController txtmobile = new TextEditingController();
   TextEditingController txtwings = new TextEditingController();
+  TextEditingController txtAddress = new TextEditingController();
+  TextEditingController txtYourName = new TextEditingController();
+  TextEditingController txtEmail = new TextEditingController();
 
   @override
   void initState() {
@@ -119,6 +130,41 @@ class _CreateSocietyState extends State<CreateSociety> {
     }
   }
 
+  createNewSociety(String Name, String Address, String ContactPerson, String ContactMobile, String StateId, String CityId, String Location, String JoinDate, String email, String SocietyType, String NoofWings) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        Services.createNewSociety(Name,Address,ContactPerson,ContactMobile,StateId,CityId,Location,JoinDate,email,SocietyType,NoofWings)
+            .then((data) async {
+          if (data.IsSuccess==true) {
+            Fluttertoast.showToast(
+              msg: "Society Created Successfully",
+              gravity: ToastGravity.BOTTOM,
+            );
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => SetupWings(
+                  wingData: txtwings.text,
+                  societyId: data.Data.toString(),
+                  mobileNo : txtmobile.text,
+                )));
+          }
+        }, onError: (e) {
+          showMsg("$e");
+          setState(() {
+            cityLoading = false;
+          });
+        });
+      } else {
+        showMsg("No Internet Connection.");
+      }
+    } on SocketException catch (_) {
+      showMsg("Something Went Wrong");
+      setState(() {
+        cityLoading = false;
+      });
+    }
+  }
+
   showMsg(String msg, {String title = 'My Jini'}) {
     showDialog(
       context: context,
@@ -137,6 +183,46 @@ class _CreateSocietyState extends State<CreateSociety> {
         );
       },
     );
+  }
+
+  final homeScaffoldKey = GlobalKey<ScaffoldState>();
+  void onError(PlacesAutocompleteResponse response) {
+    homeScaffoldKey.currentState.showSnackBar(
+      SnackBar(content: Text(response.errorMessage)),
+    );
+  }
+
+  loc.LocationData currentLocation;
+  double lat,long;
+
+  pickAddress() async {
+    try {
+      print("Current Location");
+      Prediction p = await PlacesAutocomplete.show(
+        context: context,
+        hint:  "Search your location",
+        apiKey: kGoogleApiKey,
+        onError: onError,
+        mode: Mode.overlay,
+        language: "en",
+        components: [
+          Component(Component.country, "in"),
+        ],
+        location: currentLocation == null
+            ? null
+            : Location(currentLocation.latitude, currentLocation.longitude),
+        //radius: currentLocation == null ? null : 10000
+      );
+      PlacesDetailsResponse detail =
+      await _places.getDetailsByPlaceId(p.placeId);
+        setState(() {
+          txtAddress.text = p.description;
+          lat = detail.result.geometry.location.lat;
+          long = detail.result.geometry.location.lng;
+        });
+    } catch (e) {
+      return;
+    }
   }
 
   @override
@@ -242,6 +328,45 @@ class _CreateSocietyState extends State<CreateSociety> {
               ),
               Padding(
                 padding:
+                const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
+                child: Row(
+                  children: <Widget>[
+                    Text("Society Address",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
+                child: SizedBox(
+                  height: 60,
+                  child: TextFormField(
+                    onTap: (){
+                      pickAddress();
+                    },
+                    validator: (value) {
+                      if (value.trim() == "") {
+                        return 'Please Enter Name';
+                      }
+                      return null;
+                    },
+                    controller: txtAddress,
+                    textCapitalization: TextCapitalization.words,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(5.0),
+                          borderSide: new BorderSide(),
+                        ),
+                        // labelText: "Society Name",
+                        hintText: 'Pick Society Address',
+                        hintStyle: TextStyle(fontSize: 14,),),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
                     const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -287,6 +412,78 @@ class _CreateSocietyState extends State<CreateSociety> {
               ),
               Padding(
                 padding:
+                const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
+                child: Row(
+                  children: <Widget>[
+                    Text("Your Name",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
+                child: SizedBox(
+                  height: 50,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value.trim() == "") {
+                        return 'Please Enter Name';
+                      }
+                      return null;
+                    },
+                    controller: txtYourName,
+                    textCapitalization: TextCapitalization.words,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(5.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      // labelText: "Society Name",
+                      hintText: 'Your Name',
+                      hintStyle: TextStyle(fontSize: 14,),),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
+                child: Row(
+                  children: <Widget>[
+                    Text("Your Email",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 6.0),
+                child: SizedBox(
+                  height: 50,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value.trim() == "" || !value.trim().contains("@")) {
+                        return 'Please Enter Email Id';
+                      }
+                      return null;
+                    },
+                    controller: txtEmail,
+                    textCapitalization: TextCapitalization.words,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(5.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      // labelText: "Society Name",
+                      hintText: 'Your Email',
+                      hintStyle: TextStyle(fontSize: 14,),),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
                     const EdgeInsets.only(top: 15.0, right: 5.0, left: 5.0),
                 child: Row(
                   children: <Widget>[
@@ -307,7 +504,7 @@ class _CreateSocietyState extends State<CreateSociety> {
                       }
                       return null;
                     },
-                    maxLength: 10,
+                    maxLength: 2,
                     keyboardType: TextInputType.number,
                     controller: txtwings,
                     textInputAction: TextInputAction.next,
@@ -452,20 +649,33 @@ class _CreateSocietyState extends State<CreateSociety> {
                             fontSize: 18, fontWeight: FontWeight.w600)),
                     onPressed: () {
                       if (Price_dropdownValue == "Select" ||
-                          txtname == "" ||
-                          txtmobile == "" ||
-                          txtwings == "" ||
-                          _stateClass.Name == null ||
-                          _cityClass.Name == null) {
+                          txtname.text == "" ||
+                          txtmobile.text == "" ||
+                          txtwings.text == "" ||
+                          _stateClass.Name == "" ||
+                          _cityClass.Name == "" ||
+                          txtYourName.text=="" ||
+                          txtAddress.text=="" ||
+                          txtEmail.text=="") {
                         Fluttertoast.showToast(
                           msg: "Fields can't be empty",
-                          gravity: ToastGravity.BOTTOM,
+                          gravity: ToastGravity.TOP,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
                         );
                       } else {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => SetupWings(
-                                  wingData: txtwings.text,
-                                )));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OTP(
+                                  mobileNo: txtmobile.text.toString(),
+                                  onSuccess: () {
+                                    createNewSociety(txtname.text, txtAddress.text, txtYourName.text, txtmobile.text,
+                                        _stateClass.id, _cityClass.id, "http://maps.google.com/maps?q=$lat,$long",
+                                        DateTime.now().toString(), txtEmail.text, Price_dropdownValue, txtwings.text);                                  },
+                                ),
+                              ));
+
                       }
                       //Navigator.pushNamed(context, '/SetupWings');
                     },
