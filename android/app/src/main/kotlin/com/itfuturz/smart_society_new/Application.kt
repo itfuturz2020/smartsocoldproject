@@ -1,4 +1,4 @@
-package com.itfuturz.mygenie_member_1
+package com.itfuturz.mygenie_member
 
 import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.PluginRegistry

@@ -1,6 +1,6 @@
 /*___Generated_by_IDEA___*/
 
-package com.itfuturz.mygenie_member_1;
+package com.itfuturz.mygenie_member;
 
 /* This stub is only used by the IDE. It is NOT the Manifest class actually packed into the APK */
 public final class Manifest {

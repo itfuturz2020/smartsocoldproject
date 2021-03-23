@@ -1,4 +1,4 @@
-package com.itfuturz.mygenie_member_1
+package com.itfuturz.mygenie_member
 import android.os.Bundle
 import android.app.NotificationChannel
 import android.app.NotificationManager
